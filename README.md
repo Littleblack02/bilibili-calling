@@ -1,6 +1,7 @@
-# Bilibili RAG 多Agent协作系统
+# Bilibili_calling 多Agent协作系统
 
-基于用户B站收藏夹，构建智能推荐和知识检索系统。通过多Agent协作，实现视频内容理解、语义搜索、个性化推荐等功能。
+基于用户B站收藏夹和多种B站信息渠道，构建智能推荐和知识检索系统。通过多Agent协作，实现视频内容理解、语义搜索、个性化推荐等功能。
+<img width="1280" height="764" alt="76ce91eca235eda80890293aaaa56277" src="https://github.com/user-attachments/assets/e0074138-a377-4a43-8911-aef103cdf357" />
 
 ## 功能特性
 
