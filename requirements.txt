@@ -1,0 +1,66 @@
+# Bilibili RAG 多Agent协作系统依赖
+
+# Web框架
+fastapi>=0.115.0
+uvicorn[standard]>=0.34.0
+
+# 数据库
+sqlalchemy>=2.0.0
+aiosqlite>=0.19.0
+
+# 数据验证
+pydantic>=2.12.5
+pydantic-settings>=2.13.0
+
+# HTTP客户端
+httpx>=0.28.0
+
+# 向量数据库
+chromadb>=0.4.0
+
+# 任务调度
+APScheduler==3.10.4
+
+# Web搜索
+duckduckgo-search>=6.3.0
+ddgs>=9.10.0
+
+# LangChain（用于LLM集成）
+langchain>=1.2.3
+langchain-core>=0.3.0
+langchain-openai>=1.1.7
+langchain-community
+langchain-chroma
+langchain-text-splitters
+
+# DashScope（阿里云 ASR）
+dashscope>=1.20.0
+
+# LangGraph + DeerFlow Agent Framework
+langgraph>=1.0.6,<1.0.10
+langgraph-sdk>=0.1.51
+langgraph-checkpoint-sqlite>=3.0.3
+
+# OpenAI API
+openai>=1.0.0
+
+# 工具库
+python-dotenv>=1.0.0
+pyyaml>=6.0.3
+
+# 日志
+loguru>=0.7.0
+
+# 异步支持
+aiofiles>=23.0.0
+
+# Tiktoken（用于 DeerFlow token 计算）
+tiktoken>=0.8.0
+
+# 二维码生成（用于B站登录）
+qrcode>=7.4.0
+Pillow>=10.0.0
+
+# DeerFlow Harness（通过本地路径安装）
+# 请在安装后运行: pip install -e ./backend/packages/harness
+

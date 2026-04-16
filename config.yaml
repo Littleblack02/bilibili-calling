@@ -1,0 +1,232 @@
+# DeerFlow Configuration for Bilibili RAG
+# Adapted from bilibili-rag's existing settings + DeerFlow's config.example.yaml
+#
+# Environment variable resolution: values like $DASHSCOPE_API_KEY are read from
+# the environment or .env file. Copy this to config.yaml in the bilibili-rag root.
+
+config_version: 4
+
+# ============================================================================
+# Logging
+# ============================================================================
+log_level: info
+
+# ============================================================================
+# Token Usage Tracking
+# ============================================================================
+token_usage:
+  enabled: false
+
+# ============================================================================
+# Models Configuration
+# ============================================================================
+# Reuse bilibili-rag's DashScope-compatible model (OpenAI-compatible endpoint)
+models:
+  - name: dashscope
+    display_name: (DashScope)
+    use: langchain_openai:ChatOpenAI
+    model: $LLM_MODEL
+    api_key: $DASHSCOPE_API_KEY
+    base_url: $OPENAI_BASE_URL
+    request_timeout: 120.0
+    max_retries: 2
+    max_tokens: 4096
+    temperature: 0.7
+    supports_thinking: false
+    supports_vision: false
+
+# ============================================================================
+# Tool Groups Configuration
+# ============================================================================
+tool_groups:
+  - name: rag
+  - name: bilibili
+  - name: web
+  - name: gemma
+  - name: profile
+  - name: recommendation
+  - name: time
+
+# ============================================================================
+# Tools Configuration
+# ============================================================================
+tools:
+  # RAG tools (bilibili-rag's vector store)
+  - name: rag_search
+    group: rag
+    use: app.deerflow_tools:rag_search_tool
+
+  - name: rag_answer
+    group: rag
+    use: app.deerflow_tools:rag_answer_tool
+
+  # Bilibili tools (bilibili-rag's API client)
+  - name: get_bilibili_favorites
+    group: bilibili
+    use: app.deerflow_tools:get_bilibili_favorites_tool
+
+  - name: sync_favorite_folder
+    group: bilibili
+    use: app.deerflow_tools:sync_favorite_folder_tool
+
+  - name: get_video_info
+    group: bilibili
+    use: app.deerflow_tools:get_video_info_tool
+
+  - name: get_up_info
+    group: bilibili
+    use: app.deerflow_tools:get_up_info_tool
+
+  - name: bilibili_search
+    group: bilibili
+    use: app.deerflow_tools:bilibili_search_tool
+
+  - name: get_trending
+    group: bilibili
+    use: app.deerflow_tools:get_trending_tool
+
+  - name: add_to_favorites
+    group: bilibili
+    use: app.deerflow_tools:add_to_favorites_tool
+
+  - name: intelligent_recommend
+    group: bilibili
+    use: app.deerflow_tools:intelligent_recommend_tool
+
+  # Web search (DeerFlow community tool)
+  - name: web_search
+    group: web
+    use: deerflow.community.ddg_search.tools:web_search_tool
+    max_results: 5
+
+  # Gemma 4 多模态工具（封面理解）
+  - name: analyze_cover
+    group: gemma
+    use: app.deerflow_tools:analyze_cover_tool
+
+  # Profile tools（用户画像）
+  - name: build_user_profile
+    group: profile
+    use: app.deerflow_tools:build_user_profile_tool
+
+  - name: update_profile_from_conversation
+    group: profile
+    use: app.deerflow_tools:update_profile_from_conversation_tool
+
+  - name: get_user_profile
+    group: profile
+    use: app.deerflow_tools:get_user_profile_tool
+
+  # Recommendation tools（推荐系统）
+  - name: generate_recommendations
+    group: recommendation
+    use: app.deerflow_tools:generate_recommendations_tool
+
+  - name: get_candidate_recommendations
+    group: recommendation
+    use: app.deerflow_tools:get_candidate_recommendations_tool
+
+  - name: accept_recommendation
+    group: recommendation
+    use: app.deerflow_tools:accept_recommendation_tool
+
+  - name: reject_recommendation
+    group: recommendation
+    use: app.deerflow_tools:reject_recommendation_tool
+
+  # Time tools（时间感知工具）
+  - name: get_current_time
+    group: time
+    use: app.deerflow_tools:get_current_time_tool
+
+  - name: check_recommendation_needed
+    group: time
+    use: app.deerflow_tools:check_recommendation_needed_tool
+
+  # Prefetch tools（预取-推送模式，子Agent专用缓存）
+  - name: save_prefetch_recommendations
+    group: time
+    use: app.deerflow_tools:save_prefetch_recommendations_tool
+
+  - name: get_prefetch_recommendations
+    group: time
+    use: app.deerflow_tools:get_prefetch_recommendations_tool
+
+  - name: mark_prefetch_as_pushed
+    group: time
+    use: app.deerflow_tools:mark_prefetch_as_pushed_tool
+
+  - name: clear_prefetch_cache
+    group: time
+    use: app.deerflow_tools:clear_prefetch_cache_tool
+
+  - name: get_prefetch_cache_status
+    group: time
+    use: app.deerflow_tools:get_prefetch_cache_status_tool
+
+# ============================================================================
+# Tool Search Configuration (Deferred Tool Loading)
+# ============================================================================
+tool_search:
+  enabled: false
+
+# ============================================================================
+# Sandbox Configuration
+# ============================================================================
+# Local sandbox pointing to bilibili-rag's data directories
+sandbox:
+  use: deerflow.sandbox.local:LocalSandboxProvider
+  allow_host_bash: false
+
+# ============================================================================
+# Skills Configuration
+# ============================================================================
+skills:
+  # bilibili-rag stores its skills here
+  path: ./skills
+  container_path: /mnt/skills
+
+# ============================================================================
+# Title Generation Configuration
+# ============================================================================
+title:
+  enabled: true
+  max_words: 6
+  max_chars: 60
+  model_name: null
+
+# ============================================================================
+# Summarization Configuration
+# ============================================================================
+summarization:
+  enabled: true
+  model_name: null
+  trigger:
+    - type: tokens
+      value: 15564
+  keep:
+    type: messages
+    value: 10
+  trim_tokens_to_summarize: 15564
+  summary_prompt: null
+
+# ============================================================================
+# Memory Configuration
+# ============================================================================
+memory:
+  enabled: true  # 启用长期记忆，保存用户兴趣和偏好
+  storage_path: memory.json
+  debounce_seconds: 30
+  model_name: null
+  max_facts: 100
+  fact_confidence_threshold: 0.7
+  injection_enabled: true  # 启用注入，记忆会出现在 system prompt 中
+  max_injection_tokens: 2000
+
+# ============================================================================
+# Checkpointer Configuration
+# ============================================================================
+# SQLite checkpointer for multi-turn persistence across restarts
+checkpointer:
+  type: sqlite
+  connection_string: checkpoints.db

@@ -1,0 +1,70 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# 虚拟环境
+venv/
+ENV/
+env/
+.venv/
+envs/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# 环境变量
+.env
+.env.local
+.env.*.local
+
+# 数据目录
+data/
+*.db
+*.db-shm
+*.db-wal
+
+# ChromaDB
+chroma_db/
+
+# 日志
+logs/
+*.log
+
+# 缓存
+.cache/
+*.cache
+
+# macOS
+.DS_Store
+
+# Node
+node_modules/
+package-lock.json
+frontend/package-lock.json
+
+# 前端构建
+frontend/.next/
+frontend/out/
+frontend/build/
