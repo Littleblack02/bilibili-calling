@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useEffect, useRef, useCallback } from "react";
 import LoginModal from "@/components/LoginModal";
 import DemoFlowModal from "@/components/DemoFlowModal";
@@ -170,11 +171,14 @@ export default function Home() {
               </p>
 
               <div className="hero-actions">
-                <button className="btn btn-primary btn-lg" onClick={() => setShowLogin(true)}>
-                  扫码登录开始构建
+                <Link className="btn btn-primary btn-lg" href="/demo">
+                  直接体验在线 Demo
+                </Link>
+                <button className="btn btn-outline" onClick={() => setShowLogin(true)}>
+                  连接真实 B站账户
                 </button>
                 <button className="btn btn-outline" onClick={() => setShowDemo(true)}>
-                  体验检索流程
+                  查看原有检索流程
                 </button>
               </div>
             </div>

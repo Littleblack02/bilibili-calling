@@ -14,9 +14,28 @@ const body = Noto_Sans_SC({
   variable: "--font-body",
 });
 
+const socialImage = "https://raw.githubusercontent.com/Littleblack02/bilibili-calling/main/frontend/public/og.png";
+
 export const metadata: Metadata = {
-  title: "bilibili_calling",
-  description: "B站智能助手 - 收藏夹知识库 + 个性化推荐",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://littleblack02.github.io/bilibili-calling"),
+  title: {
+    default: "bilibili_calling · Ontology 智能推荐",
+    template: "%s · bilibili_calling",
+  },
+  description: "可交互的 B站知识检索与个性化推荐 Demo：Ontology V2 实时概念计算、Grounded RAG 与强制 LLM 推荐链路。",
+  openGraph: {
+    title: "bilibili_calling · Ontology 智能推荐",
+    description: "从个人知识库到可解释推荐：实时 Ontology 图计算与经过验证的 LLM 工具链路。",
+    type: "website",
+    locale: "zh_CN",
+    images: [{ url: socialImage, width: 1680, height: 941, alt: "Ontology 驱动的视频推荐知识图谱" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "bilibili_calling · Ontology 智能推荐",
+    description: "实时 Ontology 图计算与经过验证的 LLM 推荐链路。",
+    images: [socialImage],
+  },
   icons: {
     icon: "/favicon.ico",
   },

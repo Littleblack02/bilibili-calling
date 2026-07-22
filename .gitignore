@@ -68,3 +68,9 @@ frontend/package-lock.json
 frontend/.next/
 frontend/out/
 frontend/build/
+
+# Frontend source directories whose names overlap Python ignore rules
+!frontend/build/
+!frontend/build/sites-vite-plugin.ts
+!frontend/lib/
+!frontend/lib/**
