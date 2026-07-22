@@ -76,6 +76,21 @@ def test_full_flow_filters_before_top_k_and_keeps_trace(monkeypatch):
         async def failing_llm(**_kwargs):
             raise ValueError("invalid llm response")
 
+        async def llm_plan(*_args, **_kwargs):
+            return {
+                "required": False,
+                "applied": True,
+                "model": "test-model",
+                "tool": "search_bilibili_videos",
+                "queries": [{
+                    "query": "AI 教程",
+                    "order": "totalrank",
+                    "reason": "画像兴趣",
+                    "interest_label": "AI",
+                    "priority": 0.9,
+                }],
+            }
+
         monkeypatch.setattr(service, "_ensure_profile", ensure_profile)
         monkeypatch.setattr(service, "_get_user_cookies", cookies)
         monkeypatch.setattr(service.candidate_recall, "recall_candidates", recall)
@@ -86,8 +101,10 @@ def test_full_flow_filters_before_top_k_and_keeps_trace(monkeypatch):
         monkeypatch.setattr(service.reason_generator, "generate_reasons", reasons)
         monkeypatch.setattr(service.event_service, "save_batch", save_batch)
         monkeypatch.setattr(service, "_save_to_candidate_pool", save_pool)
+        monkeypatch.setattr(service.llm_recall_planner, "plan", llm_plan)
         monkeypatch.setattr(service.llm_reranker, "rerank_candidates", failing_llm)
         monkeypatch.setattr(service_module.settings, "recommendation_llm_rerank_enabled", True)
+        monkeypatch.setattr(service_module.settings, "recommendation_llm_required", False)
         monkeypatch.setattr(service_module.settings, "candidate_hydration_enabled", True)
 
         result = await service.generate_recommendations("session", limit=3)

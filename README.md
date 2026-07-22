@@ -3,7 +3,7 @@
 基于用户B站收藏夹和多种B站信息渠道，构建智能推荐和知识检索系统。通过多Agent协作，实现视频内容理解、语义搜索、个性化推荐等功能。
 <img width="1280" height="764" alt="76ce91eca235eda80890293aaaa56277" src="https://github.com/user-attachments/assets/e0074138-a377-4a43-8911-aef103cdf357" />
 
-推荐召回、排序、事件闭环、指标、配置与安全边界见 [推荐闭环 MVP](docs/RECOMMENDATION_MVP.md)。本体、时序衰减、多兴趣画像和 B站数据通道的完整说明见 [本体与推荐集成](docs/ONTOLOGY_RECOMMENDATION.md)。V2 的最终指标、迁移/回填步骤、灰度方案和未验证 live 项见 [V2 最终验证报告](docs/FINAL_VALIDATION_V2.md)。
+推荐召回、排序、事件闭环、指标、配置与安全边界见 [推荐闭环 MVP](docs/RECOMMENDATION_MVP.md)。强制大模型召回工具调用、重排和失败契约见 [LLM 推荐契约](docs/LLM_RECOMMENDATION.md)。本体、时序衰减、多兴趣画像和 B站数据通道的完整说明见 [本体与推荐集成](docs/ONTOLOGY_RECOMMENDATION.md)。V2 的最终指标、迁移/回填步骤、灰度方案和未验证 live 项见 [V2 最终验证报告](docs/FINAL_VALIDATION_V2.md)。
 
 ## 功能特性
 
@@ -14,7 +14,7 @@
 - **语义搜索** - 基于向量数据库的自然语言搜索
 - **对话式问答** - 针对收藏内容的智能问答
 - **用户画像分析** - 基于兴趣标签和行为的多维画像
-- **个性化推荐** - 结合LLM重排的视频推荐系统
+- **个性化推荐** - LLM 基于画像规划搜索工具调用，并强制完成候选重排
 - **本体语义层** - SKOS/SHACL 概念归一、关系检索、可解释推荐路径
 - **时序多兴趣画像** - 旧收藏/旧追番衰减，近期行为和多个兴趣簇独立建模
 
@@ -106,7 +106,12 @@ npm run dev
 DASHSCOPE_API_KEY=your_dashscope_api_key
 OPENAI_API_KEY=your_openai_api_key
 LLM_MODEL=
-OPENAI_BASE_URL=[image_uploaded] 数据库配置（可选）
+EMBEDDING_MODEL=
+OPENAI_BASE_URL=https://your-openai-compatible-endpoint/v1
+RECOMMENDATION_LLM_RERANK_ENABLED=true
+RECOMMENDATION_LLM_REQUIRED=true
+
+# 数据库配置（可选）
 DATABASE_URL=sqlite+aiosqlite:///./data/bilibili_rag.db
 ```
 
@@ -144,8 +149,8 @@ bilibili-rag-main/
 ## 核心模块
 
 ### 推荐系统
-- **候选召回** - 兴趣、近期兴趣、关注动态、UP主、分区、热榜、追更和知识库多路召回
-- **确定性主排序** - 本体、时序、多兴趣、质量与探索特征；LLM仅为可选辅助
+- **候选召回** - LLM 根据画像和 Ontology 调用白名单搜索工具，再与兴趣、关注、热榜等多路召回合并
+- **混合排序** - 本体、时序、多兴趣、质量与探索形成可审计基线，LLM 必须完成候选重排
 - **理由生成** - 展示真实命中概念和本体关系，不编造用户行为
 - **画像构建** - 多通道、来源感知、时间衰减的用户画像
 

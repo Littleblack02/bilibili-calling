@@ -4,6 +4,7 @@ LLM 重排服务
 使用 Gemma 4 对召回的候选视频进行排序打分
 """
 import json
+import math
 from typing import List, Dict, Any, Optional
 from loguru import logger
 from datetime import datetime
@@ -22,7 +23,8 @@ class LLMReranker:
         session_id: str,
         user_profile: Dict[str, Any],
         candidates: List[Dict[str, Any]],
-        top_k: int = 20
+        top_k: int = 20,
+        require_success: bool = False,
     ) -> List[Dict[str, Any]]:
         """
         使用 Gemma 4 对候选视频重排打分
@@ -45,7 +47,10 @@ class LLMReranker:
         rerank_context = self._prepare_rerank_context(user_profile, candidates)
 
         # 2. 调用 Gemma 4 批量打分
-        scored_candidates = await self._batch_score_candidates(rerank_context)
+        scored_candidates = await self._batch_score_candidates(
+            rerank_context,
+            require_success=require_success,
+        )
 
         # 3. 排序并取 Top-K
         sorted_candidates = sorted(
@@ -84,7 +89,9 @@ class LLMReranker:
 
     async def _batch_score_candidates(
         self,
-        context: Dict[str, Any]
+        context: Dict[str, Any],
+        *,
+        require_success: bool = False,
     ) -> List[Dict[str, Any]]:
         """批量打分候选视频"""
         candidates = context["candidates"]
@@ -96,11 +103,17 @@ class LLMReranker:
         # 调用 Gemma 4
         try:
             result = await self._call_gemma_for_rerank(prompt)
-            scored_candidates = self._parse_rerank_result(candidates, result)
+            scored_candidates = self._parse_rerank_result(
+                candidates,
+                result,
+                require_success=require_success,
+            )
             return scored_candidates
 
         except Exception as e:
             logger.error(f"LLM 打分失败: {e}")
+            if require_success:
+                raise
             # 返回默认分数（基于规则的降级方案）
             return self._fallback_score_candidates(candidates, user_profile)
 
@@ -163,25 +176,29 @@ class LLMReranker:
             base_url=settings.openai_base_url
         )
 
-        try:
-            response = await client.chat.completions.create(
-                model=settings.llm_model,
-                messages=[
-                    {"role": "system", "content": "你是一个专业的视频排序助手，擅长根据用户偏好对视频进行排序。"},
-                    {"role": "user", "content": prompt}
-                ],
-                max_tokens=3000,
-                temperature=0.3
-            )
-            return response.choices[0].message.content
-        except Exception as e:
-            logger.error(f"调用百炼失败: {e}")
-            return "{}"
+        provider_options: Dict[str, Any] = {}
+        if "dashscope.aliyuncs.com" in settings.openai_base_url.casefold():
+            provider_options["extra_body"] = {
+                "enable_thinking": settings.recommendation_llm_enable_thinking
+            }
+        response = await client.chat.completions.create(
+            model=settings.llm_model,
+            messages=[
+                {"role": "system", "content": "你是一个专业的视频排序助手，擅长根据用户偏好对视频进行排序。"},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=3000,
+            temperature=0.3,
+            **provider_options,
+        )
+        return response.choices[0].message.content or ""
 
     def _parse_rerank_result(
         self,
         candidates: List[Dict[str, Any]],
-        result: str
+        result: str,
+        *,
+        require_success: bool = False,
     ) -> List[Dict[str, Any]]:
         """解析重排结果"""
         # 尝试提取 JSON 部分
@@ -215,6 +232,34 @@ class LLMReranker:
                 logger.info("成功修复截断的 JSON")
             except Exception:
                 pass
+
+        if require_success:
+            if not isinstance(data, dict) or not isinstance(data.get("scores"), list):
+                raise ValueError("大模型重排响应缺少 scores 数组")
+            score_map: Dict[int, Dict[str, Any]] = {}
+            for item in data["scores"]:
+                if not isinstance(item, dict):
+                    raise ValueError("大模型重排分数项不是对象")
+                try:
+                    index = int(item["index"]) - 1
+                    score = float(item["score"])
+                except (KeyError, TypeError, ValueError) as exc:
+                    raise ValueError("大模型重排分数项字段无效") from exc
+                if index < 0 or index >= len(candidates) or index in score_map:
+                    raise ValueError("大模型重排候选索引无效或重复")
+                if not math.isfinite(score) or not 0.0 <= score <= 1.0:
+                    raise ValueError("大模型重排分数必须位于 0 到 1")
+                score_map[index] = {
+                    "score": score,
+                    "reason": str(item.get("reason") or "")[:300],
+                }
+            if set(score_map) != set(range(len(candidates))):
+                raise ValueError("大模型没有为全部候选返回分数")
+            return [{
+                **candidate,
+                "rec_score": score_map[index]["score"],
+                "rec_reason": score_map[index]["reason"],
+            } for index, candidate in enumerate(candidates)]
 
         if data:
             try:

@@ -6,6 +6,9 @@
 - LLM 重排
 - 推荐理由生成
 """
-from app.services.recommendation.recommendation_service import RecommendationService
+from app.services.recommendation.recommendation_service import (
+    RecommendationModelRequiredError,
+    RecommendationService,
+)
 
-__all__ = ["RecommendationService"]
+__all__ = ["RecommendationService", "RecommendationModelRequiredError"]

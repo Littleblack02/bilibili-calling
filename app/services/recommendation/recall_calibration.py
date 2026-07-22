@@ -7,6 +7,7 @@ from typing import Any
 
 SOURCE_PRIORS: dict[str, float] = {
     "context_query": 0.90,
+    "llm_planned": 0.86,
     "recent_interest": 0.82,
     "series_update": 0.76,
     "followed_up": 0.74,

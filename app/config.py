@@ -103,11 +103,14 @@ class Settings(BaseSettings):
     recommendation_check_interval_minutes: int = Field(default=360)  # 改为6小时
     max_recommendations: int = Field(default=10)
 
-    # 推荐排序：规则排序是可靠主链路，LLM 仅作为可选的小规模辅助重排。
+    # 推荐排序：Ontology/规则先产生可审计基线，LLM 必须完成小规模重排
+    # 后才允许返回推荐；关闭 required 可显式恢复可降级模式。
     recommendation_algorithm_version: str = Field(default="temporal-ontology-xmix-v2")
-    recommendation_llm_rerank_enabled: bool = Field(default=False)
+    recommendation_llm_rerank_enabled: bool = Field(default=True)
+    recommendation_llm_required: bool = Field(default=True)
+    recommendation_llm_enable_thinking: bool = Field(default=False)
     recommendation_llm_top_n: int = Field(default=20)
-    recommendation_llm_timeout_seconds: float = Field(default=15.0)
+    recommendation_llm_timeout_seconds: float = Field(default=30.0)
     recommendation_recent_exposure_days: int = Field(default=7)
     recommendation_max_per_up: int = Field(default=2)
     recommendation_profile_max_age_hours: int = Field(default=24)

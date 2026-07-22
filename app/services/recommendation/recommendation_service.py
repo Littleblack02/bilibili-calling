@@ -21,6 +21,10 @@ from app.services.recommendation.candidate_recalls import get_candidate_recall
 from app.services.recommendation.candidate_hydration import get_candidate_hydrator
 from app.services.bilibili import BilibiliService
 from app.services.recommendation.llm_reranker import get_llm_reranker
+from app.services.recommendation.llm_recall_planner import (
+    RecommendationPlanningError,
+    get_llm_recall_planner,
+)
 from app.services.recommendation.reason_generator import get_reason_generator
 from app.services.profile.profile_builder import get_profile_builder
 from app.services.profile.multi_source_profile_builder import get_multi_source_profile_builder
@@ -32,17 +36,146 @@ from app.config import settings
 from app.services.observability import batch_id_var, metrics, safe_hash
 
 
+class RecommendationModelRequiredError(RuntimeError):
+    """Raised when required LLM planning or reranking cannot be proven."""
+
+
 class RecommendationService:
     """推荐服务"""
 
     def __init__(self):
         self.candidate_recall = get_candidate_recall()
         self.candidate_hydrator = get_candidate_hydrator()
+        self.llm_recall_planner = get_llm_recall_planner()
         self.llm_reranker = get_llm_reranker()
         self.reason_generator = get_reason_generator()
         self.profile_builder = get_profile_builder()
         self.multi_source_profile_builder = get_multi_source_profile_builder()
         self.event_service = get_recommendation_event_service()
+
+    @staticmethod
+    def _validate_llm_configuration() -> None:
+        """Fail early when the product contract requires model-backed ranking."""
+        if not settings.recommendation_llm_required:
+            return
+        if not settings.recommendation_llm_rerank_enabled:
+            raise RecommendationModelRequiredError(
+                "推荐系统要求使用大模型，但 RECOMMENDATION_LLM_RERANK_ENABLED=false"
+            )
+        missing = []
+        if not str(settings.openai_api_key or "").strip():
+            missing.append("DASHSCOPE_API_KEY/OPENAI_API_KEY")
+        if not str(settings.llm_model or "").strip():
+            missing.append("LLM_MODEL")
+        if missing:
+            raise RecommendationModelRequiredError(
+                "推荐系统要求使用大模型，缺少配置：" + ", ".join(missing)
+            )
+
+    async def _apply_llm_rerank(
+        self,
+        *,
+        session_id: str,
+        profile: Dict[str, Any],
+        ranked_candidates: List[Dict[str, Any]],
+        context: Dict[str, Any],
+    ) -> List[Dict[str, Any]]:
+        """Apply auditable LLM reranking and enforce required-mode semantics."""
+        if not ranked_candidates:
+            context["llm_rerank"] = {
+                "required": settings.recommendation_llm_required,
+                "applied": False,
+                "reason": "no_candidates",
+            }
+            return ranked_candidates
+
+        if not settings.recommendation_llm_rerank_enabled:
+            context["llm_rerank"] = {
+                "required": settings.recommendation_llm_required,
+                "applied": False,
+                "reason": "disabled",
+            }
+            if settings.recommendation_llm_required:
+                raise RecommendationModelRequiredError(
+                    "推荐系统要求使用大模型，但 LLM 重排已关闭"
+                )
+            return ranked_candidates
+
+        llm_input = [
+            dict(item, rule_score=item["rec_score"])
+            for item in ranked_candidates[:settings.recommendation_llm_top_n]
+        ]
+        try:
+            llm_ranked = await asyncio.wait_for(
+                self.llm_reranker.rerank_candidates(
+                    session_id=session_id,
+                    user_profile=profile,
+                    candidates=llm_input,
+                    top_k=len(llm_input),
+                    require_success=settings.recommendation_llm_required,
+                ),
+                timeout=settings.recommendation_llm_timeout_seconds,
+            )
+            if settings.recommendation_llm_required and not llm_ranked:
+                raise RecommendationModelRequiredError("大模型没有返回有效的重排结果")
+            context["llm_rerank"] = {
+                "required": settings.recommendation_llm_required,
+                "applied": True,
+                "model": settings.llm_model,
+                "candidate_count": len(llm_input),
+                "blend_weight": 0.25,
+            }
+            metrics.inc("recommendation_llm_rerank_total", outcome="success")
+            return blend_llm_scores(ranked_candidates, llm_ranked, llm_weight=0.25)
+        except Exception as exc:
+            context["llm_rerank"] = {
+                "required": settings.recommendation_llm_required,
+                "applied": False,
+                "reason": "model_error",
+            }
+            metrics.inc("recommendation_llm_rerank_total", outcome="failure")
+            if settings.recommendation_llm_required:
+                raise RecommendationModelRequiredError(
+                    f"大模型推荐重排失败：{exc}"
+                ) from exc
+            logger.warning(f"LLM 辅助重排失败，保留规则排序: {exc}")
+            return ranked_candidates
+
+    async def _build_llm_recall_plan(
+        self,
+        *,
+        profile: Dict[str, Any],
+        context: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        """Require a model tool call before any remote candidate lookup."""
+        try:
+            plan = await asyncio.wait_for(
+                self.llm_recall_planner.plan(
+                    profile,
+                    context,
+                    require_success=settings.recommendation_llm_required,
+                ),
+                timeout=settings.recommendation_llm_timeout_seconds,
+            )
+            metrics.inc(
+                "recommendation_llm_recall_plan_total",
+                outcome="success" if plan.get("applied") else "skipped",
+            )
+            return plan
+        except Exception as exc:
+            metrics.inc("recommendation_llm_recall_plan_total", outcome="failure")
+            if settings.recommendation_llm_required:
+                message = str(exc) if isinstance(exc, RecommendationPlanningError) else f"{exc}"
+                raise RecommendationModelRequiredError(
+                    f"大模型推荐召回规划失败：{message}"
+                ) from exc
+            logger.warning(f"LLM 召回规划失败，使用确定性召回: {exc}")
+            return {
+                "required": False,
+                "applied": False,
+                "reason": "model_error",
+                "queries": [],
+            }
 
     async def generate_recommendations(
         self,
@@ -63,6 +196,7 @@ class RecommendationService:
             推荐视频列表
         """
         context = dict(context or {})
+        self._validate_llm_configuration()
         started = time.perf_counter()
         session_ref = safe_hash(session_id)
         effective_flags = settings.v2_feature_flags(session_id)
@@ -77,6 +211,13 @@ class RecommendationService:
         if context.get("query"):
             profile_model.current_intent = context["query"]
         profile = profile_model.as_legacy_dict()
+
+        # The model must first translate the aggregate profile and Ontology
+        # interests into an allow-listed Bilibili search tool call.
+        context["llm_recall_plan"] = await self._build_llm_recall_plan(
+            profile=profile,
+            context=context,
+        )
 
         # 2. 获取用户 cookies
         cookies = await self._get_user_cookies(session_id)
@@ -138,7 +279,7 @@ class RecommendationService:
             / len(candidates),
         )
 
-        # 4. 可解释规则排序是主链路，任何时候都能独立返回有效结果。
+        # 4. 可解释规则/Ontology 排序产生审计基线；强制模式仍需经过 LLM。
         ranking_started = time.perf_counter()
         ranked_candidates = score_candidates(
             eligible_candidates,
@@ -155,22 +296,14 @@ class RecommendationService:
             exploration_level=float(context.get("exploration_level", 0.3)),
         )
 
-        # 可选 LLM 只对小规模候选辅助打分，并与规则分混合。
-        if settings.recommendation_llm_rerank_enabled and ranked_candidates:
-            llm_input = [dict(item, rule_score=item["rec_score"]) for item in ranked_candidates[:settings.recommendation_llm_top_n]]
-            try:
-                llm_ranked = await asyncio.wait_for(
-                    self.llm_reranker.rerank_candidates(
-                        session_id=session_id,
-                        user_profile=profile,
-                        candidates=llm_input,
-                        top_k=len(llm_input),
-                    ),
-                    timeout=settings.recommendation_llm_timeout_seconds,
-                )
-                ranked_candidates = blend_llm_scores(ranked_candidates, llm_ranked, llm_weight=0.25)
-            except Exception as exc:
-                logger.warning(f"LLM 辅助重排超时或失败，保留规则排序: {exc}")
+        # Required mode never returns a list that skipped model reranking.
+        # The model trace is persisted with the batch for later auditing.
+        ranked_candidates = await self._apply_llm_rerank(
+            session_id=session_id,
+            profile=profile,
+            ranked_candidates=ranked_candidates,
+            context=context,
+        )
 
         reranked_candidates = diversify(
             ranked_candidates,
@@ -213,6 +346,12 @@ class RecommendationService:
                 "pic": item.get("pic_url", ""),
                 "batch_id": batch_id,
                 "algorithm_version": settings.recommendation_algorithm_version,
+                "llm_recall_applied": bool(
+                    (context.get("llm_recall_plan") or {}).get("applied")
+                ),
+                "llm_rerank_applied": bool(
+                    (context.get("llm_rerank") or {}).get("applied")
+                ),
             }
             for item in candidates_with_reasons
         ]

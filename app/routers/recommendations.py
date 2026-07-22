@@ -1,7 +1,10 @@
 from fastapi import APIRouter, HTTPException, WebSocket, WebSocketDisconnect
 from pydantic import BaseModel, Field
 from typing import Any, List, Literal, Optional
-from app.services.recommendation import RecommendationService
+from app.services.recommendation import (
+    RecommendationModelRequiredError,
+    RecommendationService,
+)
 from app.services.recommendation.event_service import get_recommendation_event_service
 from app.routers.websocket_manager import manager
 from app.utils.logger import get_logger
@@ -96,6 +99,9 @@ async def get_recommendations(request: GetRecommendationsRequest):
             "count": len(recommendations)
         }
 
+    except RecommendationModelRequiredError as e:
+        logger.error(f"Required recommendation model unavailable: {e}")
+        raise HTTPException(status_code=503, detail=str(e))
     except Exception as e:
         logger.error(f"Get recommendations error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
@@ -517,6 +523,13 @@ async def websocket_recommendations(websocket: WebSocket, session_id: str):
     except WebSocketDisconnect:
         manager.disconnect(websocket)
         logger.info(f"WebSocket disconnected: {session_id}")
+    except RecommendationModelRequiredError as e:
+        await websocket.send_json({
+            "type": "recommendation_error",
+            "code": "required_model_unavailable",
+            "message": str(e),
+        })
+        manager.disconnect(websocket)
     except Exception as e:
         logger.error(f"WebSocket error: {e}")
         manager.disconnect(websocket)

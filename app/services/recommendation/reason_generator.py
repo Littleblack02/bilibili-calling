@@ -127,6 +127,11 @@ class ReasonGenerator:
         )
 
         try:
+            provider_options: Dict[str, Any] = {}
+            if "dashscope.aliyuncs.com" in settings.openai_base_url.casefold():
+                provider_options["extra_body"] = {
+                    "enable_thinking": settings.recommendation_llm_enable_thinking
+                }
             response = await client.chat.completions.create(
                 model=settings.llm_model,
                 messages=[
@@ -134,7 +139,8 @@ class ReasonGenerator:
                     {"role": "user", "content": prompt}
                 ],
                 max_tokens=2000,
-                temperature=0.3
+                temperature=0.3,
+                **provider_options,
             )
             return response.choices[0].message.content
         except Exception as e:
@@ -262,6 +268,9 @@ class ReasonGenerator:
                     reasons.append(f"与你近期的「{cand.get('recall_tag', '相关主题')}」兴趣匹配")
             elif recall_source == "context_query":
                 reasons.append(f"匹配你这次输入的「{cand.get('recall_tag', '主题')}」")
+            elif recall_source == "llm_planned":
+                label = cand.get("recall_interest_label") or cand.get("recall_tag", "主题")
+                reasons.append(f"大模型根据你的「{label}」画像兴趣规划了这次检索")
             elif recall_source == "vector_rediscovery":
                 reasons.append("与当前主题在你的收藏知识库中语义相近")
             elif recall_source == "series_update":

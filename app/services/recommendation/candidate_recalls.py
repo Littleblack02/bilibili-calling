@@ -126,6 +126,14 @@ class CandidateRecall:
                     "context_query",
                     lambda: self._recall_by_context(bili, context["query"], limit_per_channel),
                 ))
+            llm_plan = context.get("llm_recall_plan") or {}
+            if llm_plan.get("applied") and llm_plan.get("queries"):
+                channels.append((
+                    "llm_planned",
+                    lambda: self._recall_by_llm_plan(
+                        bili, llm_plan, limit_per_channel
+                    ),
+                ))
             channel_results = await asyncio.gather(*[
                 run_channel(name, factory) for name, factory in channels
             ])
@@ -151,6 +159,7 @@ class CandidateRecall:
                 "raw_recall_score", "calibrated_recall_score",
                 "recall_score_calibrated", "recall_tag", "recall_category",
                 "recall_up_name", "recall_lookup", "follow_prior", "favorited_at",
+                "recall_plan_reason", "recall_interest_label",
             }
             deduplicated = [{
                 **{key: value for key, value in candidate.items() if key in trace_fields},
@@ -296,6 +305,59 @@ class CandidateRecall:
                 "recall_tag": query,
                 "raw_recall_score": 1.0,
             })
+        return candidates
+
+    async def _recall_by_llm_plan(
+        self,
+        bili: BilibiliService,
+        plan: Dict[str, Any],
+        limit: int,
+    ) -> List[Dict[str, Any]]:
+        """Execute only the validated search calls emitted by the LLM planner."""
+        queries = [row for row in (plan.get("queries") or []) if isinstance(row, dict)][:5]
+        if not queries:
+            return []
+        candidates: List[Dict[str, Any]] = []
+        per_query = max(1, limit // len(queries))
+        for spec in queries:
+            query = clean_bilibili_title(str(spec.get("query") or "")).strip()[:60]
+            if not query:
+                continue
+            order = str(spec.get("order") or "totalrank")
+            if order not in {"totalrank", "pubdate"}:
+                order = "totalrank"
+            result = await bili.search_bilibili(
+                keyword=query,
+                search_type="video",
+                order=order,
+                page=1,
+            )
+            items = (result.get("items") or []) if result.get("success") else []
+            for item in items[:per_query]:
+                candidates.append({
+                    "bvid": item.get("bvid", ""),
+                    "title": clean_bilibili_title(item.get("title", "")),
+                    "author": clean_bilibili_title(item.get("author", "")),
+                    "mid": item.get("mid", 0),
+                    "play": item.get("play", 0),
+                    "duration": duration_seconds(item.get("duration", 0)),
+                    "pic_url": item.get("pic", ""),
+                    "pubdate": datetime.fromtimestamp(item.get("pubdate", 0))
+                    if item.get("pubdate") else None,
+                    "recall_source": "llm_planned",
+                    "recall_tag": query,
+                    "raw_recall_score": float(spec.get("priority", 0.5)),
+                    "recall_plan_reason": str(spec.get("reason") or "")[:160],
+                    "recall_interest_label": str(
+                        spec.get("interest_label") or query
+                    )[:60],
+                    "recall_lookup": {
+                        "tool": plan.get("tool"),
+                        "model": plan.get("model"),
+                        "query": query,
+                        "order": order,
+                    },
+                })
         return candidates
 
     async def _recall_series_updates(
@@ -639,7 +701,9 @@ class CandidateRecall:
             recall_source = candidate.get("recall_source", "unknown")
 
             # 细分维度限制：每个画像维度最多 2 条
-            if recall_source in {"interest", "recent_interest", "context_query"}:
+            if recall_source in {
+                "interest", "recent_interest", "context_query", "llm_planned"
+            }:
                 tag = candidate.get("recall_tag", "")
                 if tag_counts.get(tag, 0) >= 2:
                     continue
