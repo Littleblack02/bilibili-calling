@@ -30,7 +30,8 @@ named `personal`, and SHACL rejects personal concepts in the public graph.
 
 ## Entity-linking cascade
 
-With `ONTOLOGY_LINKER_V2_ENABLED=true`, `resolve_text` uses the V2 cascade:
+`resolve_text` uses the V2 cascade by default. Set
+`ONTOLOGY_LINKER_V2_ENABLED=false` to use the deterministic V1 linker instead:
 
 1. exact preferred/alternative labels;
 2. token overlap plus RapidFuzz candidate generation;

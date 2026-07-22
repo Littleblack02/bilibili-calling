@@ -1,6 +1,7 @@
 # Profile Sync V2
 
-Enable with `PROFILE_SYNC_V2_ENABLED=true`. Each channel request records an
+V2 profile sync is enabled by default; set `PROFILE_SYNC_V2_ENABLED=false` to
+roll it back. Each channel request records an
 idempotent `ProfileSyncRun` with session, channel, channel kind, status,
 capability status, timing, HTTP status, item/page counts, cursor, bounded error
 summary, full-snapshot flag and schema version.

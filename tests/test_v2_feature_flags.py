@@ -11,3 +11,14 @@ def test_v2_feature_flags_are_explicit_and_auditable():
         "candidate_hydration": settings.candidate_hydration_enabled,
     }
     assert all(isinstance(value, bool) for value in snapshot.values())
+
+
+def test_ontology_v2_capabilities_are_enabled_by_default():
+    assert settings.temporal_affinity_v2_enabled is True
+    assert settings.rag_grounded_v2_enabled is True
+    assert settings.profile_sync_v2_enabled is True
+    assert settings.ontology_linker_v2_enabled is True
+    assert settings.v2_rollout_percentage == 100
+    # Candidate hydration changes recall/network behavior and is intentionally
+    # not part of the Ontology-default bundle.
+    assert settings.candidate_hydration_enabled is False

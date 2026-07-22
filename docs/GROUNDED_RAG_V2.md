@@ -1,6 +1,6 @@
 # Grounded RAG V2
 
-V2 is enabled with `RAG_GROUNDED_V2_ENABLED=true`; disabling it restores the
+V2 is enabled by default. Set `RAG_GROUNDED_V2_ENABLED=false` to restore the
 existing search and answer path.
 
 Every original or ontology-expanded query uses a score-bearing vector-store

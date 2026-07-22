@@ -35,7 +35,9 @@ def test_v2_subtitle_chunks_keep_time_range_and_independent_concepts(monkeypatch
     assert second.metadata["end_time"] == 72.5
     first_concepts = json.loads(first.metadata["concept_ids"])
     second_concepts = json.loads(second.metadata["concept_ids"])
-    assert "https://bilibili.local/ontology/Music" in first_concepts
+    # The default V2 linker keeps the most specific lexical concept. The
+    # broader Music concept remains reachable through SKOS expansion.
+    assert "https://bilibili.local/ontology/LiveMusic" in first_concepts
     assert "https://bilibili.local/ontology/RAG" not in first_concepts
     assert "https://bilibili.local/ontology/RAG" in second_concepts
     assert first.metadata["concept_scope"] == "chunk"

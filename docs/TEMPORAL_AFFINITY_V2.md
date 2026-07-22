@@ -26,6 +26,7 @@ view/favorite sequence from being treated as independent evidence many times.
 timestamps never enter recent affinity. Recommendation reasons label evidence
 as historical when evidence exists but recency confidence is below 0.15.
 
-V2 is independently reversible with `TEMPORAL_AFFINITY_V2_ENABLED=false`.
+V2 temporal affinity is enabled by default and is independently reversible
+with `TEMPORAL_AFFINITY_V2_ENABLED=false`.
 Profile JSON includes `schema_version` and the actual calibration parameters so
 V1 and V2 results remain attributable during rollout.

@@ -124,16 +124,17 @@ class Settings(BaseSettings):
         "recall_confidence": 0.08,
     })
 
-    # V2 rollout flags. Every material algorithm/data-path change must remain
-    # independently reversible while evaluation is in progress.
-    temporal_affinity_v2_enabled: bool = Field(default=False)
+    # Ontology V2 is the production default.  Every material algorithm/data-
+    # path change remains independently reversible through its environment
+    # variable so deployments can still roll back one capability at a time.
+    temporal_affinity_v2_enabled: bool = Field(default=True)
     # Calibration: a raw evidence mass of ``tau`` maps to 1-exp(-1)=0.632
     # absolute affinity. Tune on the dev split; never normalize by profile max.
     temporal_affinity_tau: float = Field(default=1.5, gt=0.0)
     temporal_secondary_signal_discount: float = Field(default=0.25, ge=0.0, le=1.0)
     interest_cluster_max_hops: int = Field(default=1, ge=0, le=4)
     multi_interest_temperature: float = Field(default=0.35, gt=0.0)
-    rag_grounded_v2_enabled: bool = Field(default=False)
+    rag_grounded_v2_enabled: bool = Field(default=True)
     rag_original_min_relevance: float = Field(default=0.35, ge=0.0, le=1.0)
     rag_synonym_min_relevance: float = Field(default=0.45, ge=0.0, le=1.0)
     rag_hierarchy_min_relevance: float = Field(default=0.55, ge=0.0, le=1.0)
@@ -144,8 +145,8 @@ class Settings(BaseSettings):
     rag_answerability_threshold: float = Field(default=0.45, ge=0.0, le=1.0)
     rag_answerability_query_coverage: float = Field(default=0.28, ge=0.0, le=1.0)
     rag_subtitle_chunk_seconds: float = Field(default=45.0, gt=1.0, le=300.0)
-    profile_sync_v2_enabled: bool = Field(default=False)
-    ontology_linker_v2_enabled: bool = Field(default=False)
+    profile_sync_v2_enabled: bool = Field(default=True)
+    ontology_linker_v2_enabled: bool = Field(default=True)
     ontology_linker_accept_threshold: float = Field(default=0.78, ge=0.0, le=1.0)
     ontology_linker_ambiguity_margin: float = Field(default=0.08, ge=0.0, le=1.0)
     candidate_hydration_enabled: bool = Field(default=False)
