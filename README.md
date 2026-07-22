@@ -1,6 +1,13 @@
 # Bilibili_calling 多Agent协作系统
 
 基于用户B站收藏夹和多种B站信息渠道，构建智能推荐和知识检索系统。通过多Agent协作，实现视频内容理解、语义搜索、个性化推荐等功能。
+
+## 在线交互 Demo
+
+👉 **[立即体验公开 Demo（无需登录）](https://bilibili-calling-demo.gengyiyang0227.chatgpt.site/demo)**
+
+Demo 使用脱敏数据：Ontology V2 的实体链接与关系扩展在浏览器中实时计算；B站数据与大模型调用展示经过验证的脱敏轨迹，不需要 Cookie、模型密钥或真实 B站账号。
+
 <img width="1280" height="764" alt="76ce91eca235eda80890293aaaa56277" src="https://github.com/user-attachments/assets/e0074138-a377-4a43-8911-aef103cdf357" />
 
 推荐召回、排序、事件闭环、指标、配置与安全边界见 [推荐闭环 MVP](docs/RECOMMENDATION_MVP.md)。强制大模型召回工具调用、重排和失败契约见 [LLM 推荐契约](docs/LLM_RECOMMENDATION.md)。本体、时序衰减、多兴趣画像和 B站数据通道的完整说明见 [本体与推荐集成](docs/ONTOLOGY_RECOMMENDATION.md)。V2 的最终指标、迁移/回填步骤、灰度方案和未验证 live 项见 [V2 最终验证报告](docs/FINAL_VALIDATION_V2.md)。
