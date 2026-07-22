@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "benchmark": "local_hydrated_candidate_ranking",
+  "metrics": {
+    "iterations": 40,
+    "hydrated_candidates": 200,
+    "average_ms": 28.994325,
+    "p95_ms": 39.672,
+    "maximum_ms": 114.979
+  },
+  "threshold_p95_ms": 300.0,
+  "passed": true,
+  "limitations": "Local deterministic ranking only; excludes network hydration and remote LLM latency."
+}

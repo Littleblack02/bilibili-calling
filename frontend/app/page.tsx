@@ -73,12 +73,15 @@ export default function Home() {
   }, [isDragging, handleMouseMove, handleMouseUp]);
 
   useEffect(() => {
-    const s = localStorage.getItem("bili_session");
-    const u = localStorage.getItem("bili_user");
-    if (s && u) {
-      setSession(s);
-      setUser(u);
-    }
+    const timer = window.setTimeout(() => {
+      const s = localStorage.getItem("bili_session");
+      const u = localStorage.getItem("bili_user");
+      if (s && u) {
+        setSession(s);
+        setUser(u);
+      }
+    }, 0);
+    return () => window.clearTimeout(timer);
   }, []);
 
   const onLogin = (sid: string, info: UserInfo) => {

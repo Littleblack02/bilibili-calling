@@ -1,0 +1,32 @@
+{
+  "schema_version": "2.0",
+  "deidentified": true,
+  "channels": {
+    "favorites": {"code": 0, "data": {"items": [{"bvid": "BV1FIXTURE01"}], "has_more": false}},
+    "bangumi": {"code": 0, "data": {"items": [{"season_id": 101}], "has_more": false}},
+    "cinema": {"code": 0, "data": {"items": [{"media_id": 102}], "has_more": false}},
+    "history": {"code": 0, "data": {"items": [{"bvid": "BV1FIXTURE02", "view_at": 1700000000}], "has_more": false}},
+    "watchlater": {"code": 0, "data": {"items": [{"bvid": "BV1FIXTURE03"}], "has_more": false}},
+    "followings": {"code": 0, "data": {"items": [{"mid": 2001}], "has_more": false}},
+    "special_followings": {"code": 0, "data": {"items": [{"mid": 2002}], "has_more": false}},
+    "whisper_followings": {"code": 0, "data": {"items": [{"mid": 2003}], "has_more": false}},
+    "subscribed_tags": {"code": 0, "data": {"items": [{"tag_id": 301}], "has_more": false}},
+    "favorite_collections": {"code": 0, "data": {"items": [{"id": 302}], "has_more": false}},
+    "favorite_topics": {"code": 0, "data": {"items": [{"id": 303}], "has_more": false}},
+    "favorite_articles": {"code": 0, "data": {"items": [{"id": 304}], "has_more": false}},
+    "favorite_courses": {"code": 0, "data": {"items": [{"id": 305}], "has_more": false}},
+    "favorite_notes": {"code": 0, "data": {"items": [{"id": 306}], "has_more": false}},
+    "courses": {"code": 0, "data": {"items": [{"id": 307}], "has_more": false}},
+    "fan_medals": {"code": 0, "data": {"items": [{"medal_id": 308}], "has_more": false}},
+    "manga": {"code": 0, "data": {"items": [{"id": 309}], "has_more": false}},
+    "live_history": {"code": 0, "data": {"items": [{"room_id": 310}], "has_more": false}},
+    "dynamic_feed": {"code": 0, "data": {"items": [{"id_str": "311"}], "has_more": false}}
+  },
+  "error_cases": {
+    "empty": {"code": 0, "data": {"items": [], "has_more": false}},
+    "missing_items": {"code": 0, "data": {"unexpected": []}},
+    "nonzero_code": {"code": -500, "message": "fixture error"},
+    "auth_required": {"code": -101, "message": "fixture auth required"},
+    "rate_limited": {"code": 429, "message": "fixture rate limited"}
+  }
+}

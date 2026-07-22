@@ -4,18 +4,21 @@ Bilibili RAG 多Agent协作系统
 主应用入口
 """
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
 import sys
 import asyncio
+import re
+import time
+import uuid
 from typing import Optional
 
 from app.config import settings, ensure_directories
 from app.database import init_db, async_session_factory
 
 # 导入原有路由
-from app.routers import auth, favorites, knowledge, chat
+from app.routers import auth, favorites, knowledge, chat, ontology, privacy, observability
 
 # 导入新路由（多Agent系统）
 from app.services.tools import tool_registry, register_all_tools
@@ -32,19 +35,23 @@ from app.routers.websocket_manager import heartbeat_loop
 
 # DeerFlow Client singleton (separate module to avoid circular imports)
 from app.deerflow_client import get_deerflow_client, _set_deerflow_client, _clear_deerflow_client
+from app.services.security.cookies import redact_log_record
+from app.services.observability import metrics, request_id_var, session_hash_var, safe_hash
 
 # 配置日志
 logger.remove()
 logger.add(
     sys.stdout,
     format="<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>",
-    level="DEBUG" if settings.debug else "INFO"
+    level="DEBUG" if settings.debug else "INFO",
+    filter=redact_log_record,
 )
 logger.add(
     "logs/app.log",
     rotation="10 MB",
     retention="7 days",
-    level="DEBUG"
+    level="DEBUG",
+    filter=redact_log_record,
 )
 
 
@@ -185,11 +192,41 @@ app.add_middleware(
 )
 
 
+@app.middleware("http")
+async def correlate_and_measure(request: Request, call_next):
+    supplied = request.headers.get("x-request-id", "")
+    request_id = supplied if re.fullmatch(r"[A-Za-z0-9_.-]{1,64}", supplied) else uuid.uuid4().hex
+    session_hash = safe_hash(request.query_params.get("session_id"))
+    request_token = request_id_var.set(request_id)
+    session_token = session_hash_var.set(session_hash)
+    started = time.perf_counter()
+    status = 500
+    try:
+        response = await call_next(request)
+        status = response.status_code
+        response.headers["X-Request-ID"] = request_id
+        return response
+    finally:
+        route = request.scope.get("route")
+        route_name = getattr(route, "path", "unmatched")
+        elapsed_ms = (time.perf_counter() - started) * 1000
+        metrics.inc("api_requests_total", method=request.method, route=route_name, status=status)
+        metrics.observe("api_request_duration_ms", elapsed_ms, method=request.method, route=route_name)
+        logger.bind(request_id=request_id, session_hash=session_hash).info(
+            f"API request completed route={route_name} status={status} duration_ms={elapsed_ms:.2f}"
+        )
+        request_id_var.reset(request_token)
+        session_hash_var.reset(session_token)
+
+
 # 注册原有路由（已有 prefix 和 tags）
 app.include_router(auth.router)
 app.include_router(favorites.router)
 app.include_router(knowledge.router)
 app.include_router(chat.router)
+app.include_router(ontology.router)
+app.include_router(privacy.router)
+app.include_router(observability.router)
 
 # 注册新路由（多Agent系统，已有 prefix="/api/v1"）
 app.include_router(agent_router)

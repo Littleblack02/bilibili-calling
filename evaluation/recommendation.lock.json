@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "dataset_kind": "deterministic_synthetic_editorial",
+  "seed": 20260721,
+  "cutoff": "2026-06-01T00:00:00Z",
+  "sessions": 84,
+  "items": 1008,
+  "events": 1328,
+  "future_targets": 280,
+  "sha256": {
+    "recommendation_items.jsonl": "143ab7147097fbd0933f451c0c6346fc7bfc8ca788920c2e4922ca403956e742",
+    "recommendation_events.jsonl": "bd3defc97f9a6dc0732e5ca8d97ba55c5b1977f5d8f0930a256d18c2d199b390"
+  },
+  "limitations": "Synthetic regression fixture; does not represent live Bilibili traffic or online causal uplift."
+}

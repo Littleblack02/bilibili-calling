@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-07-21T06:16:00.955807+00:00",
+  "ontology_version": "bili-ontology-2.0.0",
+  "module_count": 9,
+  "concept_count": 234,
+  "triple_count": 2199,
+  "shacl_conforms": true,
+  "normalized_label_conflicts": {},
+  "duplicate_bilibili_tids": {},
+  "dangling_relations": [],
+  "public_personal_concepts": [],
+  "passes": true
+}

@@ -1,0 +1,129 @@
+@prefix bili: <https://bilibili.local/ontology/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+bili:ontology-v2 a owl:Ontology ;
+    rdfs:label "B站内容与兴趣本体 V2"@zh ;
+    owl:versionInfo "2.0.0" .
+
+bili:Video a owl:Class .
+bili:Creator a owl:Class .
+bili:User a owl:Class .
+bili:FavoriteFolder a owl:Class .
+bili:RecommendationEvent a owl:Class .
+bili:Topic a owl:Class ; rdfs:subClassOf skos:Concept .
+bili:Skill a owl:Class ; rdfs:subClassOf skos:Concept .
+bili:ContentFormat a owl:Class ; rdfs:subClassOf skos:Concept .
+bili:Difficulty a owl:Class ; rdfs:subClassOf skos:Concept .
+bili:Category a owl:Class ; rdfs:subClassOf skos:Concept .
+bili:PersonalConcept a owl:Class ; rdfs:subClassOf skos:Concept .
+
+bili:aboutTopic a owl:ObjectProperty ; rdfs:domain bili:Video ; rdfs:range skos:Concept .
+bili:teaches a owl:ObjectProperty ; rdfs:domain bili:Video ; rdfs:range bili:Skill .
+bili:requires a owl:ObjectProperty ; rdfs:domain skos:Concept ; rdfs:range skos:Concept .
+bili:hasFormat a owl:ObjectProperty ; rdfs:domain bili:Video ; rdfs:range bili:ContentFormat .
+bili:hasDifficulty a owl:ObjectProperty ; rdfs:domain bili:Video ; rdfs:range bili:Difficulty .
+bili:createdBy a owl:ObjectProperty ; rdfs:domain bili:Video ; rdfs:range bili:Creator .
+bili:interestEvidenceFor a owl:ObjectProperty ; rdfs:domain bili:RecommendationEvent ; rdfs:range skos:Concept .
+bili:status a owl:DatatypeProperty ; rdfs:domain skos:Concept ; rdfs:range xsd:string .
+bili:maintenanceVersion a owl:DatatypeProperty ; rdfs:domain skos:Concept ; rdfs:range xsd:string .
+bili:bilibiliTid a owl:DatatypeProperty ; rdfs:domain bili:Category ; rdfs:range xsd:integer .
+
+bili:Tutorial a bili:ContentFormat, skos:Concept ;
+    skos:prefLabel "教程"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“教程”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial core" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "tutorial"@en, "入门教程"@zh .
+
+bili:HandsOn a bili:ContentFormat, skos:Concept ;
+    skos:prefLabel "实战"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“实战”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial core" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "hands-on"@en, "项目实战"@zh .
+
+bili:Review a bili:ContentFormat, skos:Concept ;
+    skos:prefLabel "测评"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“测评”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial core" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "review"@en, "评测"@zh .
+
+bili:News a bili:ContentFormat, skos:Concept ;
+    skos:prefLabel "资讯"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“资讯”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial core" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "news"@en, "新闻"@zh .
+
+bili:DocumentaryFormat a bili:ContentFormat, skos:Concept ;
+    skos:prefLabel "纪录片形式"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“纪录片形式”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial core" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "documentary format"@en .
+
+bili:Commentary a bili:ContentFormat, skos:Concept ;
+    skos:prefLabel "解说"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“解说”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial core" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "commentary"@en .
+
+bili:Vlog a bili:ContentFormat, skos:Concept ;
+    skos:prefLabel "视频日志"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“视频日志”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial core" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Vlog"@en .
+
+bili:LiveReplay a bili:ContentFormat, skos:Concept ;
+    skos:prefLabel "直播回放"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“直播回放”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial core" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "录播"@zh .
+
+bili:Beginner a bili:Difficulty, skos:Concept ;
+    skos:prefLabel "入门"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“入门”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial core" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "beginner"@en, "零基础"@zh .
+
+bili:Intermediate a bili:Difficulty, skos:Concept ;
+    skos:prefLabel "进阶"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“进阶”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial core" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "intermediate"@en, "中级"@zh .
+
+bili:Advanced a bili:Difficulty, skos:Concept ;
+    skos:prefLabel "高级"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“高级”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial core" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "advanced"@en, "深入"@zh .
+
+bili:AIGeneratedContentLegacy a bili:Topic, skos:Concept ;
+    skos:prefLabel "AI生成内容（旧称）"@zh ;
+    skos:definition "生成式人工智能内容的历史术语，仅用于兼容旧标注。"@zh ;
+    dcterms:source "Ontology V1 compatibility review" ;
+    bili:status "deprecated" ; bili:maintenanceVersion "2.0.0" ;
+    owl:deprecated true ; dcterms:isReplacedBy bili:GenerativeAI .

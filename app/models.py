@@ -4,9 +4,10 @@
 from sqlalchemy import Column, Integer, String, DateTime, Boolean, Text, JSON, Float, UniqueConstraint
 from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
-from typing import Optional
-from pydantic import BaseModel
+from typing import Any, Optional
+from pydantic import BaseModel, Field
 from enum import Enum
+from app.services.security.cookies import EncryptedCookieText
 
 Base = declarative_base()
 
@@ -54,9 +55,10 @@ class UserSession(Base):
     bili_uname = Column(String(100), nullable=True)  # B站用户名
     bili_face = Column(String(500), nullable=True)  # 头像URL
 
-    # Cookie 信息（加密存储更安全，这里简化处理）
-    sessdata = Column(Text, nullable=True)
-    bili_jct = Column(Text, nullable=True)
+    # Cookie values are transparently protected with versioned AES-GCM while
+    # preserving the existing TEXT database schema.
+    sessdata = Column(EncryptedCookieText(), nullable=True)
+    bili_jct = Column(EncryptedCookieText(), nullable=True)
     dedeuserid = Column(String(50), nullable=True)
 
     # 状态
@@ -215,6 +217,9 @@ class UserInterestProfile(Base):
     # === 短期兴趣（动态、对话驱动）===
     recent_interest_shift = Column(JSON, nullable=True)  # 最近兴趣变化：{"from": "通用AI", "to": "LoRA微调", "detected_at": "2024-01-15"}
     short_term_focus = Column(JSON, nullable=True)  # 当前阶段偏好：{"focus": "入门教程", "reason": "连续3次对话问基础", "detected_at": "2024-01-15"}
+    # Ontology + temporal multi-interest features. Kept as JSON so new
+    # feature families can evolve without repeatedly changing the profile table.
+    profile_features = Column(JSON, nullable=True)
 
     # 时间偏好
     update_frequency = Column(String(20), default='daily')  # daily/weekly/monthly
@@ -483,6 +488,164 @@ class FinalRecommendation(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
 
+# ==================== Ontology / unified user-signal layer ====================
+
+class OntologyConcept(Base):
+    """Canonical concept materialized from the versioned RDF ontology."""
+    __tablename__ = "ontology_concepts"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    concept_id = Column(String(300), unique=True, index=True, nullable=False)
+    pref_label = Column(String(200), index=True, nullable=False)
+    concept_type = Column(String(50), index=True, nullable=False)
+    aliases = Column(JSON, nullable=True)
+    description = Column(Text, nullable=True)
+    ontology_version = Column(String(64), index=True, nullable=False)
+    is_active = Column(Boolean, default=True, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+
+class OntologyRelation(Base):
+    """Materialized ontology edge for auditing and future graph migration."""
+    __tablename__ = "ontology_relations"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    subject_id = Column(String(300), index=True, nullable=False)
+    predicate = Column(String(80), index=True, nullable=False)
+    object_id = Column(String(300), index=True, nullable=False)
+    weight = Column(Float, default=1.0, nullable=False)
+    confidence = Column(Float, default=1.0, nullable=False)
+    source = Column(String(50), default="curated", nullable=False)
+    ontology_version = Column(String(64), index=True, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    __table_args__ = (
+        UniqueConstraint(
+            "subject_id", "predicate", "object_id", "ontology_version",
+            name="uix_ontology_relation_version",
+        ),
+    )
+
+
+class VideoConcept(Base):
+    """Evidence-backed relation between a Bilibili video and a concept."""
+    __tablename__ = "video_concepts"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    bvid = Column(String(20), index=True, nullable=False)
+    concept_id = Column(String(300), index=True, nullable=False)
+    relation_type = Column(String(50), index=True, nullable=False)
+    confidence = Column(Float, default=0.0, nullable=False)
+    evidence_text = Column(Text, nullable=True)
+    extraction_source = Column(String(80), nullable=False)
+    ontology_version = Column(String(64), index=True, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    __table_args__ = (
+        UniqueConstraint(
+            "bvid", "concept_id", "relation_type",
+            name="uix_video_concept_relation",
+        ),
+    )
+
+
+class UserContentSignal(Base):
+    """Normalized, time-aware signal collected from any supported Bilibili channel."""
+    __tablename__ = "user_content_signals"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    signal_key = Column(String(300), unique=True, index=True, nullable=False)
+    session_id = Column(String(64), index=True, nullable=False)
+    source = Column(String(50), index=True, nullable=False)
+    item_type = Column(String(50), index=True, nullable=False)
+    item_id = Column(String(200), index=True, nullable=False)
+    title = Column(String(500), nullable=True)
+    description = Column(Text, nullable=True)
+    creator_mid = Column(Integer, index=True, nullable=True)
+    creator_name = Column(String(100), nullable=True)
+    category = Column(String(100), nullable=True)
+    tags = Column(JSON, nullable=True)
+    strength = Column(Float, default=1.0, nullable=False)
+    occurred_at = Column(DateTime, index=True, nullable=True)
+    payload = Column(JSON, nullable=True)
+    is_active = Column(Boolean, default=True, nullable=False)
+    first_seen_at = Column(DateTime, default=datetime.utcnow)
+    last_seen_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    last_seen_sync_id = Column(String(64), index=True, nullable=True)
+
+    __table_args__ = (
+        UniqueConstraint("signal_key", name="uix_user_content_signal_key"),
+    )
+
+
+class ProfileSyncRun(Base):
+    """Auditable lifecycle for one profile channel synchronization attempt."""
+    __tablename__ = "profile_sync_runs"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    run_id = Column(String(64), unique=True, index=True, nullable=False)
+    idempotency_key = Column(String(128), unique=True, index=True, nullable=False)
+    session_id = Column(String(64), index=True, nullable=False)
+    channel = Column(String(50), index=True, nullable=False)
+    channel_kind = Column(String(20), nullable=False)  # snapshot / event_stream
+    status = Column(String(30), index=True, nullable=False, default="running")
+    capability_status = Column(String(30), nullable=False, default="working")
+    started_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    finished_at = Column(DateTime, nullable=True)
+    duration_ms = Column(Integer, nullable=True)
+    cursor = Column(JSON, nullable=True)
+    item_count = Column(Integer, default=0, nullable=False)
+    page_count = Column(Integer, default=0, nullable=False)
+    full_snapshot = Column(Boolean, default=False, nullable=False)
+    http_status = Column(Integer, nullable=True)
+    error_summary = Column(String(500), nullable=True)
+    schema_version = Column(String(16), nullable=False, default="2.0")
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+
+class RecommendationBatch(Base):
+    """一次推荐响应的可追溯快照。"""
+    __tablename__ = "recommendation_batches"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    batch_id = Column(String(64), unique=True, index=True, nullable=False)
+    session_id = Column(String(64), index=True, nullable=False)
+    algorithm_version = Column(String(32), nullable=False)
+    requested_count = Column(Integer, nullable=False)
+    returned_count = Column(Integer, nullable=False, default=0)
+    context = Column(JSON, nullable=True)
+    recommendations = Column(JSON, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, index=True)
+
+
+class RecommendationEvent(Base):
+    """推荐曝光及显式/隐式反馈事件。"""
+    __tablename__ = "recommendation_events"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    event_id = Column(String(64), unique=True, index=True, nullable=False)
+    session_id = Column(String(64), index=True, nullable=False)
+    batch_id = Column(String(64), index=True, nullable=True)
+    bvid = Column(String(20), index=True, nullable=False)
+    event_type = Column(String(32), index=True, nullable=False)
+    reason_code = Column(String(64), nullable=True)
+    topic = Column(String(100), index=True, nullable=True)
+    up_mid = Column(Integer, index=True, nullable=True)
+    position = Column(Integer, nullable=True)
+    score = Column(Float, nullable=True)
+    event_data = Column(JSON, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, index=True)
+
+    __table_args__ = (
+        UniqueConstraint(
+            "session_id", "batch_id", "bvid", "event_type",
+            name="uix_recommendation_event_once",
+        ),
+    )
+
+
 class PushHistory(Base):
     """推送历史记录"""
     __tablename__ = 'push_history'
@@ -557,6 +720,9 @@ class VideoContent(BaseModel):
     content: str
     source: ContentSource
     outline: Optional[list] = None
+    # Timestamped subtitle/ASR units. Each row uses text/content plus
+    # start_time/end_time seconds. Older callers can continue omitting it.
+    segments: Optional[list[dict[str, Any]]] = None
 
 
 class QRCodeResponse(BaseModel):
@@ -594,6 +760,12 @@ class ChatResponse(BaseModel):
     """对话响应"""
     answer: str
     sources: list[dict]
+    grounded: Optional[bool] = None
+    retrieval_confidence: Optional[float] = None
+    answerability: Optional[str] = None
+    citations: list[dict] = Field(default_factory=list)
+    ontology_matches: list[str] = Field(default_factory=list)
+    citation_verification: Optional[dict] = None
 
 
 # ==================== 智能推荐系统 API 模型 ====================

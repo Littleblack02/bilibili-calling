@@ -33,23 +33,28 @@ export default function DemoFlowModal({ isOpen, onClose }: Props) {
 
 
   useEffect(() => {
+    let startTimer: number | null = null;
     if (!isOpen) {
-      setStep("idle");
-      setTyped("");
-      setAnswerTyped("");
-      return;
+      startTimer = window.setTimeout(() => {
+        setStep("idle");
+        setTyped("");
+        setAnswerTyped("");
+      }, 0);
+      return () => {
+        if (startTimer) window.clearTimeout(startTimer);
+      };
     }
-
-    setStep("typing");
-    setTyped("");
-    setAnswerTyped("");
 
     let typingTimer: number | null = null;
     let searchTimer: number | null = null;
     let answerTimer: number | null = null;
 
     let i = 0;
-    typingTimer = window.setInterval(() => {
+    startTimer = window.setTimeout(() => {
+      setStep("typing");
+      setTyped("");
+      setAnswerTyped("");
+      typingTimer = window.setInterval(() => {
       i += 1;
       setTyped(question.slice(0, i));
       if (i >= question.length) {
@@ -68,9 +73,11 @@ export default function DemoFlowModal({ isOpen, onClose }: Props) {
           }, 18);
         }, 1400);
       }
-    }, 60);
+      }, 60);
+    }, 0);
 
     return () => {
+      if (startTimer) window.clearTimeout(startTimer);
       if (typingTimer) window.clearInterval(typingTimer);
       if (searchTimer) window.clearTimeout(searchTimer);
       if (answerTimer) window.clearInterval(answerTimer);

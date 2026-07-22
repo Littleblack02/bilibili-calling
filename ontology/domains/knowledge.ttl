@@ -1,0 +1,259 @@
+@prefix bili: <https://bilibili.local/ontology/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+bili:Science a bili:Topic, skos:Concept ;
+    skos:prefLabel "自然科学"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“自然科学”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: knowledge domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Science"@en ;
+    skos:broader bili:Knowledge .
+
+bili:Mathematics a bili:Topic, skos:Concept ;
+    skos:prefLabel "数学"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“数学”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: knowledge domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Mathematics"@en, "Math"@en ;
+    skos:broader bili:Knowledge .
+
+bili:Physics a bili:Topic, skos:Concept ;
+    skos:prefLabel "物理学"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“物理学”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: knowledge domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Physics"@en ;
+    skos:broader bili:Science .
+
+bili:Chemistry a bili:Topic, skos:Concept ;
+    skos:prefLabel "化学"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“化学”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: knowledge domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Chemistry"@en ;
+    skos:broader bili:Science .
+
+bili:Biology a bili:Topic, skos:Concept ;
+    skos:prefLabel "生物学"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“生物学”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: knowledge domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Biology"@en ;
+    skos:broader bili:Science .
+
+bili:Astronomy a bili:Topic, skos:Concept ;
+    skos:prefLabel "天文学"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“天文学”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: knowledge domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Astronomy"@en ;
+    skos:broader bili:Science .
+
+bili:EarthScience a bili:Topic, skos:Concept ;
+    skos:prefLabel "地球科学"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“地球科学”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: knowledge domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Earth Science"@en ;
+    skos:broader bili:Science .
+
+bili:Medicine a bili:Topic, skos:Concept ;
+    skos:prefLabel "医学科普"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“医学科普”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: knowledge domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Medical Science"@en ;
+    skos:broader bili:Knowledge .
+
+bili:History a bili:Topic, skos:Concept ;
+    skos:prefLabel "历史"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“历史”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: knowledge domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "History"@en ;
+    skos:broader bili:Knowledge .
+
+bili:Geography a bili:Topic, skos:Concept ;
+    skos:prefLabel "地理"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“地理”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: knowledge domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Geography"@en ;
+    skos:broader bili:Knowledge .
+
+bili:Philosophy a bili:Topic, skos:Concept ;
+    skos:prefLabel "哲学"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“哲学”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: knowledge domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Philosophy"@en ;
+    skos:broader bili:Knowledge .
+
+bili:Psychology a bili:Topic, skos:Concept ;
+    skos:prefLabel "心理学"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“心理学”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: knowledge domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Psychology"@en ;
+    skos:broader bili:Knowledge .
+
+bili:Economics a bili:Topic, skos:Concept ;
+    skos:prefLabel "经济学"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“经济学”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: knowledge domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Economics"@en ;
+    skos:broader bili:Knowledge .
+
+bili:Sociology a bili:Topic, skos:Concept ;
+    skos:prefLabel "社会学"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“社会学”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: knowledge domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Sociology"@en ;
+    skos:broader bili:Knowledge .
+
+bili:Law a bili:Topic, skos:Concept ;
+    skos:prefLabel "法律知识"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“法律知识”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: knowledge domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Law"@en ;
+    skos:broader bili:Knowledge .
+
+bili:Linguistics a bili:Topic, skos:Concept ;
+    skos:prefLabel "语言学"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“语言学”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: knowledge domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Linguistics"@en ;
+    skos:broader bili:Knowledge .
+
+bili:Literature a bili:Topic, skos:Concept ;
+    skos:prefLabel "文学"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“文学”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: knowledge domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Literature"@en ;
+    skos:broader bili:Knowledge .
+
+bili:ArtHistory a bili:Topic, skos:Concept ;
+    skos:prefLabel "艺术史"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“艺术史”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: knowledge domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Art History"@en ;
+    skos:broader bili:Knowledge .
+
+bili:Education a bili:Topic, skos:Concept ;
+    skos:prefLabel "教育"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“教育”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: knowledge domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Education"@en ;
+    skos:broader bili:Knowledge .
+
+bili:LearningMethods a bili:Skill, skos:Concept ;
+    skos:prefLabel "学习方法"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“学习方法”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: knowledge domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Study Skills"@en ;
+    skos:broader bili:Education .
+
+bili:ExamPreparation a bili:Skill, skos:Concept ;
+    skos:prefLabel "考试备考"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“考试备考”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: knowledge domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Exam Prep"@en ;
+    skos:broader bili:Education .
+
+bili:InformationRetrieval a bili:Skill, skos:Concept ;
+    skos:prefLabel "信息检索"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“信息检索”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: knowledge domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Information Retrieval"@en, "IR"@en ;
+    skos:broader bili:Knowledge .
+
+bili:AcademicWriting a bili:Skill, skos:Concept ;
+    skos:prefLabel "学术写作"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“学术写作”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: knowledge domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Academic Writing"@en ;
+    skos:broader bili:Education .
+
+bili:ResearchMethods a bili:Skill, skos:Concept ;
+    skos:prefLabel "研究方法"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“研究方法”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: knowledge domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Research Methods"@en ;
+    skos:broader bili:Education .
+
+bili:DataVisualization a bili:Skill, skos:Concept ;
+    skos:prefLabel "数据可视化"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“数据可视化”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: knowledge domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Data Visualization"@en ;
+    skos:broader bili:DataScience .
+
+bili:Statistics a bili:Topic, skos:Concept ;
+    skos:prefLabel "统计学"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“统计学”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: knowledge domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Statistics"@en ;
+    skos:broader bili:Mathematics .
+
+bili:PopularScience a bili:Skill, skos:Concept ;
+    skos:prefLabel "科普创作"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“科普创作”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: knowledge domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Science Communication"@en ;
+    skos:broader bili:Knowledge .
+
+bili:Museum a bili:Topic, skos:Concept ;
+    skos:prefLabel "博物馆知识"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“博物馆知识”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: knowledge domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Museum"@en ;
+    skos:broader bili:Knowledge .

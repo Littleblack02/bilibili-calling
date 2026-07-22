@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-07-21T06:17:25.557866+00:00",
+  "ontology_version": "bili-ontology-2.0.0",
+  "split": "test",
+  "example_count": 111,
+  "tp": 96,
+  "fp": 2,
+  "fn": 5,
+  "precision": 0.979592,
+  "recall": 0.950495,
+  "f1": 0.964824,
+  "abstention_accuracy": 1.0,
+  "abstention_count": 10,
+  "stage_counts": {
+    "exact_label": 84,
+    "local_vector": 14,
+    "reject": 13
+  },
+  "thresholds": {
+    "precision": 0.92,
+    "recall": 0.85,
+    "f1": 0.88,
+    "abstention_accuracy": 0.9
+  },
+  "passes": true,
+  "failures": [
+    {
+      "id": "el-v2-0403",
+      "text": "Pythn 编程",
+      "expected": [
+        "https://bilibili.local/ontology/Python"
+      ],
+      "predicted": [
+        "https://bilibili.local/ontology/Programming"
+      ],
+      "reason": null
+    },
+    {
+      "id": "el-v2-0404",
+      "text": "Machin Learnig",
+      "expected": [
+        "https://bilibili.local/ontology/MachineLearning"
+      ],
+      "predicted": [],
+      "reason": "no_candidate"
+    },
+    {
+      "id": "el-v2-0405",
+      "text": "Reinforcment Learning",
+      "expected": [
+        "https://bilibili.local/ontology/ReinforcementLearning"
+      ],
+      "predicted": [],
+      "reason": "no_candidate"
+    },
+    {
+      "id": "el-v2-0406",
+      "text": "Minecraf 沙盒",
+      "expected": [
+        "https://bilibili.local/ontology/Minecraft"
+      ],
+      "predicted": [],
+      "reason": "below_confidence_threshold"
+    },
+    {
+      "id": "el-v2-0410",
+      "text": "Eletronic Music",
+      "expected": [
+        "https://bilibili.local/ontology/ElectronicMusic"
+      ],
+      "predicted": [
+        "https://bilibili.local/ontology/Music"
+      ],
+      "reason": null
+    }
+  ]
+}

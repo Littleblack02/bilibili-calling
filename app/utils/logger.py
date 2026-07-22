@@ -5,6 +5,7 @@
 """
 import sys
 from loguru import logger
+from app.services.security.cookies import redact_log_record
 
 # 移除默认处理器
 logger.remove()
@@ -13,7 +14,8 @@ logger.remove()
 logger.add(
     sys.stdout,
     format="<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>",
-    level="DEBUG"  # 默认 DEBUG，可根据 settings.debug 调整
+    level="DEBUG",  # 默认 DEBUG，可根据 settings.debug 调整
+    filter=redact_log_record,
 )
 
 # 添加文件处理器
@@ -21,7 +23,8 @@ logger.add(
     "logs/app.log",
     rotation="10 MB",
     retention="7 days",
-    level="DEBUG"
+    level="DEBUG",
+    filter=redact_log_record,
 )
 
 

@@ -1,0 +1,382 @@
+@prefix bili: <https://bilibili.local/ontology/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+bili:ArtificialIntelligence a bili:Topic, skos:Concept ;
+    skos:prefLabel "人工智能"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“人工智能”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "AI"@en ;
+    skos:broader bili:Technology .
+
+bili:MachineLearning a bili:Topic, skos:Concept ;
+    skos:prefLabel "机器学习"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“机器学习”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "ML"@en ;
+    skos:broader bili:ArtificialIntelligence .
+
+bili:DeepLearning a bili:Topic, skos:Concept ;
+    skos:prefLabel "深度学习"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“深度学习”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "DL"@en ;
+    skos:broader bili:MachineLearning .
+
+bili:GenerativeAI a bili:Topic, skos:Concept ;
+    skos:prefLabel "生成式人工智能"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“生成式人工智能”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "生成式AI"@zh, "AIGC"@en, "Generative AI"@en ;
+    skos:broader bili:ArtificialIntelligence .
+
+bili:LargeLanguageModel a bili:Topic, skos:Concept ;
+    skos:prefLabel "大语言模型"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“大语言模型”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "大模型"@zh, "LLM"@en, "Large Language Model"@en ;
+    skos:broader bili:GenerativeAI .
+
+bili:Transformer a bili:Topic, skos:Concept ;
+    skos:prefLabel "Transformer模型"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“Transformer模型”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Transformer"@en, "变换器模型"@zh ;
+    skos:broader bili:DeepLearning .
+
+bili:RAG a bili:Topic, skos:Concept ;
+    skos:prefLabel "检索增强生成"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“检索增强生成”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "RAG"@en, "知识库问答"@zh, "检索增强"@zh ;
+    skos:broader bili:LargeLanguageModel .
+
+bili:Agent a bili:Topic, skos:Concept ;
+    skos:prefLabel "AI智能体"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“AI智能体”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Agent"@en, "智能体"@zh, "AI Agent"@en ;
+    skos:broader bili:LargeLanguageModel .
+
+bili:MultiAgent a bili:Topic, skos:Concept ;
+    skos:prefLabel "多智能体"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“多智能体”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Multi-Agent"@en, "多Agent"@zh ;
+    skos:broader bili:Agent .
+
+bili:PromptEngineering a bili:Skill, skos:Concept ;
+    skos:prefLabel "提示词工程"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“提示词工程”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Prompt Engineering"@en, "提示工程"@zh ;
+    skos:broader bili:LargeLanguageModel .
+
+bili:FineTuning a bili:Skill, skos:Concept ;
+    skos:prefLabel "模型微调"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“模型微调”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Fine-tuning"@en, "微调"@zh ;
+    skos:broader bili:MachineLearning .
+
+bili:LoRA a bili:Skill, skos:Concept ;
+    skos:prefLabel "LoRA微调"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“LoRA微调”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "LoRA"@en, "低秩微调"@zh ;
+    skos:broader bili:FineTuning .
+
+bili:VectorDatabase a bili:Topic, skos:Concept ;
+    skos:prefLabel "向量数据库"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“向量数据库”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Vector DB"@en, "向量库"@zh ;
+    skos:broader bili:Technology .
+
+bili:KnowledgeGraph a bili:Topic, skos:Concept ;
+    skos:prefLabel "知识图谱"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“知识图谱”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Knowledge Graph"@en, "KG"@en ;
+    skos:broader bili:ArtificialIntelligence .
+
+bili:Ontology a bili:Topic, skos:Concept ;
+    skos:prefLabel "知识本体"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“知识本体”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Ontology"@en, "领域本体"@zh ;
+    skos:broader bili:KnowledgeGraph .
+
+bili:Programming a bili:Skill, skos:Concept ;
+    skos:prefLabel "编程"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“编程”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "programming"@en ;
+    skos:broader bili:Technology .
+
+bili:Python a bili:Skill, skos:Concept ;
+    skos:prefLabel "Python编程"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“Python编程”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Python"@en ;
+    skos:broader bili:Programming .
+
+bili:Java a bili:Skill, skos:Concept ;
+    skos:prefLabel "Java编程"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“Java编程”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Java"@en ;
+    skos:broader bili:Programming .
+
+bili:JavaScript a bili:Skill, skos:Concept ;
+    skos:prefLabel "JavaScript编程"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“JavaScript编程”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "JavaScript"@en, "JS"@en ;
+    skos:broader bili:Programming .
+
+bili:WebDevelopment a bili:Skill, skos:Concept ;
+    skos:prefLabel "Web开发"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“Web开发”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "网页开发"@zh, "前端开发"@zh ;
+    skos:broader bili:Programming .
+
+bili:DataScience a bili:Topic, skos:Concept ;
+    skos:prefLabel "数据科学"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“数据科学”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Data Science"@en, "数据分析"@zh ;
+    skos:broader bili:Technology .
+
+bili:LangChain a bili:Skill, skos:Concept ;
+    skos:prefLabel "LangChain"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“LangChain”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:broader bili:Agent .
+
+bili:LangGraph a bili:Skill, skos:Concept ;
+    skos:prefLabel "LangGraph"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“LangGraph”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:broader bili:Agent .
+
+bili:ChromaDB a bili:Skill, skos:Concept ;
+    skos:prefLabel "ChromaDB"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“ChromaDB”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Chroma"@en ;
+    skos:broader bili:VectorDatabase .
+
+bili:Neo4j a bili:Skill, skos:Concept ;
+    skos:prefLabel "Neo4j"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“Neo4j”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:broader bili:KnowledgeGraph .
+
+bili:PyTorch a bili:Skill, skos:Concept ;
+    skos:prefLabel "PyTorch"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“PyTorch”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Torch"@en ;
+    skos:broader bili:DeepLearning .
+
+bili:TensorFlow a bili:Skill, skos:Concept ;
+    skos:prefLabel "TensorFlow"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“TensorFlow”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "TF框架"@zh ;
+    skos:broader bili:DeepLearning .
+
+bili:ComputerVision a bili:Topic, skos:Concept ;
+    skos:prefLabel "计算机视觉"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“计算机视觉”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Computer Vision"@en, "CV"@en ;
+    skos:broader bili:ArtificialIntelligence .
+
+bili:NaturalLanguageProcessing a bili:Topic, skos:Concept ;
+    skos:prefLabel "自然语言处理"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“自然语言处理”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "NLP"@en ;
+    skos:broader bili:ArtificialIntelligence .
+
+bili:SpeechRecognition a bili:Topic, skos:Concept ;
+    skos:prefLabel "语音识别"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“语音识别”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "ASR"@en ;
+    skos:broader bili:ArtificialIntelligence .
+
+bili:ReinforcementLearning a bili:Topic, skos:Concept ;
+    skos:prefLabel "强化学习"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“强化学习”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "RL"@en ;
+    skos:broader bili:MachineLearning .
+
+bili:DiffusionModel a bili:Topic, skos:Concept ;
+    skos:prefLabel "扩散模型"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“扩散模型”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Diffusion Model"@en ;
+    skos:broader bili:GenerativeAI .
+
+bili:MultimodalAI a bili:Topic, skos:Concept ;
+    skos:prefLabel "多模态人工智能"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“多模态人工智能”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "多模态AI"@zh, "Multimodal AI"@en ;
+    skos:broader bili:GenerativeAI .
+
+bili:ModelInference a bili:Skill, skos:Concept ;
+    skos:prefLabel "模型推理"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“模型推理”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Inference"@en ;
+    skos:broader bili:MachineLearning .
+
+bili:ModelQuantization a bili:Skill, skos:Concept ;
+    skos:prefLabel "模型量化"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“模型量化”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Quantization"@en ;
+    skos:broader bili:ModelInference .
+
+bili:AIAlignment a bili:Topic, skos:Concept ;
+    skos:prefLabel "人工智能对齐"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“人工智能对齐”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "AI Alignment"@en ;
+    skos:broader bili:ArtificialIntelligence .
+
+bili:FunctionCalling a bili:Skill, skos:Concept ;
+    skos:prefLabel "函数调用"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“函数调用”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Function Calling"@en, "工具调用"@zh ;
+    skos:broader bili:Agent .
+
+bili:Embedding a bili:Topic, skos:Concept ;
+    skos:prefLabel "文本嵌入"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“文本嵌入”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Embedding"@en, "向量嵌入"@zh ;
+    skos:broader bili:NaturalLanguageProcessing .
+
+bili:SemanticSearch a bili:Topic, skos:Concept ;
+    skos:prefLabel "语义搜索"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“语义搜索”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Semantic Search"@en ;
+    skos:broader bili:InformationRetrieval .
+
+bili:GraphRAG a bili:Topic, skos:Concept ;
+    skos:prefLabel "图检索增强生成"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“图检索增强生成”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "GraphRAG"@en, "Graph RAG"@en ;
+    skos:broader bili:RAG .
+
+bili:ModelContextProtocol a bili:Topic, skos:Concept ;
+    skos:prefLabel "模型上下文协议"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“模型上下文协议”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "MCP"@en, "Model Context Protocol"@en ;
+    skos:broader bili:Agent .
+
+bili:OpenAIAPI a bili:Skill, skos:Concept ;
+    skos:prefLabel "OpenAI API"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“OpenAI API”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: ai domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "OpenAI接口"@zh ;
+    skos:broader bili:LargeLanguageModel .

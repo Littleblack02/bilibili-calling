@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "sha256": "88c87837dafc68ba31f5aed516c3d93a7cec440550ee964ac43f72f3ac02dbb7",
+  "count": 471,
+  "split_counts": {
+    "train": 315,
+    "dev": 45,
+    "test": 111
+  },
+  "review_basis": "Ontology V2 curated concepts, one preferred-label case, at most one alias case, and explicit rejection cases.",
+  "privacy": "synthetic and contains no account identifiers"
+}

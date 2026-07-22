@@ -1,0 +1,232 @@
+@prefix bili: <https://bilibili.local/ontology/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+bili:ActionFilm a bili:Topic, skos:Concept ;
+    skos:prefLabel "动作电影"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“动作电影”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: film domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Action Film"@en ;
+    skos:broader bili:Film .
+
+bili:ComedyFilm a bili:Topic, skos:Concept ;
+    skos:prefLabel "喜剧电影"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“喜剧电影”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: film domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Comedy Film"@en ;
+    skos:broader bili:Film .
+
+bili:DramaFilm a bili:Topic, skos:Concept ;
+    skos:prefLabel "剧情电影"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“剧情电影”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: film domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Drama Film"@en ;
+    skos:broader bili:Film .
+
+bili:ScienceFictionFilm a bili:Topic, skos:Concept ;
+    skos:prefLabel "科幻电影"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“科幻电影”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: film domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Sci-Fi Film"@en ;
+    skos:broader bili:Film .
+
+bili:HorrorFilm a bili:Topic, skos:Concept ;
+    skos:prefLabel "恐怖电影"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“恐怖电影”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: film domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Horror Film"@en ;
+    skos:broader bili:Film .
+
+bili:ThrillerFilm a bili:Topic, skos:Concept ;
+    skos:prefLabel "惊悚电影"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“惊悚电影”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: film domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Thriller"@en ;
+    skos:broader bili:Film .
+
+bili:MysteryFilm a bili:Topic, skos:Concept ;
+    skos:prefLabel "悬疑电影"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“悬疑电影”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: film domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Mystery Film"@en ;
+    skos:broader bili:Film .
+
+bili:RomanceFilm a bili:Topic, skos:Concept ;
+    skos:prefLabel "爱情电影"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“爱情电影”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: film domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Romance Film"@en ;
+    skos:broader bili:Film .
+
+bili:CrimeFilm a bili:Topic, skos:Concept ;
+    skos:prefLabel "犯罪电影"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“犯罪电影”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: film domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Crime Film"@en ;
+    skos:broader bili:Film .
+
+bili:WarFilm a bili:Topic, skos:Concept ;
+    skos:prefLabel "战争电影"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“战争电影”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: film domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "War Film"@en ;
+    skos:broader bili:Film .
+
+bili:DocumentaryFilm a bili:Topic, skos:Concept ;
+    skos:prefLabel "纪实电影"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“纪实电影”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: film domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Documentary Film"@en ;
+    skos:broader bili:Film .
+
+bili:ArtFilm a bili:Topic, skos:Concept ;
+    skos:prefLabel "艺术电影"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“艺术电影”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: film domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Art Film"@en ;
+    skos:broader bili:Film .
+
+bili:ChineseCinema a bili:Topic, skos:Concept ;
+    skos:prefLabel "华语电影"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“华语电影”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: film domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Chinese Cinema"@en ;
+    skos:broader bili:Film .
+
+bili:WorldCinema a bili:Topic, skos:Concept ;
+    skos:prefLabel "世界电影"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“世界电影”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: film domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "World Cinema"@en ;
+    skos:broader bili:Film .
+
+bili:TelevisionDrama a bili:Topic, skos:Concept ;
+    skos:prefLabel "电视连续剧"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“电视连续剧”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: film domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "TV Series"@en ;
+    skos:broader bili:Film .
+
+bili:WebSeries a bili:Topic, skos:Concept ;
+    skos:prefLabel "网络剧"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“网络剧”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: film domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Web Series"@en ;
+    skos:broader bili:Film .
+
+bili:VarietyShow a bili:Topic, skos:Concept ;
+    skos:prefLabel "综艺节目"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“综艺节目”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: film domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Variety Show"@en ;
+    skos:broader bili:Film .
+
+bili:FilmReview a bili:Topic, skos:Concept ;
+    skos:prefLabel "影评"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“影评”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: film domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Film Review"@en ;
+    skos:broader bili:Film .
+
+bili:FilmAnalysis a bili:Topic, skos:Concept ;
+    skos:prefLabel "影视解析"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“影视解析”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: film domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Film Analysis"@en ;
+    skos:broader bili:Film .
+
+bili:Screenwriting a bili:Skill, skos:Concept ;
+    skos:prefLabel "编剧"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“编剧”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: film domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Screenwriting"@en ;
+    skos:broader bili:Film .
+
+bili:Directing a bili:Skill, skos:Concept ;
+    skos:prefLabel "导演"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“导演”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: film domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Directing"@en ;
+    skos:broader bili:Film .
+
+bili:Cinematography a bili:Skill, skos:Concept ;
+    skos:prefLabel "电影摄影"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“电影摄影”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: film domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Cinematography"@en ;
+    skos:broader bili:Film .
+
+bili:FilmEditing a bili:Skill, skos:Concept ;
+    skos:prefLabel "影视剪辑"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“影视剪辑”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: film domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Film Editing"@en ;
+    skos:broader bili:Film .
+
+bili:VisualEffects a bili:Skill, skos:Concept ;
+    skos:prefLabel "视觉特效"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“视觉特效”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: film domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "VFX"@en ;
+    skos:broader bili:Film .
+
+bili:SoundDesign a bili:Skill, skos:Concept ;
+    skos:prefLabel "影视声音设计"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“影视声音设计”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: film domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Sound Design"@en ;
+    skos:broader bili:Film .

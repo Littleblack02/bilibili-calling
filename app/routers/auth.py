@@ -5,6 +5,7 @@ from sqlalchemy import select
 from app.database import get_db, get_db_context
 from app.models import QRCodeResponse, LoginStatusResponse, UserSession as UserSessionModel
 from app.services.bilibili import BilibiliService
+from app.services.security.cookies import CookieCipher, CookieEncryptionUnavailable
 import uuid
 
 router = APIRouter(prefix="/auth", tags=["认证"])
@@ -62,6 +63,15 @@ async def poll_qrcode_status(qrcode_key: str, db: AsyncSession = Depends(get_db)
         # 登录成功
         if result["status"] == "confirmed":
             cookies = result.get("cookies", {})
+
+            # Confirmed credentials must never fall back to plaintext storage.
+            # Check before the best-effort profile lookup and process cache.
+            if cookies.get("SESSDATA") or cookies.get("bili_jct"):
+                cipher = CookieCipher.from_settings()
+                if not cipher.available:
+                    raise CookieEncryptionUnavailable(
+                        "Bilibili session storage encryption is not configured"
+                    )
             
             # 创建会话
             session_id = str(uuid.uuid4())
@@ -103,7 +113,11 @@ async def poll_qrcode_status(qrcode_key: str, db: AsyncSession = Depends(get_db)
                 
                 response.user_info = user_info_dict
                 
+            except CookieEncryptionUnavailable:
+                await db.rollback()
+                raise
             except Exception as e:
+                await db.rollback()
                 logger.warning(f"获取用户信息失败: {e}")
                 response.user_info = {
                     "mid": cookies.get("DedeUserID"),
@@ -124,6 +138,13 @@ async def poll_qrcode_status(qrcode_key: str, db: AsyncSession = Depends(get_db)
         
         return response
         
+    except CookieEncryptionUnavailable:
+        raise HTTPException(
+            status_code=503,
+            detail="登录暂不可用：服务端尚未配置会话凭据加密",
+        )
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"轮询二维码状态失败: {e}")
         raise HTTPException(status_code=500, detail=f"轮询失败: {str(e)}")
@@ -161,12 +182,22 @@ async def get_session_info(session_id: str):
 
 
 @router.delete("/session/{session_id}")
-async def logout(session_id: str):
+async def logout(session_id: str, db: AsyncSession = Depends(get_db)):
     """
     退出登录
     """
     if session_id in login_sessions:
         del login_sessions[session_id]
+
+    result = await db.execute(
+        select(UserSessionModel).where(UserSessionModel.session_id == session_id)
+    )
+    db_session = result.scalar_one_or_none()
+    if db_session:
+        db_session.is_valid = False
+        db_session.sessdata = None
+        db_session.bili_jct = None
+        await db.commit()
     
     return {"message": "已退出登录"}
 

@@ -11,6 +11,16 @@ aiosqlite>=0.19.0
 # 数据验证
 pydantic>=2.12.5
 pydantic-settings>=2.13.0
+cryptography>=41.0.0,<45
+rapidfuzz>=3.9.0,<4
+alembic>=1.13,<2
+
+# Ontology / RDF 语义层
+rdflib>=7.1.4,<7.2
+pyshacl>=0.30.1,<0.31
+# Keep compatibility with OpenTelemetry pulled in by ChromaDB.
+importlib-metadata>=6,<8.8.0
+pyparsing>=3.0.9,<3.1
 
 # HTTP客户端
 httpx>=0.28.0

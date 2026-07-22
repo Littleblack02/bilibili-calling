@@ -138,7 +138,8 @@ class ContentFetcher:
 
         # 策略1: 优先字幕（最快最准确）
         logger.info(f"[{bvid}] 尝试策略1: 字幕获取")
-        subtitle_text = await self._try_subtitle(bvid, cid, video_info)
+        subtitle_payload = await self._try_subtitle(bvid, cid, video_info)
+        subtitle_text = subtitle_payload.get("text", "") if subtitle_payload else ""
         if subtitle_text and len(subtitle_text) >= 50:
             logger.info(f"[{bvid}] ✓ 使用字幕内容 (长度: {len(subtitle_text)})")
             self._stats["subtitle"] += 1
@@ -146,7 +147,8 @@ class ContentFetcher:
                 bvid=bvid,
                 title=title,
                 content=subtitle_text,
-                source=ContentSource.SUBTITLE
+                source=ContentSource.SUBTITLE,
+                segments=subtitle_payload.get("segments") or None,
             )
         elif subtitle_text:
             logger.info(f"[{bvid}] 字幕内容过短 ({len(subtitle_text)}字符)，跳过")
@@ -510,7 +512,7 @@ class ContentFetcher:
             logger.warning(f"[{bvid}] 获取 AI 摘要失败: {e}")
             return None
     
-    async def _try_subtitle(self, bvid: str, cid: int, video_info: Optional[dict] = None) -> Optional[str]:
+    async def _try_subtitle(self, bvid: str, cid: int, video_info: Optional[dict] = None) -> Optional[dict]:
         """尝试获取字幕"""
         try:
             def pick_subtitle(subtitles: list) -> Optional[dict]:
@@ -547,11 +549,12 @@ class ContentFetcher:
                 selected_subtitle = pick_subtitle(subtitles)
                 subtitle_url = extract_url(selected_subtitle or {})
                 if subtitle_url:
-                    subtitle_text = await self.bili.download_subtitle(subtitle_url)
+                    subtitle_payload = await self.bili.download_subtitle_with_segments(subtitle_url)
+                    subtitle_text = subtitle_payload.get("text", "") if subtitle_payload else ""
                     if subtitle_text and len(subtitle_text) >= 50:
                         preview = subtitle_text[:120].replace("\n", " ").strip()
                         logger.info(f"[{bvid}] 字幕获取成功，长度={len(subtitle_text)}，预览：{preview}")
-                        return subtitle_text
+                        return subtitle_payload
                     logger.info(f"[{bvid}] 字幕内容过少，已忽略")
                 else:
                     logger.info(f"[{bvid}] 字幕地址为空，无法下载")
@@ -576,11 +579,12 @@ class ContentFetcher:
                         selected_subtitle = pick_subtitle(subtitles)
                         subtitle_url = extract_url(selected_subtitle or {})
                         if subtitle_url:
-                            subtitle_text = await self.bili.download_subtitle(subtitle_url)
+                            subtitle_payload = await self.bili.download_subtitle_with_segments(subtitle_url)
+                            subtitle_text = subtitle_payload.get("text", "") if subtitle_payload else ""
                             if subtitle_text and len(subtitle_text) >= 50:
                                 preview = subtitle_text[:120].replace("\n", " ").strip()
                                 logger.info(f"[{bvid}] 字幕获取成功(补aid)，长度={len(subtitle_text)}，预览：{preview}")
-                                return subtitle_text
+                                return subtitle_payload
                             logger.info(f"[{bvid}] 字幕内容过少，已忽略")
                         else:
                             logger.info(f"[{bvid}] 字幕地址为空，无法下载")
@@ -593,11 +597,12 @@ class ContentFetcher:
                 selected_subtitle = pick_subtitle(view_subtitles)
                 subtitle_url = extract_url(selected_subtitle or {})
                 if subtitle_url:
-                    subtitle_text = await self.bili.download_subtitle(subtitle_url)
+                    subtitle_payload = await self.bili.download_subtitle_with_segments(subtitle_url)
+                    subtitle_text = subtitle_payload.get("text", "") if subtitle_payload else ""
                     if subtitle_text and len(subtitle_text) >= 50:
                         preview = subtitle_text[:120].replace("\n", " ").strip()
                         logger.info(f"[{bvid}] 字幕获取成功(view兜底)，长度={len(subtitle_text)}，预览：{preview}")
-                        return subtitle_text
+                        return subtitle_payload
                     logger.info(f"[{bvid}] 字幕内容过少，已忽略")
                 else:
                     logger.info(f"[{bvid}] 字幕地址为空，无法下载")

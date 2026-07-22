@@ -4,8 +4,9 @@ Bilibili RAG 多Agent协作系统
 核心配置模块
 """
 from pydantic_settings import BaseSettings
-from pydantic import Field, AliasChoices
+from pydantic import Field, AliasChoices, SecretStr
 from typing import Optional
+import hashlib
 import os
 from pathlib import Path
 
@@ -87,6 +88,11 @@ class Settings(BaseSettings):
     # Bilibili 配置
     bilibili_cookies: dict = Field(default={})
     bilibili_session_file: str = Field(default="bilibili_session.json")
+    # Comma-separated versioned AES-256 keys: ``v1=<urlsafe-base64>,v0=<...>``.
+    # There is intentionally no fallback key: authenticated persistence must
+    # fail closed instead of silently writing plaintext cookies.
+    bilibili_cookie_encryption_keys: SecretStr = Field(default=SecretStr(""))
+    bilibili_cookie_active_key_id: str = Field(default="")
 
     # 记忆系统配置
     short_term_memory_max_size: int = Field(default=1000)
@@ -96,6 +102,65 @@ class Settings(BaseSettings):
     # 推荐系统配置
     recommendation_check_interval_minutes: int = Field(default=360)  # 改为6小时
     max_recommendations: int = Field(default=10)
+
+    # 推荐排序：规则排序是可靠主链路，LLM 仅作为可选的小规模辅助重排。
+    recommendation_algorithm_version: str = Field(default="temporal-ontology-xmix-v2")
+    recommendation_llm_rerank_enabled: bool = Field(default=False)
+    recommendation_llm_top_n: int = Field(default=20)
+    recommendation_llm_timeout_seconds: float = Field(default=15.0)
+    recommendation_recent_exposure_days: int = Field(default=7)
+    recommendation_max_per_up: int = Field(default=2)
+    recommendation_profile_max_age_hours: int = Field(default=24)
+    recommendation_scoring_weights: dict[str, float] = Field(default_factory=lambda: {
+        "content_match": 0.18,
+        "ontology_match": 0.17,
+        "recent_interest": 0.16,
+        "multi_interest": 0.10,
+        "up_affinity": 0.10,
+        "freshness": 0.09,
+        "quality": 0.08,
+        "exploration": 0.07,
+        "context": 0.05,
+        "recall_confidence": 0.08,
+    })
+
+    # V2 rollout flags. Every material algorithm/data-path change must remain
+    # independently reversible while evaluation is in progress.
+    temporal_affinity_v2_enabled: bool = Field(default=False)
+    # Calibration: a raw evidence mass of ``tau`` maps to 1-exp(-1)=0.632
+    # absolute affinity. Tune on the dev split; never normalize by profile max.
+    temporal_affinity_tau: float = Field(default=1.5, gt=0.0)
+    temporal_secondary_signal_discount: float = Field(default=0.25, ge=0.0, le=1.0)
+    interest_cluster_max_hops: int = Field(default=1, ge=0, le=4)
+    multi_interest_temperature: float = Field(default=0.35, gt=0.0)
+    rag_grounded_v2_enabled: bool = Field(default=False)
+    rag_original_min_relevance: float = Field(default=0.35, ge=0.0, le=1.0)
+    rag_synonym_min_relevance: float = Field(default=0.45, ge=0.0, le=1.0)
+    rag_hierarchy_min_relevance: float = Field(default=0.55, ge=0.0, le=1.0)
+    rag_associative_min_relevance: float = Field(default=0.65, ge=0.0, le=1.0)
+    rag_retrieval_pool_size: int = Field(default=30, ge=5, le=100)
+    rag_reranker_enabled: bool = Field(default=True)
+    rag_reranker_max_chunks: int = Field(default=30, ge=1, le=50)
+    rag_answerability_threshold: float = Field(default=0.45, ge=0.0, le=1.0)
+    rag_answerability_query_coverage: float = Field(default=0.28, ge=0.0, le=1.0)
+    rag_subtitle_chunk_seconds: float = Field(default=45.0, gt=1.0, le=300.0)
+    profile_sync_v2_enabled: bool = Field(default=False)
+    ontology_linker_v2_enabled: bool = Field(default=False)
+    ontology_linker_accept_threshold: float = Field(default=0.78, ge=0.0, le=1.0)
+    ontology_linker_ambiguity_margin: float = Field(default=0.08, ge=0.0, le=1.0)
+    candidate_hydration_enabled: bool = Field(default=False)
+    # Backward-compatible when omitted: a feature flag behaves as before.
+    # Production .env.example explicitly starts rollout at 0.
+    v2_rollout_percentage: int = Field(default=100, ge=0, le=100)
+    # Comma-separated 16-char salted hashes, never raw session IDs.
+    v2_test_session_hashes: SecretStr = Field(default=SecretStr(""))
+    up_video_cache_ttl_seconds: int = Field(default=900, ge=0, le=86400)
+    candidate_hydration_cache_ttl_seconds: int = Field(default=1800, ge=0, le=86400)
+    candidate_hydration_concurrency: int = Field(default=8, ge=1, le=32)
+    candidate_hydration_timeout_seconds: float = Field(default=12.0, gt=0.0, le=60.0)
+    recommendation_baseline_algorithm_version: str = Field(
+        default="temporal-ontology-xmix-v2"
+    )
 
     # 调度器配置
     scheduler_timezone: str = Field(default="Asia/Shanghai")
@@ -167,6 +232,37 @@ class Settings(BaseSettings):
         if self._log_dir is None:
             self._log_dir = self.data_dir / "logs"
         return self._log_dir
+
+    def v2_rollout_state(self, session_id: str | None = None) -> dict[str, object]:
+        if session_id is None:
+            return {"eligible": True, "bucket": None, "test_session": False}
+        digest = hashlib.sha256(("v2-rollout-v1:" + session_id).encode()).hexdigest()
+        session_ref = digest[:16]
+        allowlist = {
+            value.strip() for value in self.v2_test_session_hashes.get_secret_value().split(",")
+            if value.strip()
+        }
+        test_session = session_ref in allowlist
+        bucket = int(digest[16:24], 16) % 100
+        return {
+            "eligible": test_session or bucket < self.v2_rollout_percentage,
+            "bucket": bucket, "session_hash": session_ref,
+            "test_session": test_session,
+        }
+
+    def v2_feature_flags(self, session_id: str | None = None) -> dict[str, bool]:
+        """Return the exact rollout state stored with auditable batch output."""
+        configured = {
+            "temporal_affinity_v2": self.temporal_affinity_v2_enabled,
+            "rag_grounded_v2": self.rag_grounded_v2_enabled,
+            "profile_sync_v2": self.profile_sync_v2_enabled,
+            "ontology_linker_v2": self.ontology_linker_v2_enabled,
+            "candidate_hydration": self.candidate_hydration_enabled,
+        }
+        if session_id is None:
+            return configured
+        eligible = bool(self.v2_rollout_state(session_id)["eligible"])
+        return {name: enabled and eligible for name, enabled in configured.items()}
 
 
 # 全局配置实例

@@ -1,0 +1,471 @@
+{"schema_version":"1.0","id":"el-v2-0001","split":"test","domain":"ai","text":"专题：人工智能对齐","expected_concepts":["https://bilibili.local/ontology/AIAlignment"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0002","split":"dev","domain":"ai","text":"专题：AI Alignment","expected_concepts":["https://bilibili.local/ontology/AIAlignment"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0003","split":"train","domain":"ai","text":"专题：AI智能体","expected_concepts":["https://bilibili.local/ontology/Agent"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0004","split":"train","domain":"ai","text":"LangGraph Agent 工作流","expected_concepts":["https://bilibili.local/ontology/Agent"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0005","split":"train","domain":"ai","text":"专题：人工智能","expected_concepts":["https://bilibili.local/ontology/ArtificialIntelligence"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0006","split":"train","domain":"ai","text":"专题：AI","expected_concepts":["https://bilibili.local/ontology/ArtificialIntelligence"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0007","split":"train","domain":"ai","text":"专题：ChromaDB","expected_concepts":["https://bilibili.local/ontology/ChromaDB"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0008","split":"train","domain":"ai","text":"专题：Chroma","expected_concepts":["https://bilibili.local/ontology/ChromaDB"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0009","split":"train","domain":"ai","text":"专题：计算机视觉","expected_concepts":["https://bilibili.local/ontology/ComputerVision"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0010","split":"test","domain":"ai","text":"专题：Computer Vision","expected_concepts":["https://bilibili.local/ontology/ComputerVision"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0011","split":"test","domain":"ai","text":"专题：数据科学","expected_concepts":["https://bilibili.local/ontology/DataScience"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0012","split":"dev","domain":"ai","text":"专题：Data Science","expected_concepts":["https://bilibili.local/ontology/DataScience"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0013","split":"train","domain":"ai","text":"专题：深度学习","expected_concepts":["https://bilibili.local/ontology/DeepLearning"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0014","split":"train","domain":"ai","text":"专题：DL","expected_concepts":["https://bilibili.local/ontology/DeepLearning"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0015","split":"train","domain":"ai","text":"专题：扩散模型","expected_concepts":["https://bilibili.local/ontology/DiffusionModel"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0016","split":"train","domain":"ai","text":"专题：Diffusion Model","expected_concepts":["https://bilibili.local/ontology/DiffusionModel"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0017","split":"train","domain":"ai","text":"专题：文本嵌入","expected_concepts":["https://bilibili.local/ontology/Embedding"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0018","split":"train","domain":"ai","text":"专题：Embedding","expected_concepts":["https://bilibili.local/ontology/Embedding"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0019","split":"train","domain":"ai","text":"专题：模型微调","expected_concepts":["https://bilibili.local/ontology/FineTuning"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0020","split":"test","domain":"ai","text":"专题：Fine-tuning","expected_concepts":["https://bilibili.local/ontology/FineTuning"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0021","split":"test","domain":"ai","text":"专题：函数调用","expected_concepts":["https://bilibili.local/ontology/FunctionCalling"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0022","split":"dev","domain":"ai","text":"专题：Function Calling","expected_concepts":["https://bilibili.local/ontology/FunctionCalling"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0023","split":"train","domain":"ai","text":"专题：生成式人工智能","expected_concepts":["https://bilibili.local/ontology/GenerativeAI"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0024","split":"train","domain":"ai","text":"专题：生成式AI","expected_concepts":["https://bilibili.local/ontology/GenerativeAI"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0025","split":"train","domain":"ai","text":"专题：图检索增强生成","expected_concepts":["https://bilibili.local/ontology/GraphRAG"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0026","split":"train","domain":"ai","text":"专题：GraphRAG","expected_concepts":["https://bilibili.local/ontology/GraphRAG"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0027","split":"train","domain":"ai","text":"专题：Java编程","expected_concepts":["https://bilibili.local/ontology/Java"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0028","split":"train","domain":"ai","text":"Java Spring 后端开发教程","expected_concepts":["https://bilibili.local/ontology/Java"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0029","split":"train","domain":"ai","text":"专题：JavaScript编程","expected_concepts":["https://bilibili.local/ontology/JavaScript"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0030","split":"test","domain":"ai","text":"专题：JavaScript","expected_concepts":["https://bilibili.local/ontology/JavaScript"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0031","split":"test","domain":"ai","text":"专题：知识图谱","expected_concepts":["https://bilibili.local/ontology/KnowledgeGraph"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0032","split":"dev","domain":"ai","text":"专题：Knowledge Graph","expected_concepts":["https://bilibili.local/ontology/KnowledgeGraph"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0033","split":"train","domain":"ai","text":"专题：LangChain","expected_concepts":["https://bilibili.local/ontology/LangChain"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0034","split":"train","domain":"ai","text":"专题：LangGraph","expected_concepts":["https://bilibili.local/ontology/LangGraph"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0035","split":"train","domain":"ai","text":"专题：大语言模型","expected_concepts":["https://bilibili.local/ontology/LargeLanguageModel"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0036","split":"train","domain":"ai","text":"专题：大模型","expected_concepts":["https://bilibili.local/ontology/LargeLanguageModel"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0037","split":"train","domain":"ai","text":"专题：LoRA微调","expected_concepts":["https://bilibili.local/ontology/LoRA"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0038","split":"train","domain":"ai","text":"专题：LoRA","expected_concepts":["https://bilibili.local/ontology/LoRA"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0039","split":"train","domain":"ai","text":"专题：机器学习","expected_concepts":["https://bilibili.local/ontology/MachineLearning"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0040","split":"test","domain":"ai","text":"专题：ML","expected_concepts":["https://bilibili.local/ontology/MachineLearning"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0041","split":"test","domain":"ai","text":"专题：模型上下文协议","expected_concepts":["https://bilibili.local/ontology/ModelContextProtocol"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0042","split":"dev","domain":"ai","text":"专题：MCP","expected_concepts":["https://bilibili.local/ontology/ModelContextProtocol"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0043","split":"train","domain":"ai","text":"专题：模型推理","expected_concepts":["https://bilibili.local/ontology/ModelInference"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0044","split":"train","domain":"ai","text":"专题：Inference","expected_concepts":["https://bilibili.local/ontology/ModelInference"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0045","split":"train","domain":"ai","text":"专题：模型量化","expected_concepts":["https://bilibili.local/ontology/ModelQuantization"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0046","split":"train","domain":"ai","text":"专题：Quantization","expected_concepts":["https://bilibili.local/ontology/ModelQuantization"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0047","split":"train","domain":"ai","text":"专题：多智能体","expected_concepts":["https://bilibili.local/ontology/MultiAgent"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0048","split":"train","domain":"ai","text":"专题：Multi-Agent","expected_concepts":["https://bilibili.local/ontology/MultiAgent"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0049","split":"train","domain":"ai","text":"专题：多模态人工智能","expected_concepts":["https://bilibili.local/ontology/MultimodalAI"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0050","split":"test","domain":"ai","text":"专题：多模态AI","expected_concepts":["https://bilibili.local/ontology/MultimodalAI"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0051","split":"test","domain":"ai","text":"专题：自然语言处理","expected_concepts":["https://bilibili.local/ontology/NaturalLanguageProcessing"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0052","split":"dev","domain":"ai","text":"专题：NLP","expected_concepts":["https://bilibili.local/ontology/NaturalLanguageProcessing"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0053","split":"train","domain":"ai","text":"专题：Neo4j","expected_concepts":["https://bilibili.local/ontology/Neo4j"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0054","split":"train","domain":"ai","text":"专题：知识本体","expected_concepts":["https://bilibili.local/ontology/Ontology"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0055","split":"train","domain":"ai","text":"RDF OWL Ontology 知识建模","expected_concepts":["https://bilibili.local/ontology/Ontology"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0056","split":"train","domain":"ai","text":"专题：OpenAI API","expected_concepts":["https://bilibili.local/ontology/OpenAIAPI"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0057","split":"train","domain":"ai","text":"专题：OpenAI接口","expected_concepts":["https://bilibili.local/ontology/OpenAIAPI"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0058","split":"train","domain":"ai","text":"专题：编程","expected_concepts":["https://bilibili.local/ontology/Programming"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0059","split":"train","domain":"ai","text":"专题：programming","expected_concepts":["https://bilibili.local/ontology/Programming"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0060","split":"test","domain":"ai","text":"专题：提示词工程","expected_concepts":["https://bilibili.local/ontology/PromptEngineering"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0061","split":"test","domain":"ai","text":"专题：Prompt Engineering","expected_concepts":["https://bilibili.local/ontology/PromptEngineering"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0062","split":"dev","domain":"ai","text":"专题：PyTorch","expected_concepts":["https://bilibili.local/ontology/PyTorch"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0063","split":"train","domain":"ai","text":"专题：Torch","expected_concepts":["https://bilibili.local/ontology/PyTorch"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0064","split":"train","domain":"ai","text":"专题：Python编程","expected_concepts":["https://bilibili.local/ontology/Python"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0065","split":"train","domain":"ai","text":"专题：Python","expected_concepts":["https://bilibili.local/ontology/Python"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0066","split":"train","domain":"ai","text":"专题：检索增强生成","expected_concepts":["https://bilibili.local/ontology/RAG"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0067","split":"train","domain":"ai","text":"专题：RAG","expected_concepts":["https://bilibili.local/ontology/RAG"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0068","split":"train","domain":"ai","text":"专题：强化学习","expected_concepts":["https://bilibili.local/ontology/ReinforcementLearning"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0069","split":"train","domain":"ai","text":"专题：RL","expected_concepts":["https://bilibili.local/ontology/ReinforcementLearning"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0070","split":"test","domain":"ai","text":"专题：语义搜索","expected_concepts":["https://bilibili.local/ontology/SemanticSearch"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0071","split":"test","domain":"ai","text":"专题：Semantic Search","expected_concepts":["https://bilibili.local/ontology/SemanticSearch"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0072","split":"dev","domain":"ai","text":"专题：语音识别","expected_concepts":["https://bilibili.local/ontology/SpeechRecognition"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0073","split":"train","domain":"ai","text":"专题：ASR","expected_concepts":["https://bilibili.local/ontology/SpeechRecognition"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0074","split":"train","domain":"ai","text":"专题：TensorFlow","expected_concepts":["https://bilibili.local/ontology/TensorFlow"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0075","split":"train","domain":"ai","text":"专题：TF框架","expected_concepts":["https://bilibili.local/ontology/TensorFlow"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0076","split":"train","domain":"ai","text":"专题：Transformer模型","expected_concepts":["https://bilibili.local/ontology/Transformer"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0077","split":"train","domain":"ai","text":"专题：Transformer","expected_concepts":["https://bilibili.local/ontology/Transformer"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0078","split":"train","domain":"ai","text":"专题：向量数据库","expected_concepts":["https://bilibili.local/ontology/VectorDatabase"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0079","split":"train","domain":"ai","text":"专题：Vector DB","expected_concepts":["https://bilibili.local/ontology/VectorDatabase"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0080","split":"test","domain":"ai","text":"专题：Web开发","expected_concepts":["https://bilibili.local/ontology/WebDevelopment"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0081","split":"test","domain":"ai","text":"专题：网页开发","expected_concepts":["https://bilibili.local/ontology/WebDevelopment"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0082","split":"dev","domain":"animation","text":"专题：动画电影","expected_concepts":["https://bilibili.local/ontology/AnimationFilm"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0083","split":"train","domain":"animation","text":"专题：Animated Film","expected_concepts":["https://bilibili.local/ontology/AnimationFilm"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0084","split":"train","domain":"animation","text":"专题：动画制作","expected_concepts":["https://bilibili.local/ontology/AnimationProduction"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0085","split":"train","domain":"animation","text":"专题：Animation Production","expected_concepts":["https://bilibili.local/ontology/AnimationProduction"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0086","split":"train","domain":"animation","text":"专题：日本动画","expected_concepts":["https://bilibili.local/ontology/Anime"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0087","split":"train","domain":"animation","text":"专题：Anime","expected_concepts":["https://bilibili.local/ontology/Anime"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0088","split":"train","domain":"animation","text":"专题：动画解析","expected_concepts":["https://bilibili.local/ontology/AnimeAnalysis"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0089","split":"train","domain":"animation","text":"专题：番剧解析","expected_concepts":["https://bilibili.local/ontology/AnimeAnalysis"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0090","split":"test","domain":"animation","text":"专题：动画评论","expected_concepts":["https://bilibili.local/ontology/AnimeReview"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0091","split":"test","domain":"animation","text":"专题：番剧点评","expected_concepts":["https://bilibili.local/ontology/AnimeReview"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0092","split":"dev","domain":"animation","text":"专题：国产动画","expected_concepts":["https://bilibili.local/ontology/ChineseAnimation"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0093","split":"train","domain":"animation","text":"专题：国创","expected_concepts":["https://bilibili.local/ontology/ChineseAnimation"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0094","split":"train","domain":"animation","text":"专题：搞笑动画","expected_concepts":["https://bilibili.local/ontology/ComedyAnime"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0095","split":"train","domain":"animation","text":"专题：搞笑番","expected_concepts":["https://bilibili.local/ontology/ComedyAnime"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0096","split":"train","domain":"animation","text":"专题：角色扮演","expected_concepts":["https://bilibili.local/ontology/Cosplay"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0097","split":"train","domain":"animation","text":"专题：Cosplay","expected_concepts":["https://bilibili.local/ontology/Cosplay"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0098","split":"train","domain":"animation","text":"专题：奇幻动画","expected_concepts":["https://bilibili.local/ontology/FantasyAnime"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0099","split":"train","domain":"animation","text":"专题：奇幻番","expected_concepts":["https://bilibili.local/ontology/FantasyAnime"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0100","split":"test","domain":"animation","text":"专题：治愈系动画","expected_concepts":["https://bilibili.local/ontology/HealingAnime"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0101","split":"test","domain":"animation","text":"专题：治愈番","expected_concepts":["https://bilibili.local/ontology/HealingAnime"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0102","split":"dev","domain":"animation","text":"专题：异世界动画","expected_concepts":["https://bilibili.local/ontology/IsekaiAnime"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0103","split":"train","domain":"animation","text":"专题：异世界番剧","expected_concepts":["https://bilibili.local/ontology/IsekaiAnime"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0104","split":"train","domain":"animation","text":"专题：原画","expected_concepts":["https://bilibili.local/ontology/KeyAnimation"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0105","split":"train","domain":"animation","text":"专题：Key Animation","expected_concepts":["https://bilibili.local/ontology/KeyAnimation"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0106","split":"train","domain":"animation","text":"专题：轻小说","expected_concepts":["https://bilibili.local/ontology/LightNovel"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0107","split":"train","domain":"animation","text":"专题：Light Novel","expected_concepts":["https://bilibili.local/ontology/LightNovel"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0108","split":"train","domain":"animation","text":"专题：漫画","expected_concepts":["https://bilibili.local/ontology/Manga"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0109","split":"train","domain":"animation","text":"专题：Comic","expected_concepts":["https://bilibili.local/ontology/Manga"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0110","split":"test","domain":"animation","text":"专题：机甲动画","expected_concepts":["https://bilibili.local/ontology/MechaAnime"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0111","split":"test","domain":"animation","text":"专题：机战动画","expected_concepts":["https://bilibili.local/ontology/MechaAnime"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0112","split":"dev","domain":"animation","text":"专题：音乐动画","expected_concepts":["https://bilibili.local/ontology/MusicAnime"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0113","split":"train","domain":"animation","text":"专题：音乐番","expected_concepts":["https://bilibili.local/ontology/MusicAnime"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0114","split":"train","domain":"animation","text":"专题：悬疑动画","expected_concepts":["https://bilibili.local/ontology/MysteryAnime"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0115","split":"train","domain":"animation","text":"专题：推理番","expected_concepts":["https://bilibili.local/ontology/MysteryAnime"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0116","split":"train","domain":"animation","text":"专题：御宅文化","expected_concepts":["https://bilibili.local/ontology/OtakuCulture"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0117","split":"train","domain":"animation","text":"专题：ACG文化","expected_concepts":["https://bilibili.local/ontology/OtakuCulture"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0118","split":"train","domain":"animation","text":"专题：恋爱动画","expected_concepts":["https://bilibili.local/ontology/RomanceAnime"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0119","split":"train","domain":"animation","text":"专题：恋爱番","expected_concepts":["https://bilibili.local/ontology/RomanceAnime"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0120","split":"test","domain":"animation","text":"专题：校园动画","expected_concepts":["https://bilibili.local/ontology/SchoolAnime"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0121","split":"test","domain":"animation","text":"专题：校园番","expected_concepts":["https://bilibili.local/ontology/SchoolAnime"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0122","split":"dev","domain":"animation","text":"专题：科幻动画","expected_concepts":["https://bilibili.local/ontology/ScienceFictionAnime"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0123","split":"train","domain":"animation","text":"专题：科幻番","expected_concepts":["https://bilibili.local/ontology/ScienceFictionAnime"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0124","split":"train","domain":"animation","text":"专题：动画短片","expected_concepts":["https://bilibili.local/ontology/ShortAnimation"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0125","split":"train","domain":"animation","text":"专题：Animation Short","expected_concepts":["https://bilibili.local/ontology/ShortAnimation"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0126","split":"train","domain":"animation","text":"专题：日常系动画","expected_concepts":["https://bilibili.local/ontology/SliceOfLifeAnime"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0127","split":"train","domain":"animation","text":"专题：日常番","expected_concepts":["https://bilibili.local/ontology/SliceOfLifeAnime"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0128","split":"train","domain":"animation","text":"专题：运动动画","expected_concepts":["https://bilibili.local/ontology/SportsAnime"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0129","split":"train","domain":"animation","text":"专题：运动番","expected_concepts":["https://bilibili.local/ontology/SportsAnime"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0130","split":"test","domain":"animation","text":"专题：动画分镜","expected_concepts":["https://bilibili.local/ontology/Storyboarding"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0131","split":"test","domain":"animation","text":"专题：Storyboard","expected_concepts":["https://bilibili.local/ontology/Storyboarding"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0132","split":"dev","domain":"animation","text":"专题：配音","expected_concepts":["https://bilibili.local/ontology/VoiceActing"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0133","split":"train","domain":"animation","text":"专题：声优","expected_concepts":["https://bilibili.local/ontology/VoiceActing"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0134","split":"train","domain":"film","text":"专题：动作电影","expected_concepts":["https://bilibili.local/ontology/ActionFilm"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0135","split":"train","domain":"film","text":"专题：Action Film","expected_concepts":["https://bilibili.local/ontology/ActionFilm"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0136","split":"train","domain":"film","text":"专题：艺术电影","expected_concepts":["https://bilibili.local/ontology/ArtFilm"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0137","split":"train","domain":"film","text":"专题：Art Film","expected_concepts":["https://bilibili.local/ontology/ArtFilm"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0138","split":"train","domain":"film","text":"专题：华语电影","expected_concepts":["https://bilibili.local/ontology/ChineseCinema"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0139","split":"train","domain":"film","text":"专题：Chinese Cinema","expected_concepts":["https://bilibili.local/ontology/ChineseCinema"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0140","split":"test","domain":"film","text":"专题：电影摄影","expected_concepts":["https://bilibili.local/ontology/Cinematography"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0141","split":"test","domain":"film","text":"专题：Cinematography","expected_concepts":["https://bilibili.local/ontology/Cinematography"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0142","split":"dev","domain":"film","text":"专题：喜剧电影","expected_concepts":["https://bilibili.local/ontology/ComedyFilm"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0143","split":"train","domain":"film","text":"专题：Comedy Film","expected_concepts":["https://bilibili.local/ontology/ComedyFilm"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0144","split":"train","domain":"film","text":"专题：犯罪电影","expected_concepts":["https://bilibili.local/ontology/CrimeFilm"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0145","split":"train","domain":"film","text":"专题：Crime Film","expected_concepts":["https://bilibili.local/ontology/CrimeFilm"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0146","split":"train","domain":"film","text":"专题：导演","expected_concepts":["https://bilibili.local/ontology/Directing"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0147","split":"train","domain":"film","text":"专题：Directing","expected_concepts":["https://bilibili.local/ontology/Directing"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0148","split":"train","domain":"film","text":"专题：纪实电影","expected_concepts":["https://bilibili.local/ontology/DocumentaryFilm"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0149","split":"train","domain":"film","text":"专题：Documentary Film","expected_concepts":["https://bilibili.local/ontology/DocumentaryFilm"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0150","split":"test","domain":"film","text":"专题：剧情电影","expected_concepts":["https://bilibili.local/ontology/DramaFilm"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0151","split":"test","domain":"film","text":"专题：Drama Film","expected_concepts":["https://bilibili.local/ontology/DramaFilm"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0152","split":"dev","domain":"film","text":"专题：影视解析","expected_concepts":["https://bilibili.local/ontology/FilmAnalysis"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0153","split":"train","domain":"film","text":"专题：Film Analysis","expected_concepts":["https://bilibili.local/ontology/FilmAnalysis"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0154","split":"train","domain":"film","text":"专题：影视剪辑","expected_concepts":["https://bilibili.local/ontology/FilmEditing"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0155","split":"train","domain":"film","text":"专题：Film Editing","expected_concepts":["https://bilibili.local/ontology/FilmEditing"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0156","split":"train","domain":"film","text":"专题：影评","expected_concepts":["https://bilibili.local/ontology/FilmReview"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0157","split":"train","domain":"film","text":"专题：Film Review","expected_concepts":["https://bilibili.local/ontology/FilmReview"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0158","split":"train","domain":"film","text":"专题：恐怖电影","expected_concepts":["https://bilibili.local/ontology/HorrorFilm"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0159","split":"train","domain":"film","text":"专题：Horror Film","expected_concepts":["https://bilibili.local/ontology/HorrorFilm"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0160","split":"test","domain":"film","text":"专题：悬疑电影","expected_concepts":["https://bilibili.local/ontology/MysteryFilm"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0161","split":"test","domain":"film","text":"专题：Mystery Film","expected_concepts":["https://bilibili.local/ontology/MysteryFilm"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0162","split":"dev","domain":"film","text":"专题：爱情电影","expected_concepts":["https://bilibili.local/ontology/RomanceFilm"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0163","split":"train","domain":"film","text":"专题：Romance Film","expected_concepts":["https://bilibili.local/ontology/RomanceFilm"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0164","split":"train","domain":"film","text":"专题：科幻电影","expected_concepts":["https://bilibili.local/ontology/ScienceFictionFilm"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0165","split":"train","domain":"film","text":"专题：Sci-Fi Film","expected_concepts":["https://bilibili.local/ontology/ScienceFictionFilm"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0166","split":"train","domain":"film","text":"专题：编剧","expected_concepts":["https://bilibili.local/ontology/Screenwriting"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0167","split":"train","domain":"film","text":"专题：Screenwriting","expected_concepts":["https://bilibili.local/ontology/Screenwriting"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0168","split":"train","domain":"film","text":"专题：影视声音设计","expected_concepts":["https://bilibili.local/ontology/SoundDesign"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0169","split":"train","domain":"film","text":"专题：Sound Design","expected_concepts":["https://bilibili.local/ontology/SoundDesign"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0170","split":"test","domain":"film","text":"专题：电视连续剧","expected_concepts":["https://bilibili.local/ontology/TelevisionDrama"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0171","split":"test","domain":"film","text":"专题：TV Series","expected_concepts":["https://bilibili.local/ontology/TelevisionDrama"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0172","split":"dev","domain":"film","text":"专题：惊悚电影","expected_concepts":["https://bilibili.local/ontology/ThrillerFilm"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0173","split":"train","domain":"film","text":"专题：Thriller","expected_concepts":["https://bilibili.local/ontology/ThrillerFilm"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0174","split":"train","domain":"film","text":"专题：综艺节目","expected_concepts":["https://bilibili.local/ontology/VarietyShow"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0175","split":"train","domain":"film","text":"专题：Variety Show","expected_concepts":["https://bilibili.local/ontology/VarietyShow"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0176","split":"train","domain":"film","text":"专题：视觉特效","expected_concepts":["https://bilibili.local/ontology/VisualEffects"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0177","split":"train","domain":"film","text":"专题：VFX","expected_concepts":["https://bilibili.local/ontology/VisualEffects"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0178","split":"train","domain":"film","text":"专题：战争电影","expected_concepts":["https://bilibili.local/ontology/WarFilm"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0179","split":"train","domain":"film","text":"专题：War Film","expected_concepts":["https://bilibili.local/ontology/WarFilm"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0180","split":"test","domain":"film","text":"专题：网络剧","expected_concepts":["https://bilibili.local/ontology/WebSeries"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0181","split":"test","domain":"film","text":"专题：Web Series","expected_concepts":["https://bilibili.local/ontology/WebSeries"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0182","split":"dev","domain":"film","text":"专题：世界电影","expected_concepts":["https://bilibili.local/ontology/WorldCinema"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0183","split":"train","domain":"film","text":"专题：World Cinema","expected_concepts":["https://bilibili.local/ontology/WorldCinema"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0184","split":"train","domain":"game","text":"专题：动作游戏","expected_concepts":["https://bilibili.local/ontology/ActionGame"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0185","split":"train","domain":"game","text":"专题：Action Game","expected_concepts":["https://bilibili.local/ontology/ActionGame"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0186","split":"train","domain":"game","text":"专题：桌面游戏","expected_concepts":["https://bilibili.local/ontology/BoardGame"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0187","split":"train","domain":"game","text":"专题：桌游","expected_concepts":["https://bilibili.local/ontology/BoardGame"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0188","split":"train","domain":"game","text":"专题：主机游戏","expected_concepts":["https://bilibili.local/ontology/ConsoleGame"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0189","split":"train","domain":"game","text":"专题：Console Game","expected_concepts":["https://bilibili.local/ontology/ConsoleGame"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0190","split":"test","domain":"game","text":"专题：反恐精英","expected_concepts":["https://bilibili.local/ontology/CounterStrike"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0191","split":"test","domain":"game","text":"专题：CS2","expected_concepts":["https://bilibili.local/ontology/CounterStrike"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0192","split":"dev","domain":"game","text":"专题：Dota 2","expected_concepts":["https://bilibili.local/ontology/Dota2"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0193","split":"train","domain":"game","text":"专题：DOTA2","expected_concepts":["https://bilibili.local/ontology/Dota2"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0194","split":"train","domain":"game","text":"专题：电子竞技","expected_concepts":["https://bilibili.local/ontology/Esports"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0195","split":"train","domain":"game","text":"专题：电竞","expected_concepts":["https://bilibili.local/ontology/Esports"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0196","split":"train","domain":"game","text":"专题：游戏攻略","expected_concepts":["https://bilibili.local/ontology/GameGuide"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0197","split":"train","domain":"game","text":"专题：攻略","expected_concepts":["https://bilibili.local/ontology/GameGuide"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0198","split":"train","domain":"game","text":"专题：游戏剧情解析","expected_concepts":["https://bilibili.local/ontology/GameLore"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0199","split":"train","domain":"game","text":"专题：世界观解析","expected_concepts":["https://bilibili.local/ontology/GameLore"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0200","split":"test","domain":"game","text":"专题：游戏评测","expected_concepts":["https://bilibili.local/ontology/GameReview"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0201","split":"test","domain":"game","text":"专题：Game Review","expected_concepts":["https://bilibili.local/ontology/GameReview"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0202","split":"dev","domain":"game","text":"专题：原神","expected_concepts":["https://bilibili.local/ontology/GenshinImpact"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0203","split":"train","domain":"game","text":"专题：Genshin Impact","expected_concepts":["https://bilibili.local/ontology/GenshinImpact"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0204","split":"train","domain":"game","text":"专题：崩坏星穹铁道","expected_concepts":["https://bilibili.local/ontology/HonkaiStarRail"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0205","split":"train","domain":"game","text":"专题：星穹铁道","expected_concepts":["https://bilibili.local/ontology/HonkaiStarRail"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0206","split":"train","domain":"game","text":"专题：独立游戏","expected_concepts":["https://bilibili.local/ontology/IndieGame"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0207","split":"train","domain":"game","text":"专题：Indie Game","expected_concepts":["https://bilibili.local/ontology/IndieGame"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0208","split":"train","domain":"game","text":"专题：英雄联盟","expected_concepts":["https://bilibili.local/ontology/LeagueOfLegends"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0209","split":"train","domain":"game","text":"专题：LOL游戏","expected_concepts":["https://bilibili.local/ontology/LeagueOfLegends"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0210","split":"test","domain":"game","text":"专题：多人在线战术竞技","expected_concepts":["https://bilibili.local/ontology/MOBA"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0211","split":"test","domain":"game","text":"专题：MOBA","expected_concepts":["https://bilibili.local/ontology/MOBA"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0212","split":"dev","domain":"game","text":"专题：我的世界","expected_concepts":["https://bilibili.local/ontology/Minecraft"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0213","split":"train","domain":"game","text":"专题：Minecraft","expected_concepts":["https://bilibili.local/ontology/Minecraft"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0214","split":"train","domain":"game","text":"专题：手机游戏","expected_concepts":["https://bilibili.local/ontology/MobileGame"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0215","split":"train","domain":"game","text":"专题：手游","expected_concepts":["https://bilibili.local/ontology/MobileGame"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0216","split":"train","domain":"game","text":"专题：任天堂游戏","expected_concepts":["https://bilibili.local/ontology/Nintendo"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0217","split":"train","domain":"game","text":"专题：Nintendo","expected_concepts":["https://bilibili.local/ontology/Nintendo"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0218","split":"train","domain":"game","text":"专题：电脑游戏","expected_concepts":["https://bilibili.local/ontology/PCGame"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0219","split":"train","domain":"game","text":"专题：PC游戏","expected_concepts":["https://bilibili.local/ontology/PCGame"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0220","split":"test","domain":"game","text":"专题：PlayStation游戏","expected_concepts":["https://bilibili.local/ontology/PlayStation"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0221","split":"test","domain":"game","text":"专题：PS5","expected_concepts":["https://bilibili.local/ontology/PlayStation"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0222","split":"dev","domain":"game","text":"专题：角色扮演游戏","expected_concepts":["https://bilibili.local/ontology/RolePlayingGame"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0223","split":"train","domain":"game","text":"专题：RPG","expected_concepts":["https://bilibili.local/ontology/RolePlayingGame"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0224","split":"train","domain":"game","text":"专题：沙盒游戏","expected_concepts":["https://bilibili.local/ontology/SandboxGame"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0225","split":"train","domain":"game","text":"专题：Sandbox","expected_concepts":["https://bilibili.local/ontology/SandboxGame"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0226","split":"train","domain":"game","text":"专题：射击游戏","expected_concepts":["https://bilibili.local/ontology/ShooterGame"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0227","split":"train","domain":"game","text":"专题：FPS","expected_concepts":["https://bilibili.local/ontology/ShooterGame"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0228","split":"train","domain":"game","text":"专题：模拟游戏","expected_concepts":["https://bilibili.local/ontology/SimulationGame"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0229","split":"train","domain":"game","text":"专题：Simulation Game","expected_concepts":["https://bilibili.local/ontology/SimulationGame"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0230","split":"test","domain":"game","text":"专题：速通","expected_concepts":["https://bilibili.local/ontology/Speedrun"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0231","split":"test","domain":"game","text":"专题：Speedrun","expected_concepts":["https://bilibili.local/ontology/Speedrun"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0232","split":"dev","domain":"game","text":"专题：Steam游戏","expected_concepts":["https://bilibili.local/ontology/Steam"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0233","split":"train","domain":"game","text":"专题：Steam平台","expected_concepts":["https://bilibili.local/ontology/Steam"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0234","split":"train","domain":"game","text":"专题：策略游戏","expected_concepts":["https://bilibili.local/ontology/StrategyGame"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0235","split":"train","domain":"game","text":"专题：SLG","expected_concepts":["https://bilibili.local/ontology/StrategyGame"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0236","split":"train","domain":"game","text":"专题：无畏契约","expected_concepts":["https://bilibili.local/ontology/Valorant"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0237","split":"train","domain":"game","text":"专题：VALORANT","expected_concepts":["https://bilibili.local/ontology/Valorant"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0238","split":"train","domain":"game","text":"专题：虚拟现实游戏","expected_concepts":["https://bilibili.local/ontology/VirtualRealityGame"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0239","split":"train","domain":"game","text":"专题：VR游戏","expected_concepts":["https://bilibili.local/ontology/VirtualRealityGame"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0240","split":"test","domain":"knowledge","text":"专题：学术写作","expected_concepts":["https://bilibili.local/ontology/AcademicWriting"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0241","split":"test","domain":"knowledge","text":"专题：Academic Writing","expected_concepts":["https://bilibili.local/ontology/AcademicWriting"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0242","split":"dev","domain":"knowledge","text":"专题：艺术史","expected_concepts":["https://bilibili.local/ontology/ArtHistory"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0243","split":"train","domain":"knowledge","text":"专题：Art History","expected_concepts":["https://bilibili.local/ontology/ArtHistory"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0244","split":"train","domain":"knowledge","text":"专题：天文学","expected_concepts":["https://bilibili.local/ontology/Astronomy"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0245","split":"train","domain":"knowledge","text":"专题：Astronomy","expected_concepts":["https://bilibili.local/ontology/Astronomy"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0246","split":"train","domain":"knowledge","text":"专题：生物学","expected_concepts":["https://bilibili.local/ontology/Biology"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0247","split":"train","domain":"knowledge","text":"专题：Biology","expected_concepts":["https://bilibili.local/ontology/Biology"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0248","split":"train","domain":"knowledge","text":"专题：化学","expected_concepts":["https://bilibili.local/ontology/Chemistry"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0249","split":"train","domain":"knowledge","text":"专题：Chemistry","expected_concepts":["https://bilibili.local/ontology/Chemistry"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0250","split":"test","domain":"knowledge","text":"专题：数据可视化","expected_concepts":["https://bilibili.local/ontology/DataVisualization"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0251","split":"test","domain":"knowledge","text":"专题：Data Visualization","expected_concepts":["https://bilibili.local/ontology/DataVisualization"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0252","split":"dev","domain":"knowledge","text":"专题：地球科学","expected_concepts":["https://bilibili.local/ontology/EarthScience"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0253","split":"train","domain":"knowledge","text":"专题：Earth Science","expected_concepts":["https://bilibili.local/ontology/EarthScience"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0254","split":"train","domain":"knowledge","text":"专题：经济学","expected_concepts":["https://bilibili.local/ontology/Economics"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0255","split":"train","domain":"knowledge","text":"专题：Economics","expected_concepts":["https://bilibili.local/ontology/Economics"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0256","split":"train","domain":"knowledge","text":"专题：教育","expected_concepts":["https://bilibili.local/ontology/Education"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0257","split":"train","domain":"knowledge","text":"专题：Education","expected_concepts":["https://bilibili.local/ontology/Education"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0258","split":"train","domain":"knowledge","text":"专题：考试备考","expected_concepts":["https://bilibili.local/ontology/ExamPreparation"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0259","split":"train","domain":"knowledge","text":"专题：Exam Prep","expected_concepts":["https://bilibili.local/ontology/ExamPreparation"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0260","split":"test","domain":"knowledge","text":"专题：地理","expected_concepts":["https://bilibili.local/ontology/Geography"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0261","split":"test","domain":"knowledge","text":"专题：Geography","expected_concepts":["https://bilibili.local/ontology/Geography"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0262","split":"dev","domain":"knowledge","text":"专题：历史","expected_concepts":["https://bilibili.local/ontology/History"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0263","split":"train","domain":"knowledge","text":"专题：History","expected_concepts":["https://bilibili.local/ontology/History"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0264","split":"train","domain":"knowledge","text":"专题：信息检索","expected_concepts":["https://bilibili.local/ontology/InformationRetrieval"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0265","split":"train","domain":"knowledge","text":"专题：Information Retrieval","expected_concepts":["https://bilibili.local/ontology/InformationRetrieval"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0266","split":"train","domain":"knowledge","text":"专题：法律知识","expected_concepts":["https://bilibili.local/ontology/Law"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0267","split":"train","domain":"knowledge","text":"专题：Law","expected_concepts":["https://bilibili.local/ontology/Law"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0268","split":"train","domain":"knowledge","text":"专题：学习方法","expected_concepts":["https://bilibili.local/ontology/LearningMethods"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0269","split":"train","domain":"knowledge","text":"专题：Study Skills","expected_concepts":["https://bilibili.local/ontology/LearningMethods"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0270","split":"test","domain":"knowledge","text":"专题：语言学","expected_concepts":["https://bilibili.local/ontology/Linguistics"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0271","split":"test","domain":"knowledge","text":"专题：Linguistics","expected_concepts":["https://bilibili.local/ontology/Linguistics"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0272","split":"dev","domain":"knowledge","text":"专题：文学","expected_concepts":["https://bilibili.local/ontology/Literature"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0273","split":"train","domain":"knowledge","text":"专题：Literature","expected_concepts":["https://bilibili.local/ontology/Literature"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0274","split":"train","domain":"knowledge","text":"专题：数学","expected_concepts":["https://bilibili.local/ontology/Mathematics"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0275","split":"train","domain":"knowledge","text":"专题：Mathematics","expected_concepts":["https://bilibili.local/ontology/Mathematics"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0276","split":"train","domain":"knowledge","text":"专题：医学科普","expected_concepts":["https://bilibili.local/ontology/Medicine"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0277","split":"train","domain":"knowledge","text":"专题：Medical Science","expected_concepts":["https://bilibili.local/ontology/Medicine"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0278","split":"train","domain":"knowledge","text":"专题：博物馆知识","expected_concepts":["https://bilibili.local/ontology/Museum"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0279","split":"train","domain":"knowledge","text":"专题：Museum","expected_concepts":["https://bilibili.local/ontology/Museum"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0280","split":"test","domain":"knowledge","text":"专题：哲学","expected_concepts":["https://bilibili.local/ontology/Philosophy"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0281","split":"test","domain":"knowledge","text":"专题：Philosophy","expected_concepts":["https://bilibili.local/ontology/Philosophy"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0282","split":"dev","domain":"knowledge","text":"专题：物理学","expected_concepts":["https://bilibili.local/ontology/Physics"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0283","split":"train","domain":"knowledge","text":"专题：Physics","expected_concepts":["https://bilibili.local/ontology/Physics"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0284","split":"train","domain":"knowledge","text":"专题：科普创作","expected_concepts":["https://bilibili.local/ontology/PopularScience"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0285","split":"train","domain":"knowledge","text":"专题：Science Communication","expected_concepts":["https://bilibili.local/ontology/PopularScience"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0286","split":"train","domain":"knowledge","text":"专题：心理学","expected_concepts":["https://bilibili.local/ontology/Psychology"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0287","split":"train","domain":"knowledge","text":"专题：Psychology","expected_concepts":["https://bilibili.local/ontology/Psychology"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0288","split":"train","domain":"knowledge","text":"专题：研究方法","expected_concepts":["https://bilibili.local/ontology/ResearchMethods"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0289","split":"train","domain":"knowledge","text":"专题：Research Methods","expected_concepts":["https://bilibili.local/ontology/ResearchMethods"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0290","split":"test","domain":"knowledge","text":"专题：自然科学","expected_concepts":["https://bilibili.local/ontology/Science"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0291","split":"test","domain":"knowledge","text":"专题：Science","expected_concepts":["https://bilibili.local/ontology/Science"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0292","split":"dev","domain":"knowledge","text":"专题：社会学","expected_concepts":["https://bilibili.local/ontology/Sociology"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0293","split":"train","domain":"knowledge","text":"专题：Sociology","expected_concepts":["https://bilibili.local/ontology/Sociology"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0294","split":"train","domain":"knowledge","text":"专题：统计学","expected_concepts":["https://bilibili.local/ontology/Statistics"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0295","split":"train","domain":"knowledge","text":"专题：Statistics","expected_concepts":["https://bilibili.local/ontology/Statistics"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0296","split":"train","domain":"life","text":"专题：烘焙","expected_concepts":["https://bilibili.local/ontology/Baking"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0297","split":"train","domain":"life","text":"专题：Baking","expected_concepts":["https://bilibili.local/ontology/Baking"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0298","split":"train","domain":"life","text":"专题：篮球","expected_concepts":["https://bilibili.local/ontology/Basketball"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0299","split":"train","domain":"life","text":"专题：Basketball","expected_concepts":["https://bilibili.local/ontology/Basketball"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0300","split":"test","domain":"life","text":"专题：职业发展","expected_concepts":["https://bilibili.local/ontology/CareerDevelopment"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0301","split":"test","domain":"life","text":"专题：Career Development","expected_concepts":["https://bilibili.local/ontology/CareerDevelopment"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0302","split":"dev","domain":"life","text":"专题：猫","expected_concepts":["https://bilibili.local/ontology/Cat"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0303","split":"train","domain":"life","text":"专题：Cat","expected_concepts":["https://bilibili.local/ontology/Cat"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0304","split":"train","domain":"life","text":"专题：城市漫步","expected_concepts":["https://bilibili.local/ontology/CityWalk"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0305","split":"train","domain":"life","text":"专题：City Walk","expected_concepts":["https://bilibili.local/ontology/CityWalk"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0306","split":"train","domain":"life","text":"专题：咖啡","expected_concepts":["https://bilibili.local/ontology/Coffee"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0307","split":"train","domain":"life","text":"专题：Coffee","expected_concepts":["https://bilibili.local/ontology/Coffee"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0308","split":"train","domain":"life","text":"专题：烹饪","expected_concepts":["https://bilibili.local/ontology/Cooking"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0309","split":"train","domain":"life","text":"专题：Cooking","expected_concepts":["https://bilibili.local/ontology/Cooking"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0310","split":"test","domain":"life","text":"专题：骑行","expected_concepts":["https://bilibili.local/ontology/Cycling"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0311","split":"test","domain":"life","text":"专题：Cycling","expected_concepts":["https://bilibili.local/ontology/Cycling"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0312","split":"dev","domain":"life","text":"专题：狗","expected_concepts":["https://bilibili.local/ontology/Dog"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0313","split":"train","domain":"life","text":"专题：Dog","expected_concepts":["https://bilibili.local/ontology/Dog"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0314","split":"train","domain":"life","text":"专题：穿搭","expected_concepts":["https://bilibili.local/ontology/FashionStyling"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0315","split":"train","domain":"life","text":"专题：Styling","expected_concepts":["https://bilibili.local/ontology/FashionStyling"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0316","split":"train","domain":"life","text":"专题：健身","expected_concepts":["https://bilibili.local/ontology/Fitness"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0317","split":"train","domain":"life","text":"专题：Fitness","expected_concepts":["https://bilibili.local/ontology/Fitness"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0318","split":"train","domain":"life","text":"专题：足球","expected_concepts":["https://bilibili.local/ontology/Football"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0319","split":"train","domain":"life","text":"专题：Football","expected_concepts":["https://bilibili.local/ontology/Football"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0320","split":"test","domain":"life","text":"专题：园艺","expected_concepts":["https://bilibili.local/ontology/Gardening"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0321","split":"test","domain":"life","text":"专题：Gardening","expected_concepts":["https://bilibili.local/ontology/Gardening"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0322","split":"dev","domain":"life","text":"专题：手工","expected_concepts":["https://bilibili.local/ontology/Handicraft"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0323","split":"train","domain":"life","text":"专题：DIY手作","expected_concepts":["https://bilibili.local/ontology/Handicraft"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0324","split":"train","domain":"life","text":"专题：家居改造","expected_concepts":["https://bilibili.local/ontology/HomeImprovement"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0325","split":"train","domain":"life","text":"专题：Home Improvement","expected_concepts":["https://bilibili.local/ontology/HomeImprovement"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0326","split":"train","domain":"life","text":"专题：室内设计","expected_concepts":["https://bilibili.local/ontology/InteriorDesign"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0327","split":"train","domain":"life","text":"专题：Interior Design","expected_concepts":["https://bilibili.local/ontology/InteriorDesign"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0328","split":"train","domain":"life","text":"专题：美妆","expected_concepts":["https://bilibili.local/ontology/Makeup"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0329","split":"train","domain":"life","text":"专题：Makeup","expected_concepts":["https://bilibili.local/ontology/Makeup"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0330","split":"test","domain":"life","text":"专题：户外运动","expected_concepts":["https://bilibili.local/ontology/Outdoor"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0331","split":"test","domain":"life","text":"专题：Outdoor","expected_concepts":["https://bilibili.local/ontology/Outdoor"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0332","split":"dev","domain":"life","text":"专题：个人理财","expected_concepts":["https://bilibili.local/ontology/PersonalFinance"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0333","split":"train","domain":"life","text":"专题：Personal Finance","expected_concepts":["https://bilibili.local/ontology/PersonalFinance"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0334","split":"train","domain":"life","text":"专题：宠物养护","expected_concepts":["https://bilibili.local/ontology/PetCare"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0335","split":"train","domain":"life","text":"专题：Pet Care","expected_concepts":["https://bilibili.local/ontology/PetCare"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0336","split":"train","domain":"life","text":"专题：摄影","expected_concepts":["https://bilibili.local/ontology/Photography"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0337","split":"train","domain":"life","text":"专题：Photography","expected_concepts":["https://bilibili.local/ontology/Photography"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0338","split":"train","domain":"life","text":"专题：跑步","expected_concepts":["https://bilibili.local/ontology/Running"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0339","split":"train","domain":"life","text":"专题：Running","expected_concepts":["https://bilibili.local/ontology/Running"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0340","split":"test","domain":"life","text":"专题：护肤","expected_concepts":["https://bilibili.local/ontology/Skincare"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0341","split":"test","domain":"life","text":"专题：Skincare","expected_concepts":["https://bilibili.local/ontology/Skincare"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0342","split":"dev","domain":"life","text":"专题：游泳","expected_concepts":["https://bilibili.local/ontology/Swimming"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0343","split":"train","domain":"life","text":"专题：Swimming","expected_concepts":["https://bilibili.local/ontology/Swimming"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0344","split":"train","domain":"life","text":"专题：茶文化","expected_concepts":["https://bilibili.local/ontology/Tea"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0345","split":"train","domain":"life","text":"专题：Tea","expected_concepts":["https://bilibili.local/ontology/Tea"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0346","split":"train","domain":"life","text":"专题：旅行","expected_concepts":["https://bilibili.local/ontology/Travel"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0347","split":"train","domain":"life","text":"专题：Travel","expected_concepts":["https://bilibili.local/ontology/Travel"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0348","split":"train","domain":"life","text":"专题：视频拍摄","expected_concepts":["https://bilibili.local/ontology/Videography"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0349","split":"train","domain":"life","text":"专题：Videography","expected_concepts":["https://bilibili.local/ontology/Videography"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0350","split":"test","domain":"life","text":"专题：瑜伽","expected_concepts":["https://bilibili.local/ontology/Yoga"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0351","split":"test","domain":"life","text":"专题：Yoga","expected_concepts":["https://bilibili.local/ontology/Yoga"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0352","split":"dev","domain":"music","text":"专题：动画音乐","expected_concepts":["https://bilibili.local/ontology/AnimeMusic"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0353","split":"train","domain":"music","text":"专题：Anime OST","expected_concepts":["https://bilibili.local/ontology/AnimeMusic"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0354","split":"train","domain":"music","text":"专题：编曲","expected_concepts":["https://bilibili.local/ontology/Arrangement"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0355","split":"train","domain":"music","text":"专题：Arrangement","expected_concepts":["https://bilibili.local/ontology/Arrangement"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0356","split":"train","domain":"music","text":"专题：中国传统音乐","expected_concepts":["https://bilibili.local/ontology/ChineseTraditionalMusic"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0357","split":"train","domain":"music","text":"专题：国乐","expected_concepts":["https://bilibili.local/ontology/ChineseTraditionalMusic"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0358","split":"train","domain":"music","text":"专题：古典音乐","expected_concepts":["https://bilibili.local/ontology/ClassicalMusic"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0359","split":"train","domain":"music","text":"专题：Classical","expected_concepts":["https://bilibili.local/ontology/ClassicalMusic"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0360","split":"test","domain":"music","text":"专题：作曲","expected_concepts":["https://bilibili.local/ontology/Composition"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0361","split":"test","domain":"music","text":"专题：Composition","expected_concepts":["https://bilibili.local/ontology/Composition"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0362","split":"dev","domain":"music","text":"专题：鼓演奏","expected_concepts":["https://bilibili.local/ontology/Drums"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0363","split":"train","domain":"music","text":"专题：Drumming","expected_concepts":["https://bilibili.local/ontology/Drums"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0364","split":"train","domain":"music","text":"专题：电子音乐","expected_concepts":["https://bilibili.local/ontology/ElectronicMusic"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0365","split":"train","domain":"music","text":"专题：Electronic Music","expected_concepts":["https://bilibili.local/ontology/ElectronicMusic"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0366","split":"train","domain":"music","text":"专题：影视配乐","expected_concepts":["https://bilibili.local/ontology/FilmScore"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0367","split":"train","domain":"music","text":"专题：Film Score","expected_concepts":["https://bilibili.local/ontology/FilmScore"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0368","split":"train","domain":"music","text":"专题：民谣音乐","expected_concepts":["https://bilibili.local/ontology/FolkMusic"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0369","split":"train","domain":"music","text":"专题：Folk","expected_concepts":["https://bilibili.local/ontology/FolkMusic"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0370","split":"test","domain":"music","text":"专题：游戏音乐","expected_concepts":["https://bilibili.local/ontology/GameMusic"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0371","split":"test","domain":"music","text":"专题：Game OST","expected_concepts":["https://bilibili.local/ontology/GameMusic"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0372","split":"dev","domain":"music","text":"专题：吉他演奏","expected_concepts":["https://bilibili.local/ontology/Guitar"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0373","split":"train","domain":"music","text":"专题：Guitar","expected_concepts":["https://bilibili.local/ontology/Guitar"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0374","split":"train","domain":"music","text":"专题：嘻哈音乐","expected_concepts":["https://bilibili.local/ontology/HipHop"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0375","split":"train","domain":"music","text":"专题：Hip-Hop","expected_concepts":["https://bilibili.local/ontology/HipHop"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0376","split":"train","domain":"music","text":"专题：爵士乐","expected_concepts":["https://bilibili.local/ontology/Jazz"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0377","split":"train","domain":"music","text":"专题：Jazz","expected_concepts":["https://bilibili.local/ontology/Jazz"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0378","split":"train","domain":"music","text":"专题：音乐现场","expected_concepts":["https://bilibili.local/ontology/LiveMusic"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0379","split":"train","domain":"music","text":"专题：Live Music","expected_concepts":["https://bilibili.local/ontology/LiveMusic"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0380","split":"test","domain":"music","text":"专题：母带处理","expected_concepts":["https://bilibili.local/ontology/Mastering"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0381","split":"test","domain":"music","text":"专题：Mastering","expected_concepts":["https://bilibili.local/ontology/Mastering"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0382","split":"dev","domain":"music","text":"专题：金属音乐","expected_concepts":["https://bilibili.local/ontology/MetalMusic"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0383","split":"train","domain":"music","text":"专题：Metal","expected_concepts":["https://bilibili.local/ontology/MetalMusic"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0384","split":"train","domain":"music","text":"专题：混音","expected_concepts":["https://bilibili.local/ontology/Mixing"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0385","split":"train","domain":"music","text":"专题：Mixing","expected_concepts":["https://bilibili.local/ontology/Mixing"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0386","split":"train","domain":"music","text":"专题：音乐翻唱","expected_concepts":["https://bilibili.local/ontology/MusicCover"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0387","split":"train","domain":"music","text":"专题：Cover Song","expected_concepts":["https://bilibili.local/ontology/MusicCover"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0388","split":"train","domain":"music","text":"专题：音乐制作","expected_concepts":["https://bilibili.local/ontology/MusicProduction"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0389","split":"train","domain":"music","text":"专题：Music Production","expected_concepts":["https://bilibili.local/ontology/MusicProduction"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0390","split":"test","domain":"music","text":"专题：乐理","expected_concepts":["https://bilibili.local/ontology/MusicTheory"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0391","split":"test","domain":"music","text":"专题：Music Theory","expected_concepts":["https://bilibili.local/ontology/MusicTheory"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0392","split":"dev","domain":"music","text":"专题：钢琴演奏","expected_concepts":["https://bilibili.local/ontology/Piano"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0393","split":"train","domain":"music","text":"专题：Piano","expected_concepts":["https://bilibili.local/ontology/Piano"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0394","split":"train","domain":"music","text":"专题：流行音乐","expected_concepts":["https://bilibili.local/ontology/PopMusic"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0395","split":"train","domain":"music","text":"专题：Pop","expected_concepts":["https://bilibili.local/ontology/PopMusic"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0396","split":"train","domain":"music","text":"专题：摇滚音乐","expected_concepts":["https://bilibili.local/ontology/RockMusic"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0397","split":"train","domain":"music","text":"专题：Rock","expected_concepts":["https://bilibili.local/ontology/RockMusic"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0398","split":"train","domain":"music","text":"专题：声乐演唱","expected_concepts":["https://bilibili.local/ontology/Singing"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0399","split":"train","domain":"music","text":"专题：Singing","expected_concepts":["https://bilibili.local/ontology/Singing"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0400","split":"test","domain":"music","text":"专题：虚拟歌手音乐","expected_concepts":["https://bilibili.local/ontology/Vocaloid"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0401","split":"test","domain":"music","text":"专题：VOCALOID","expected_concepts":["https://bilibili.local/ontology/Vocaloid"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0402","split":"test","domain":"ai","text":"LangGraff 框架","expected_concepts":["https://bilibili.local/ontology/LangGraph"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0403","split":"test","domain":"ai","text":"Pythn 编程","expected_concepts":["https://bilibili.local/ontology/Python"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0404","split":"test","domain":"ai","text":"Machin Learnig","expected_concepts":["https://bilibili.local/ontology/MachineLearning"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0405","split":"test","domain":"ai","text":"Reinforcment Learning","expected_concepts":["https://bilibili.local/ontology/ReinforcementLearning"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0406","split":"test","domain":"game","text":"Minecraf 沙盒","expected_concepts":["https://bilibili.local/ontology/Minecraft"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0407","split":"test","domain":"game","text":"Genshin Impct","expected_concepts":["https://bilibili.local/ontology/GenshinImpact"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0408","split":"test","domain":"animation","text":"Animaton Production","expected_concepts":["https://bilibili.local/ontology/AnimationProduction"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0409","split":"test","domain":"animation","text":"Storybord 分镜","expected_concepts":["https://bilibili.local/ontology/Storyboarding"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0410","split":"test","domain":"music","text":"Eletronic Music","expected_concepts":["https://bilibili.local/ontology/ElectronicMusic"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0411","split":"test","domain":"music","text":"Compositon 作曲","expected_concepts":["https://bilibili.local/ontology/Composition"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0412","split":"test","domain":"film","text":"Cinematograhy","expected_concepts":["https://bilibili.local/ontology/Cinematography"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0413","split":"test","domain":"film","text":"Screenwritng","expected_concepts":["https://bilibili.local/ontology/Screenwriting"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0414","split":"test","domain":"knowledge","text":"Mathematic","expected_concepts":["https://bilibili.local/ontology/Mathematics"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0415","split":"test","domain":"knowledge","text":"Psychlogy","expected_concepts":["https://bilibili.local/ontology/Psychology"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0416","split":"test","domain":"knowledge","text":"Informtion Retrieval","expected_concepts":["https://bilibili.local/ontology/InformationRetrieval"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0417","split":"test","domain":"life","text":"Photograhy","expected_concepts":["https://bilibili.local/ontology/Photography"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0418","split":"test","domain":"life","text":"Gardning","expected_concepts":["https://bilibili.local/ontology/Gardening"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0419","split":"test","domain":"life","text":"Basketbal","expected_concepts":["https://bilibili.local/ontology/Basketball"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0420","split":"test","domain":"life","text":"Skincar","expected_concepts":["https://bilibili.local/ontology/Skincare"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0421","split":"test","domain":"life","text":"Personal Finace","expected_concepts":["https://bilibili.local/ontology/PersonalFinance"],"ambiguous":false,"should_abstain":false}
+{"schema_version":"1.0","id":"el-v2-0422","split":"dev","domain":"ai","text":"Agent","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0423","split":"train","domain":"ai","text":"Java","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0424","split":"train","domain":"ai","text":"Ontology","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0425","split":"train","domain":"life","text":"智能家居开箱","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0426","split":"train","domain":"knowledge","text":"人体的本体感觉","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0427","split":"train","domain":"game","text":"Go 入门","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0428","split":"train","domain":"film","text":"今天心情很好","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0429","split":"train","domain":"music","text":"普通聊天没有主题","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0430","split":"test","domain":"animation","text":"随机字符串 xyzqv","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0431","split":"test","domain":"life","text":"天气不错出去走走","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0432","split":"dev","domain":"ai","text":"未收录品牌型号 样例1","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0433","split":"train","domain":"game","text":"纯数字 123456 样例2","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0434","split":"train","domain":"animation","text":"这是一句测试空话 样例3","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0435","split":"train","domain":"music","text":"无明确主题的闲聊 样例4","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0436","split":"train","domain":"film","text":"尚未定义的新名词 样例5","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0437","split":"train","domain":"knowledge","text":"路边看到一棵树 样例6","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0438","split":"train","domain":"life","text":"今天按时起床 样例7","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0439","split":"train","domain":"ai","text":"请帮我随便看看 样例8","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0440","split":"test","domain":"game","text":"一个没有上下文的词 样例9","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0441","split":"test","domain":"animation","text":"未知缩写 QXZ 样例10","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0442","split":"dev","domain":"music","text":"未收录品牌型号 样例11","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0443","split":"train","domain":"film","text":"纯数字 123456 样例12","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0444","split":"train","domain":"knowledge","text":"这是一句测试空话 样例13","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0445","split":"train","domain":"life","text":"无明确主题的闲聊 样例14","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0446","split":"train","domain":"ai","text":"尚未定义的新名词 样例15","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0447","split":"train","domain":"game","text":"路边看到一棵树 样例16","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0448","split":"train","domain":"animation","text":"今天按时起床 样例17","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0449","split":"train","domain":"music","text":"请帮我随便看看 样例18","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0450","split":"test","domain":"film","text":"一个没有上下文的词 样例19","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0451","split":"test","domain":"knowledge","text":"未知缩写 QXZ 样例20","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0452","split":"dev","domain":"life","text":"未收录品牌型号 样例21","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0453","split":"train","domain":"ai","text":"纯数字 123456 样例22","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0454","split":"train","domain":"game","text":"这是一句测试空话 样例23","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0455","split":"train","domain":"animation","text":"无明确主题的闲聊 样例24","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0456","split":"train","domain":"music","text":"尚未定义的新名词 样例25","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0457","split":"train","domain":"film","text":"路边看到一棵树 样例26","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0458","split":"train","domain":"knowledge","text":"今天按时起床 样例27","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0459","split":"train","domain":"life","text":"请帮我随便看看 样例28","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0460","split":"test","domain":"ai","text":"一个没有上下文的词 样例29","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0461","split":"test","domain":"game","text":"未知缩写 QXZ 样例30","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0462","split":"dev","domain":"animation","text":"未收录品牌型号 样例31","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0463","split":"train","domain":"music","text":"纯数字 123456 样例32","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0464","split":"train","domain":"film","text":"这是一句测试空话 样例33","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0465","split":"train","domain":"knowledge","text":"无明确主题的闲聊 样例34","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0466","split":"train","domain":"life","text":"尚未定义的新名词 样例35","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0467","split":"train","domain":"ai","text":"路边看到一棵树 样例36","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0468","split":"train","domain":"game","text":"今天按时起床 样例37","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0469","split":"train","domain":"animation","text":"请帮我随便看看 样例38","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0470","split":"test","domain":"music","text":"一个没有上下文的词 样例39","expected_concepts":[],"ambiguous":true,"should_abstain":true}
+{"schema_version":"1.0","id":"el-v2-0471","split":"test","domain":"film","text":"未知缩写 QXZ 样例40","expected_concepts":[],"ambiguous":true,"should_abstain":true}

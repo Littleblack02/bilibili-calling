@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-07-22T22:34:36.375425+08:00",
+  "gates": {
+    "ontology": {
+      "passed": true,
+      "reason": "verified",
+      "file": "ontology-quality.json"
+    },
+    "entity_linking": {
+      "passed": true,
+      "reason": "verified",
+      "file": "entity-linking.json"
+    },
+    "rag": {
+      "passed": true,
+      "reason": "verified",
+      "file": "rag.json"
+    },
+    "recommendation": {
+      "passed": true,
+      "reason": "verified",
+      "file": "recommendation.json"
+    },
+    "migration": {
+      "passed": true,
+      "reason": "verified",
+      "file": "migration.json"
+    },
+    "backfill": {
+      "passed": true,
+      "reason": "verified",
+      "file": "backfill.json"
+    },
+    "local_performance": {
+      "passed": true,
+      "reason": "verified",
+      "file": "local-performance.json"
+    }
+  },
+  "passed": true,
+  "required_action": "May advance rollout only while every gate remains green."
+}

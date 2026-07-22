@@ -15,6 +15,7 @@ from app.config import settings
 from app.routers.knowledge import get_rag_service
 from app.services.bilibili import BilibiliService
 from app.routers.auth import get_session
+from app.services.rag_grounded import grounded_refusal
 
 router = APIRouter(prefix="/chat", tags=["对话"])
 
@@ -603,12 +604,29 @@ async def _prepare_messages(request: ChatRequest, db: AsyncSession) -> tuple[lis
     context, sources = await _get_video_context(db, folder_ids, include_content=False, limit=50)
     return _build_fallback_messages(context or "（暂无入库信息）", question), sources, question
 
+
+async def _answer_grounded_chat(request: ChatRequest, db: AsyncSession) -> dict:
+    """Run V2 only inside the authenticated user's selected knowledge scope."""
+    if not request.session_id:
+        return grounded_refusal("missing_session_scope")
+    folder_ids = await _get_folder_ids_for_session(
+        db, request.session_id, request.folder_ids
+    )
+    bvids = await _get_bvids_by_folder_ids(db, folder_ids)
+    if not bvids:
+        return grounded_refusal("empty_selected_scope")
+    return await get_rag_service().answer_question(
+        request.question.strip(), k=5, bvids=bvids
+    )
+
 @router.post("/ask", response_model=ChatResponse)
 async def ask_question(request: ChatRequest, db: AsyncSession = Depends(get_db)):
     """智能问答"""
     if not request.question or not request.question.strip():
         raise HTTPException(status_code=400, detail="问题不能为空")
     try:
+        if settings.v2_feature_flags(request.session_id)["rag_grounded_v2"]:
+            return ChatResponse(**(await _answer_grounded_chat(request, db)))
         messages, sources, _ = await _prepare_messages(request, db)
         client = _get_llm_client()
         response = client.chat.completions.create(model=settings.llm_model, messages=messages, temperature=0.5)
@@ -624,6 +642,19 @@ async def ask_question_stream(request: ChatRequest, db: AsyncSession = Depends(g
     if not request.question or not request.question.strip():
         raise HTTPException(status_code=400, detail="问题不能为空")
     try:
+        if settings.v2_feature_flags(request.session_id)["rag_grounded_v2"]:
+            result = await _answer_grounded_chat(request, db)
+            def generate_grounded():
+                yield result["answer"]
+                contract = {
+                    key: value for key, value in result.items()
+                    if key not in {"answer", "sources"}
+                }
+                payload = {"sources": result["sources"], "grounding": contract}
+                yield f"\n[[SOURCES_JSON]]{json.dumps(payload, ensure_ascii=False)}"
+            return StreamingResponse(
+                generate_grounded(), media_type="text/plain; charset=utf-8"
+            )
         messages, sources, _ = await _prepare_messages(request, db)
         client = _get_llm_client()
         def generate():

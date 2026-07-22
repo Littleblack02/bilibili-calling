@@ -1,0 +1,116 @@
+@prefix bili: <https://bilibili.local/ontology/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+bili: a owl:Ontology ;
+    rdfs:label "Bilibili content and interest ontology"@en ;
+    rdfs:label "B站内容与兴趣本体"@zh ;
+    owl:versionInfo "1.0.0" .
+
+bili:Video a owl:Class .
+bili:Creator a owl:Class .
+bili:User a owl:Class .
+bili:FavoriteFolder a owl:Class .
+bili:RecommendationEvent a owl:Class .
+bili:Topic a owl:Class ; rdfs:subClassOf skos:Concept .
+bili:Skill a owl:Class ; rdfs:subClassOf skos:Concept .
+bili:ContentFormat a owl:Class ; rdfs:subClassOf skos:Concept .
+bili:Difficulty a owl:Class ; rdfs:subClassOf skos:Concept .
+bili:Category a owl:Class ; rdfs:subClassOf skos:Concept .
+
+bili:aboutTopic a owl:ObjectProperty ; rdfs:domain bili:Video ; rdfs:range bili:Topic .
+bili:teaches a owl:ObjectProperty ; rdfs:domain bili:Video ; rdfs:range bili:Skill .
+bili:requires a owl:ObjectProperty ; rdfs:domain skos:Concept ; rdfs:range skos:Concept .
+bili:hasFormat a owl:ObjectProperty ; rdfs:domain bili:Video ; rdfs:range bili:ContentFormat .
+bili:hasDifficulty a owl:ObjectProperty ; rdfs:domain bili:Video ; rdfs:range bili:Difficulty .
+bili:createdBy a owl:ObjectProperty ; rdfs:domain bili:Video ; rdfs:range bili:Creator .
+bili:interestEvidenceFor a owl:ObjectProperty ; rdfs:domain bili:RecommendationEvent ; rdfs:range skos:Concept .
+
+# Top-level Bilibili categories
+bili:Technology a bili:Category, skos:Concept ; skos:prefLabel "科技"@zh ; skos:altLabel "数码"@zh, "technology"@en .
+bili:Knowledge a bili:Category, skos:Concept ; skos:prefLabel "知识"@zh ; skos:altLabel "科普"@zh, "knowledge"@en .
+bili:Animation a bili:Category, skos:Concept ; skos:prefLabel "动画"@zh ; skos:altLabel "动漫"@zh, "番剧"@zh, "anime"@en .
+bili:Game a bili:Category, skos:Concept ; skos:prefLabel "游戏"@zh ; skos:altLabel "gaming"@en .
+bili:Music a bili:Category, skos:Concept ; skos:prefLabel "音乐"@zh ; skos:altLabel "music"@en .
+bili:Film a bili:Category, skos:Concept ; skos:prefLabel "影视"@zh ; skos:altLabel "电影"@zh, "电视剧"@zh, "film"@en .
+bili:Life a bili:Category, skos:Concept ; skos:prefLabel "生活"@zh ; skos:altLabel "日常"@zh, "life"@en .
+bili:Entertainment a bili:Category, skos:Concept ; skos:prefLabel "娱乐"@zh ; skos:altLabel "搞笑"@zh, "entertainment"@en .
+bili:Sports a bili:Category, skos:Concept ; skos:prefLabel "运动"@zh ; skos:altLabel "体育"@zh, "sports"@en .
+bili:Food a bili:Category, skos:Concept ; skos:prefLabel "美食"@zh ; skos:altLabel "做饭"@zh, "烹饪"@zh, "food"@en ; skos:broader bili:Life .
+
+# AI / software engineering concept scheme
+bili:ArtificialIntelligence a bili:Topic, skos:Concept ;
+    skos:prefLabel "人工智能"@zh ;
+    skos:altLabel "AI"@en, "智能"@zh ;
+    skos:broader bili:Technology .
+bili:MachineLearning a bili:Topic, skos:Concept ;
+    skos:prefLabel "机器学习"@zh ; skos:altLabel "ML"@en ;
+    skos:broader bili:ArtificialIntelligence .
+bili:DeepLearning a bili:Topic, skos:Concept ;
+    skos:prefLabel "深度学习"@zh ; skos:altLabel "DL"@en ;
+    skos:broader bili:MachineLearning .
+bili:GenerativeAI a bili:Topic, skos:Concept ;
+    skos:prefLabel "生成式人工智能"@zh ;
+    skos:altLabel "生成式AI"@zh, "AIGC"@en, "Generative AI"@en ;
+    skos:broader bili:ArtificialIntelligence .
+bili:LargeLanguageModel a bili:Topic, skos:Concept ;
+    skos:prefLabel "大语言模型"@zh ;
+    skos:altLabel "大模型"@zh, "LLM"@en, "Large Language Model"@en ;
+    skos:broader bili:GenerativeAI .
+bili:Transformer a bili:Topic, skos:Concept ;
+    skos:prefLabel "Transformer"@en ; skos:altLabel "变换器模型"@zh ;
+    skos:broader bili:DeepLearning ; skos:related bili:LargeLanguageModel .
+bili:RAG a bili:Topic, skos:Concept ;
+    skos:prefLabel "检索增强生成"@zh ;
+    skos:altLabel "RAG"@en, "知识库问答"@zh, "检索增强"@zh ;
+    skos:broader bili:LargeLanguageModel ; skos:related bili:VectorDatabase .
+bili:Agent a bili:Topic, skos:Concept ;
+    skos:prefLabel "AI智能体"@zh ;
+    skos:altLabel "Agent"@en, "智能体"@zh, "AI Agent"@en ;
+    skos:broader bili:LargeLanguageModel .
+bili:MultiAgent a bili:Topic, skos:Concept ;
+    skos:prefLabel "多智能体"@zh ; skos:altLabel "Multi-Agent"@en, "多Agent"@zh ;
+    skos:broader bili:Agent .
+bili:PromptEngineering a bili:Skill, skos:Concept ;
+    skos:prefLabel "提示词工程"@zh ; skos:altLabel "Prompt Engineering"@en, "提示工程"@zh ;
+    skos:broader bili:LargeLanguageModel .
+bili:FineTuning a bili:Skill, skos:Concept ;
+    skos:prefLabel "模型微调"@zh ; skos:altLabel "Fine-tuning"@en, "微调"@zh ;
+    skos:broader bili:MachineLearning .
+bili:LoRA a bili:Skill, skos:Concept ;
+    skos:prefLabel "LoRA微调"@zh ; skos:altLabel "LoRA"@en, "低秩微调"@zh ;
+    skos:broader bili:FineTuning .
+bili:VectorDatabase a bili:Topic, skos:Concept ;
+    skos:prefLabel "向量数据库"@zh ; skos:altLabel "Vector DB"@en, "向量库"@zh ;
+    skos:broader bili:Technology .
+bili:KnowledgeGraph a bili:Topic, skos:Concept ;
+    skos:prefLabel "知识图谱"@zh ; skos:altLabel "Knowledge Graph"@en, "KG"@en ;
+    skos:broader bili:ArtificialIntelligence ; skos:related bili:Ontology .
+bili:Ontology a bili:Topic, skos:Concept ;
+    skos:prefLabel "本体"@zh ; skos:altLabel "Ontology"@en, "领域本体"@zh ;
+    skos:broader bili:KnowledgeGraph .
+
+bili:Programming a bili:Skill, skos:Concept ; skos:prefLabel "编程"@zh ; skos:altLabel "programming"@en ; skos:broader bili:Technology .
+bili:Python a bili:Skill, skos:Concept ; skos:prefLabel "Python"@en ; skos:altLabel "Python编程"@zh ; skos:broader bili:Programming .
+bili:Java a bili:Skill, skos:Concept ; skos:prefLabel "Java"@en ; skos:altLabel "Java编程"@zh ; skos:broader bili:Programming .
+bili:JavaScript a bili:Skill, skos:Concept ; skos:prefLabel "JavaScript"@en ; skos:altLabel "JS"@en ; skos:broader bili:Programming .
+bili:WebDevelopment a bili:Topic, skos:Concept ; skos:prefLabel "Web开发"@zh ; skos:altLabel "网页开发"@zh, "前端开发"@zh ; skos:broader bili:Technology .
+bili:DataScience a bili:Topic, skos:Concept ; skos:prefLabel "数据科学"@zh ; skos:altLabel "Data Science"@en, "数据分析"@zh ; skos:broader bili:Technology .
+
+# Frameworks and prerequisites
+bili:LangChain a bili:Skill, skos:Concept ; skos:prefLabel "LangChain"@en ; skos:broader bili:Agent ; bili:requires bili:Python .
+bili:LangGraph a bili:Skill, skos:Concept ; skos:prefLabel "LangGraph"@en ; skos:broader bili:Agent ; bili:requires bili:LangChain, bili:Python .
+bili:ChromaDB a bili:Skill, skos:Concept ; skos:prefLabel "ChromaDB"@en ; skos:altLabel "Chroma"@en ; skos:broader bili:VectorDatabase .
+bili:Neo4j a bili:Skill, skos:Concept ; skos:prefLabel "Neo4j"@en ; skos:broader bili:KnowledgeGraph .
+
+# Formats and difficulty
+bili:Tutorial a bili:ContentFormat, skos:Concept ; skos:prefLabel "教程"@zh ; skos:altLabel "入门教程"@zh, "tutorial"@en .
+bili:HandsOn a bili:ContentFormat, skos:Concept ; skos:prefLabel "实战"@zh ; skos:altLabel "项目实战"@zh, "hands-on"@en .
+bili:Review a bili:ContentFormat, skos:Concept ; skos:prefLabel "测评"@zh ; skos:altLabel "评测"@zh, "review"@en .
+bili:News a bili:ContentFormat, skos:Concept ; skos:prefLabel "资讯"@zh ; skos:altLabel "新闻"@zh, "news"@en .
+bili:Beginner a bili:Difficulty, skos:Concept ; skos:prefLabel "入门"@zh ; skos:altLabel "零基础"@zh, "beginner"@en .
+bili:Intermediate a bili:Difficulty, skos:Concept ; skos:prefLabel "进阶"@zh ; skos:altLabel "中级"@zh, "intermediate"@en .
+bili:Advanced a bili:Difficulty, skos:Concept ; skos:prefLabel "高级"@zh ; skos:altLabel "深入"@zh, "advanced"@en .

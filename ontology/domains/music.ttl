@@ -1,0 +1,232 @@
+@prefix bili: <https://bilibili.local/ontology/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+bili:PopMusic a bili:Topic, skos:Concept ;
+    skos:prefLabel "流行音乐"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“流行音乐”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: music domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Pop"@en ;
+    skos:broader bili:Music .
+
+bili:RockMusic a bili:Topic, skos:Concept ;
+    skos:prefLabel "摇滚音乐"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“摇滚音乐”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: music domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Rock"@en ;
+    skos:broader bili:Music .
+
+bili:ElectronicMusic a bili:Topic, skos:Concept ;
+    skos:prefLabel "电子音乐"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“电子音乐”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: music domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Electronic Music"@en, "EDM"@en ;
+    skos:broader bili:Music .
+
+bili:ClassicalMusic a bili:Topic, skos:Concept ;
+    skos:prefLabel "古典音乐"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“古典音乐”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: music domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Classical"@en ;
+    skos:broader bili:Music .
+
+bili:FolkMusic a bili:Topic, skos:Concept ;
+    skos:prefLabel "民谣音乐"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“民谣音乐”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: music domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Folk"@en ;
+    skos:broader bili:Music .
+
+bili:Jazz a bili:Topic, skos:Concept ;
+    skos:prefLabel "爵士乐"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“爵士乐”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: music domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Jazz"@en ;
+    skos:broader bili:Music .
+
+bili:HipHop a bili:Topic, skos:Concept ;
+    skos:prefLabel "嘻哈音乐"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“嘻哈音乐”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: music domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Hip-Hop"@en, "说唱"@zh ;
+    skos:broader bili:Music .
+
+bili:MetalMusic a bili:Topic, skos:Concept ;
+    skos:prefLabel "金属音乐"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“金属音乐”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: music domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Metal"@en ;
+    skos:broader bili:RockMusic .
+
+bili:ChineseTraditionalMusic a bili:Topic, skos:Concept ;
+    skos:prefLabel "中国传统音乐"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“中国传统音乐”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: music domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "国乐"@zh ;
+    skos:broader bili:Music .
+
+bili:Vocaloid a bili:Topic, skos:Concept ;
+    skos:prefLabel "虚拟歌手音乐"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“虚拟歌手音乐”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: music domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "VOCALOID"@en ;
+    skos:broader bili:Music .
+
+bili:GameMusic a bili:Topic, skos:Concept ;
+    skos:prefLabel "游戏音乐"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“游戏音乐”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: music domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Game OST"@en ;
+    skos:broader bili:Music .
+
+bili:AnimeMusic a bili:Topic, skos:Concept ;
+    skos:prefLabel "动画音乐"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“动画音乐”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: music domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Anime OST"@en ;
+    skos:broader bili:Music .
+
+bili:FilmScore a bili:Topic, skos:Concept ;
+    skos:prefLabel "影视配乐"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“影视配乐”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: music domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Film Score"@en ;
+    skos:broader bili:Music .
+
+bili:MusicTheory a bili:Skill, skos:Concept ;
+    skos:prefLabel "乐理"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“乐理”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: music domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Music Theory"@en ;
+    skos:broader bili:Music .
+
+bili:Composition a bili:Skill, skos:Concept ;
+    skos:prefLabel "作曲"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“作曲”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: music domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Composition"@en ;
+    skos:broader bili:Music .
+
+bili:Arrangement a bili:Skill, skos:Concept ;
+    skos:prefLabel "编曲"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“编曲”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: music domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Arrangement"@en ;
+    skos:broader bili:Music .
+
+bili:MusicProduction a bili:Skill, skos:Concept ;
+    skos:prefLabel "音乐制作"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“音乐制作”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: music domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Music Production"@en ;
+    skos:broader bili:Music .
+
+bili:Mixing a bili:Skill, skos:Concept ;
+    skos:prefLabel "混音"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“混音”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: music domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Mixing"@en ;
+    skos:broader bili:MusicProduction .
+
+bili:Mastering a bili:Skill, skos:Concept ;
+    skos:prefLabel "母带处理"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“母带处理”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: music domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Mastering"@en ;
+    skos:broader bili:MusicProduction .
+
+bili:Singing a bili:Skill, skos:Concept ;
+    skos:prefLabel "声乐演唱"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“声乐演唱”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: music domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Singing"@en ;
+    skos:broader bili:Music .
+
+bili:Guitar a bili:Skill, skos:Concept ;
+    skos:prefLabel "吉他演奏"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“吉他演奏”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: music domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Guitar"@en ;
+    skos:broader bili:Music .
+
+bili:Piano a bili:Skill, skos:Concept ;
+    skos:prefLabel "钢琴演奏"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“钢琴演奏”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: music domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Piano"@en ;
+    skos:broader bili:Music .
+
+bili:Drums a bili:Skill, skos:Concept ;
+    skos:prefLabel "鼓演奏"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“鼓演奏”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: music domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Drumming"@en ;
+    skos:broader bili:Music .
+
+bili:MusicCover a bili:Topic, skos:Concept ;
+    skos:prefLabel "音乐翻唱"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“音乐翻唱”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: music domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Cover Song"@en ;
+    skos:broader bili:Music .
+
+bili:LiveMusic a bili:Topic, skos:Concept ;
+    skos:prefLabel "音乐现场"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“音乐现场”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: music domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Live Music"@en, "现场演出"@zh ;
+    skos:broader bili:Music .

@@ -1,0 +1,604 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-07-21T14:17:39.409045+08:00",
+  "dataset_kind": "deterministic_synthetic_editorial",
+  "claim_scope": "Offline engineering regression only; not live traffic and not causal online uplift.",
+  "protocol": {
+    "cutoff": "2026-06-01T00:00:00+00:00",
+    "seed": 20260721,
+    "bootstrap_iterations": 500,
+    "sessions": 84,
+    "candidate_count": 1008,
+    "candidate_set_sha256": "143ab7147097fbd0933f451c0c6346fc7bfc8ca788920c2e4922ca403956e742",
+    "future_behavior_used_for_profile": false,
+    "candidates_published_before_cutoff": true
+  },
+  "variants": {
+    "baseline_v1": {
+      "config": {
+        "temporal": false,
+        "ontology": false,
+        "clusters": false,
+        "hydration": false,
+        "dynamic": false,
+        "diversity": 0.0
+      },
+      "metrics": {
+        "recall_at_20": 0.077381,
+        "ndcg_at_10": 0.039753,
+        "mrr_at_10": 0.04315,
+        "hit_rate_at_10": 0.309524,
+        "novelty": 0.442077,
+        "ild": 0.033562,
+        "topic_coverage": 0.117063,
+        "coverage": 0.835317
+      },
+      "confidence_interval_95": {
+        "recall_at_20": [
+          0.053571,
+          0.104167
+        ],
+        "ndcg_at_10": [
+          0.027496,
+          0.05381
+        ],
+        "mrr_at_10": [
+          0.029809,
+          0.058343
+        ],
+        "hit_rate_at_10": [
+          0.214286,
+          0.416667
+        ],
+        "novelty": [
+          0.427708,
+          0.453161
+        ],
+        "ild": [
+          0.0,
+          0.078311
+        ],
+        "topic_coverage": [
+          0.083333,
+          0.154762
+        ]
+      }
+    },
+    "full_v2": {
+      "config": {
+        "temporal": true,
+        "ontology": true,
+        "clusters": true,
+        "hydration": true,
+        "dynamic": true,
+        "diversity": 0.25
+      },
+      "metrics": {
+        "recall_at_20": 0.694444,
+        "ndcg_at_10": 0.570682,
+        "mrr_at_10": 0.776786,
+        "hit_rate_at_10": 1.0,
+        "novelty": 0.352887,
+        "ild": 0.805461,
+        "topic_coverage": 1.0,
+        "coverage": 0.306548
+      },
+      "confidence_interval_95": {
+        "recall_at_20": [
+          0.686508,
+          0.703373
+        ],
+        "ndcg_at_10": [
+          0.540503,
+          0.603111
+        ],
+        "mrr_at_10": [
+          0.714286,
+          0.84623
+        ],
+        "hit_rate_at_10": [
+          1.0,
+          1.0
+        ],
+        "novelty": [
+          0.345113,
+          0.359768
+        ],
+        "ild": [
+          0.798875,
+          0.81192
+        ],
+        "topic_coverage": [
+          1.0,
+          1.0
+        ]
+      }
+    },
+    "no_time": {
+      "config": {
+        "temporal": false,
+        "ontology": true,
+        "clusters": true,
+        "hydration": true,
+        "dynamic": true,
+        "diversity": 0.25
+      },
+      "metrics": {
+        "recall_at_20": 0.705357,
+        "ndcg_at_10": 0.48375,
+        "mrr_at_10": 0.534524,
+        "hit_rate_at_10": 1.0,
+        "novelty": 0.348405,
+        "ild": 0.828822,
+        "topic_coverage": 1.0,
+        "coverage": 0.321429
+      },
+      "confidence_interval_95": {
+        "recall_at_20": [
+          0.690476,
+          0.718254
+        ],
+        "ndcg_at_10": [
+          0.451282,
+          0.519694
+        ],
+        "mrr_at_10": [
+          0.462698,
+          0.612302
+        ],
+        "hit_rate_at_10": [
+          1.0,
+          1.0
+        ],
+        "novelty": [
+          0.341661,
+          0.355613
+        ],
+        "ild": [
+          0.821648,
+          0.83479
+        ],
+        "topic_coverage": [
+          1.0,
+          1.0
+        ]
+      }
+    },
+    "no_ontology": {
+      "config": {
+        "temporal": true,
+        "ontology": false,
+        "clusters": true,
+        "hydration": true,
+        "dynamic": true,
+        "diversity": 0.25
+      },
+      "metrics": {
+        "recall_at_20": 0.690476,
+        "ndcg_at_10": 0.488473,
+        "mrr_at_10": 0.616667,
+        "hit_rate_at_10": 1.0,
+        "novelty": 0.336506,
+        "ild": 0.853941,
+        "topic_coverage": 0.994048,
+        "coverage": 0.277778
+      },
+      "confidence_interval_95": {
+        "recall_at_20": [
+          0.677579,
+          0.701389
+        ],
+        "ndcg_at_10": [
+          0.452811,
+          0.531564
+        ],
+        "mrr_at_10": [
+          0.546825,
+          0.705754
+        ],
+        "hit_rate_at_10": [
+          1.0,
+          1.0
+        ],
+        "novelty": [
+          0.329845,
+          0.343655
+        ],
+        "ild": [
+          0.842585,
+          0.865909
+        ],
+        "topic_coverage": [
+          0.982143,
+          1.0
+        ]
+      }
+    },
+    "no_clusters": {
+      "config": {
+        "temporal": true,
+        "ontology": true,
+        "clusters": false,
+        "hydration": true,
+        "dynamic": true,
+        "diversity": 0.25
+      },
+      "metrics": {
+        "recall_at_20": 0.694444,
+        "ndcg_at_10": 0.522336,
+        "mrr_at_10": 0.712302,
+        "hit_rate_at_10": 1.0,
+        "novelty": 0.324446,
+        "ild": 0.870977,
+        "topic_coverage": 1.0,
+        "coverage": 0.281746
+      },
+      "confidence_interval_95": {
+        "recall_at_20": [
+          0.686508,
+          0.703373
+        ],
+        "ndcg_at_10": [
+          0.48504,
+          0.559391
+        ],
+        "mrr_at_10": [
+          0.632937,
+          0.801587
+        ],
+        "hit_rate_at_10": [
+          1.0,
+          1.0
+        ],
+        "novelty": [
+          0.319875,
+          0.329101
+        ],
+        "ild": [
+          0.867989,
+          0.873769
+        ],
+        "topic_coverage": [
+          1.0,
+          1.0
+        ]
+      }
+    },
+    "no_hydration": {
+      "config": {
+        "temporal": true,
+        "ontology": true,
+        "clusters": true,
+        "hydration": false,
+        "dynamic": true,
+        "diversity": 0.25
+      },
+      "metrics": {
+        "recall_at_20": 0.06746,
+        "ndcg_at_10": 0.020199,
+        "mrr_at_10": 0.019232,
+        "hit_rate_at_10": 0.154762,
+        "novelty": 0.294857,
+        "ild": 0.786701,
+        "topic_coverage": 1.0,
+        "coverage": 0.359127
+      },
+      "confidence_interval_95": {
+        "recall_at_20": [
+          0.041667,
+          0.09623
+        ],
+        "ndcg_at_10": [
+          0.011411,
+          0.031276
+        ],
+        "mrr_at_10": [
+          0.010728,
+          0.029658
+        ],
+        "hit_rate_at_10": [
+          0.083333,
+          0.238095
+        ],
+        "novelty": [
+          0.289583,
+          0.300929
+        ],
+        "ild": [
+          0.78011,
+          0.794637
+        ],
+        "topic_coverage": [
+          1.0,
+          1.0
+        ]
+      }
+    },
+    "no_dynamic": {
+      "config": {
+        "temporal": true,
+        "ontology": true,
+        "clusters": true,
+        "hydration": true,
+        "dynamic": false,
+        "diversity": 0.25
+      },
+      "metrics": {
+        "recall_at_20": 0.978175,
+        "ndcg_at_10": 0.807174,
+        "mrr_at_10": 0.790675,
+        "hit_rate_at_10": 1.0,
+        "novelty": 0.344958,
+        "ild": 0.854352,
+        "topic_coverage": 0.968254,
+        "coverage": 0.208333
+      },
+      "confidence_interval_95": {
+        "recall_at_20": [
+          0.959325,
+          0.993056
+        ],
+        "ndcg_at_10": [
+          0.772784,
+          0.846649
+        ],
+        "mrr_at_10": [
+          0.729167,
+          0.856151
+        ],
+        "hit_rate_at_10": [
+          1.0,
+          1.0
+        ],
+        "novelty": [
+          0.339351,
+          0.349833
+        ],
+        "ild": [
+          0.84766,
+          0.860363
+        ],
+        "topic_coverage": [
+          0.940476,
+          0.990079
+        ]
+      }
+    },
+    "weights_relevance": {
+      "config": {
+        "temporal": true,
+        "ontology": true,
+        "clusters": true,
+        "hydration": true,
+        "dynamic": true,
+        "diversity": 0.03,
+        "interest_weight": 1.35,
+        "quality_weight": 0.28
+      },
+      "metrics": {
+        "recall_at_20": 0.463294,
+        "ndcg_at_10": 0.324562,
+        "mrr_at_10": 0.680206,
+        "hit_rate_at_10": 0.809524,
+        "novelty": 0.46475,
+        "ild": 0.196739,
+        "topic_coverage": 0.539683,
+        "coverage": 0.705357
+      },
+      "confidence_interval_95": {
+        "recall_at_20": [
+          0.429563,
+          0.5
+        ],
+        "ndcg_at_10": [
+          0.283609,
+          0.367677
+        ],
+        "mrr_at_10": [
+          0.590325,
+          0.780867
+        ],
+        "hit_rate_at_10": [
+          0.72619,
+          0.892857
+        ],
+        "novelty": [
+          0.458821,
+          0.471804
+        ],
+        "ild": [
+          0.176303,
+          0.213452
+        ],
+        "topic_coverage": [
+          0.521825,
+          0.559524
+        ]
+      }
+    },
+    "weights_diversity": {
+      "config": {
+        "temporal": true,
+        "ontology": true,
+        "clusters": true,
+        "hydration": true,
+        "dynamic": true,
+        "diversity": 0.45,
+        "interest_weight": 1.05,
+        "quality_weight": 0.4
+      },
+      "metrics": {
+        "recall_at_20": 0.694444,
+        "ndcg_at_10": 0.621647,
+        "mrr_at_10": 0.805556,
+        "hit_rate_at_10": 1.0,
+        "novelty": 0.313601,
+        "ild": 0.917616,
+        "topic_coverage": 1.0,
+        "coverage": 0.147817
+      },
+      "confidence_interval_95": {
+        "recall_at_20": [
+          0.686508,
+          0.703373
+        ],
+        "ndcg_at_10": [
+          0.594809,
+          0.652834
+        ],
+        "mrr_at_10": [
+          0.75,
+          0.865079
+        ],
+        "hit_rate_at_10": [
+          1.0,
+          1.0
+        ],
+        "novelty": [
+          0.309345,
+          0.31819
+        ],
+        "ild": [
+          0.914561,
+          0.920442
+        ],
+        "topic_coverage": [
+          1.0,
+          1.0
+        ]
+      }
+    }
+  },
+  "relative_gains": {
+    "ndcg_at_10": 13.355696,
+    "recall_at_20": 7.974348,
+    "hit_rate_at_10": 2.230767,
+    "topic_coverage": 7.542409
+  },
+  "acceptance_gates": {
+    "ndcg_relative_gain_gte_10pct": true,
+    "recall_relative_gain_gte_8pct": true,
+    "hit_rate_relative_gain_gte_8pct": true,
+    "ild_not_lower": true,
+    "topic_coverage_relative_gain_gte_10pct": true
+  },
+  "passed": true,
+  "buckets_full_v2": {
+    "activity_bucket": {
+      "high": {
+        "sessions": 58,
+        "recall_at_20": 0.6939655172413793,
+        "ndcg_at_10": 0.546853290276497,
+        "mrr_at_10": 0.7140804597701149,
+        "hit_rate_at_10": 1.0,
+        "novelty": 0.35138793103448274,
+        "ild": 0.8046506352087115,
+        "topic_coverage": 1.0
+      },
+      "medium": {
+        "sessions": 26,
+        "recall_at_20": 0.6955128205128205,
+        "ndcg_at_10": 0.6238382097591808,
+        "mrr_at_10": 0.9166666666666666,
+        "hit_rate_at_10": 1.0,
+        "novelty": 0.35623076923076924,
+        "ild": 0.8072672064777328,
+        "topic_coverage": 1.0
+      }
+    },
+    "freshness_bucket": {
+      "aging": {
+        "sessions": 28,
+        "recall_at_20": 0.6666666666666666,
+        "ndcg_at_10": 0.550647498171928,
+        "mrr_at_10": 0.8035714285714286,
+        "hit_rate_at_10": 1.0,
+        "novelty": 0.387125,
+        "ild": 0.7894924812030075,
+        "topic_coverage": 1.0
+      },
+      "recent": {
+        "sessions": 28,
+        "recall_at_20": 0.75,
+        "ndcg_at_10": 0.7189407222831795,
+        "mrr_at_10": 1.0,
+        "hit_rate_at_10": 1.0,
+        "novelty": 0.34082142857142855,
+        "ild": 0.8103477443609023,
+        "topic_coverage": 1.0
+      },
+      "stale": {
+        "sessions": 28,
+        "recall_at_20": 0.6666666666666666,
+        "ndcg_at_10": 0.44245764703687546,
+        "mrr_at_10": 0.5267857142857143,
+        "hit_rate_at_10": 1.0,
+        "novelty": 0.33071428571428574,
+        "ild": 0.8165413533834587,
+        "topic_coverage": 1.0
+      }
+    },
+    "domain_bucket": {
+      "ai": {
+        "sessions": 24,
+        "recall_at_20": 0.6944444444444444,
+        "ndcg_at_10": 0.5593661610189627,
+        "mrr_at_10": 0.7569444444444444,
+        "hit_rate_at_10": 1.0,
+        "novelty": 0.34872916666666665,
+        "ild": 0.8144956140350877,
+        "topic_coverage": 1.0
+      },
+      "animation": {
+        "sessions": 20,
+        "recall_at_20": 0.6833333333333333,
+        "ndcg_at_10": 0.545427839110696,
+        "mrr_at_10": 0.7333333333333333,
+        "hit_rate_at_10": 1.0,
+        "novelty": 0.35767499999999997,
+        "ild": 0.7921184210526315,
+        "topic_coverage": 1.0
+      },
+      "film": {
+        "sessions": 12,
+        "recall_at_20": 0.6944444444444444,
+        "ndcg_at_10": 0.5688323115647765,
+        "mrr_at_10": 0.7708333333333334,
+        "hit_rate_at_10": 1.0,
+        "novelty": 0.34933333333333333,
+        "ild": 0.8040131578947368,
+        "topic_coverage": 1.0
+      },
+      "game": {
+        "sessions": 16,
+        "recall_at_20": 0.7083333333333333,
+        "ndcg_at_10": 0.6227481767259159,
+        "mrr_at_10": 0.875,
+        "hit_rate_at_10": 1.0,
+        "novelty": 0.3539375,
+        "ild": 0.8188486842105264,
+        "topic_coverage": 1.0
+      },
+      "knowledge": {
+        "sessions": 4,
+        "recall_at_20": 0.75,
+        "ndcg_at_10": 0.7176644807425099,
+        "mrr_at_10": 1.0,
+        "hit_rate_at_10": 1.0,
+        "novelty": 0.364375,
+        "ild": 0.7947368421052632,
+        "topic_coverage": 1.0
+      },
+      "life": {
+        "sessions": 8,
+        "recall_at_20": 0.6666666666666666,
+        "ndcg_at_10": 0.49291539421806085,
+        "mrr_at_10": 0.6458333333333334,
+        "hit_rate_at_10": 1.0,
+        "novelty": 0.350875,
+        "ild": 0.7924671052631579,
+        "topic_coverage": 1.0
+      }
+    }
+  }
+}

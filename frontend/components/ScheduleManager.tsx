@@ -59,7 +59,13 @@ export default function ScheduleManager({ sessionId, folderIds, onClose }: Sched
     try {
       const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
       let endpoint = "";
-      let body: any = { session_id: sessionId };
+      const body: {
+        session_id: string;
+        folder_ids?: number[];
+        schedule_type?: string;
+        interval_minutes?: number;
+        limit?: number;
+      } = { session_id: sessionId };
 
       switch (taskType) {
         case "sync":

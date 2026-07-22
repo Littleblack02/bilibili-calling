@@ -1,0 +1,187 @@
+@prefix bili: <https://bilibili.local/ontology/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+bili:Technology a bili:Category, skos:Concept ;
+    skos:prefLabel "科技"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“科技”的受控概念。"@zh ;
+    dcterms:source "Bilibili public partition taxonomy and editorial mapping" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "technology"@en, "数码科技"@zh  ;
+    bili:bilibiliTid 188 .
+
+bili:Knowledge a bili:Category, skos:Concept ;
+    skos:prefLabel "知识"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“知识”的受控概念。"@zh ;
+    dcterms:source "Bilibili public partition taxonomy and editorial mapping" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "knowledge"@en, "泛知识"@zh  ;
+    bili:bilibiliTid 36 .
+
+bili:Animation a bili:Category, skos:Concept ;
+    skos:prefLabel "动画"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“动画”的受控概念。"@zh ;
+    dcterms:source "Bilibili public partition taxonomy and editorial mapping" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "animation"@en, "动漫作品"@zh  ;
+    bili:bilibiliTid 1 .
+
+bili:Game a bili:Category, skos:Concept ;
+    skos:prefLabel "游戏"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“游戏”的受控概念。"@zh ;
+    dcterms:source "Bilibili public partition taxonomy and editorial mapping" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "gaming"@en, "电子游戏"@zh  ;
+    bili:bilibiliTid 4 .
+
+bili:Music a bili:Category, skos:Concept ;
+    skos:prefLabel "音乐"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“音乐”的受控概念。"@zh ;
+    dcterms:source "Bilibili public partition taxonomy and editorial mapping" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "music"@en, "音乐内容"@zh  ;
+    bili:bilibiliTid 3 .
+
+bili:Film a bili:Category, skos:Concept ;
+    skos:prefLabel "影视"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“影视”的受控概念。"@zh ;
+    dcterms:source "Bilibili public partition taxonomy and editorial mapping" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "film and television"@en, "影视内容"@zh  ;
+    bili:bilibiliTid 181 .
+
+bili:Life a bili:Category, skos:Concept ;
+    skos:prefLabel "生活"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“生活”的受控概念。"@zh ;
+    dcterms:source "Bilibili public partition taxonomy and editorial mapping" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "lifestyle"@en, "生活记录"@zh  ;
+    bili:bilibiliTid 160 .
+
+bili:Entertainment a bili:Category, skos:Concept ;
+    skos:prefLabel "娱乐"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“娱乐”的受控概念。"@zh ;
+    dcterms:source "Bilibili public partition taxonomy and editorial mapping" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "entertainment"@en, "娱乐内容"@zh  ;
+    bili:bilibiliTid 5 .
+
+bili:Sports a bili:Category, skos:Concept ;
+    skos:prefLabel "运动"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“运动”的受控概念。"@zh ;
+    dcterms:source "Bilibili public partition taxonomy and editorial mapping" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "sports"@en, "体育运动"@zh  ;
+    bili:bilibiliTid 234 .
+
+bili:Food a bili:Category, skos:Concept ;
+    skos:prefLabel "美食"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“美食”的受控概念。"@zh ;
+    dcterms:source "Bilibili public partition taxonomy and editorial mapping" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "food"@en, "烹饪美食"@zh  ;
+    bili:bilibiliTid 211 .
+
+bili:Dance a bili:Category, skos:Concept ;
+    skos:prefLabel "舞蹈"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“舞蹈”的受控概念。"@zh ;
+    dcterms:source "Bilibili public partition taxonomy and editorial mapping" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "dance"@en  ;
+    bili:bilibiliTid 129 .
+
+bili:Fashion a bili:Category, skos:Concept ;
+    skos:prefLabel "时尚"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“时尚”的受控概念。"@zh ;
+    dcterms:source "Bilibili public partition taxonomy and editorial mapping" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "fashion"@en  ;
+    bili:bilibiliTid 155 .
+
+bili:Automotive a bili:Category, skos:Concept ;
+    skos:prefLabel "汽车"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“汽车”的受控概念。"@zh ;
+    dcterms:source "Bilibili public partition taxonomy and editorial mapping" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "automotive"@en  ;
+    bili:bilibiliTid 223 .
+
+bili:Animals a bili:Category, skos:Concept ;
+    skos:prefLabel "动物圈"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“动物圈”的受控概念。"@zh ;
+    dcterms:source "Bilibili public partition taxonomy and editorial mapping" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "animals"@en, "萌宠"@zh  ;
+    bili:bilibiliTid 217 .
+
+bili:Information a bili:Category, skos:Concept ;
+    skos:prefLabel "资讯分区"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“资讯分区”的受控概念。"@zh ;
+    dcterms:source "Bilibili public partition taxonomy and editorial mapping" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "information"@en  ;
+    bili:bilibiliTid 202 .
+
+bili:Kichiku a bili:Category, skos:Concept ;
+    skos:prefLabel "鬼畜"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“鬼畜”的受控概念。"@zh ;
+    dcterms:source "Bilibili public partition taxonomy and editorial mapping" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "kichiku"@en  ;
+    bili:bilibiliTid 119 .
+
+bili:TVShow a bili:Category, skos:Concept ;
+    skos:prefLabel "综艺"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“综艺”的受控概念。"@zh ;
+    dcterms:source "Bilibili public partition taxonomy and editorial mapping" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Bilibili variety partition"@en  ;
+    bili:bilibiliTid 71 .
+
+bili:Documentary a bili:Category, skos:Concept ;
+    skos:prefLabel "纪录片"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“纪录片”的受控概念。"@zh ;
+    dcterms:source "Bilibili public partition taxonomy and editorial mapping" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "documentary"@en  ;
+    bili:bilibiliTid 177 .
+
+bili:Movie a bili:Category, skos:Concept ;
+    skos:prefLabel "电影"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“电影”的受控概念。"@zh ;
+    dcterms:source "Bilibili public partition taxonomy and editorial mapping" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "movie"@en  ;
+    bili:bilibiliTid 23 .
+
+bili:Teleplay a bili:Category, skos:Concept ;
+    skos:prefLabel "电视剧"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“电视剧”的受控概念。"@zh ;
+    dcterms:source "Bilibili public partition taxonomy and editorial mapping" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "teleplay"@en, "TV drama"@en  ;
+    bili:bilibiliTid 11 .

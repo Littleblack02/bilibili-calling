@@ -27,11 +27,14 @@ export default function LoginModal({ isOpen, onClose, onSuccess }: Props) {
   };
 
   useEffect(() => {
-    if (isOpen) getQR();
-    else {
-      setPolling(false);
-      setQr(null);
-    }
+    const timer = window.setTimeout(() => {
+      if (isOpen) getQR();
+      else {
+        setPolling(false);
+        setQr(null);
+      }
+    }, 0);
+    return () => window.clearTimeout(timer);
   }, [isOpen]);
 
   useEffect(() => {

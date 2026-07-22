@@ -1,0 +1,10 @@
+{
+  "legacy_upgrade": true,
+  "empty_upgrade": true,
+  "repeat_upgrade": true,
+  "seed_data_preserved": true,
+  "revision": "0001_v2",
+  "irreversible": true,
+  "rollback": "Disable V2 feature flags for code rollback; schema rollback requires restoring the pre-migration backup.",
+  "passed": true
+}

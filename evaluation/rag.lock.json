@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "dataset_kind": "deterministic_synthetic_editorial",
+  "questions": 150,
+  "answerable": 126,
+  "unanswerable": 24,
+  "gold_chunks": 126,
+  "benchmark_chunk_count": 10000,
+  "sha256": {
+    "rag_chunks.jsonl": "4b78d1839ff86238131cacca2c8da1b813928db8c976ebcb53c1d9276cc2cb43",
+    "rag_qa.jsonl": "9256debc04b1ad9ee1b563418de2199720bb5d798dd3b74c4135d614167af2da"
+  },
+  "limitations": "Synthetic extractive regression fixture; no remote LLM and no live user knowledge base."
+}

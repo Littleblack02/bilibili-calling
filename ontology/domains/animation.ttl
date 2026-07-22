@@ -1,0 +1,241 @@
+@prefix bili: <https://bilibili.local/ontology/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+bili:Anime a bili:Topic, skos:Concept ;
+    skos:prefLabel "日本动画"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“日本动画”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: animation domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Anime"@en, "日漫"@zh ;
+    skos:broader bili:Animation .
+
+bili:ChineseAnimation a bili:Topic, skos:Concept ;
+    skos:prefLabel "国产动画"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“国产动画”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: animation domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "国创"@zh, "国漫"@zh ;
+    skos:broader bili:Animation .
+
+bili:AnimationFilm a bili:Topic, skos:Concept ;
+    skos:prefLabel "动画电影"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“动画电影”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: animation domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Animated Film"@en ;
+    skos:broader bili:Animation .
+
+bili:ShortAnimation a bili:Topic, skos:Concept ;
+    skos:prefLabel "动画短片"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“动画短片”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: animation domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Animation Short"@en ;
+    skos:broader bili:Animation .
+
+bili:MechaAnime a bili:Topic, skos:Concept ;
+    skos:prefLabel "机甲动画"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“机甲动画”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: animation domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "机战动画"@zh ;
+    skos:broader bili:Anime .
+
+bili:IsekaiAnime a bili:Topic, skos:Concept ;
+    skos:prefLabel "异世界动画"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“异世界动画”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: animation domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "异世界番剧"@zh ;
+    skos:broader bili:Anime .
+
+bili:SchoolAnime a bili:Topic, skos:Concept ;
+    skos:prefLabel "校园动画"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“校园动画”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: animation domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "校园番"@zh ;
+    skos:broader bili:Anime .
+
+bili:RomanceAnime a bili:Topic, skos:Concept ;
+    skos:prefLabel "恋爱动画"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“恋爱动画”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: animation domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "恋爱番"@zh ;
+    skos:broader bili:Anime .
+
+bili:ComedyAnime a bili:Topic, skos:Concept ;
+    skos:prefLabel "搞笑动画"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“搞笑动画”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: animation domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "搞笑番"@zh ;
+    skos:broader bili:Anime .
+
+bili:MysteryAnime a bili:Topic, skos:Concept ;
+    skos:prefLabel "悬疑动画"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“悬疑动画”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: animation domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "推理番"@zh ;
+    skos:broader bili:Anime .
+
+bili:ScienceFictionAnime a bili:Topic, skos:Concept ;
+    skos:prefLabel "科幻动画"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“科幻动画”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: animation domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "科幻番"@zh ;
+    skos:broader bili:Anime .
+
+bili:FantasyAnime a bili:Topic, skos:Concept ;
+    skos:prefLabel "奇幻动画"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“奇幻动画”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: animation domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "奇幻番"@zh ;
+    skos:broader bili:Anime .
+
+bili:SportsAnime a bili:Topic, skos:Concept ;
+    skos:prefLabel "运动动画"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“运动动画”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: animation domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "运动番"@zh ;
+    skos:broader bili:Anime .
+
+bili:MusicAnime a bili:Topic, skos:Concept ;
+    skos:prefLabel "音乐动画"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“音乐动画”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: animation domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "音乐番"@zh ;
+    skos:broader bili:Anime .
+
+bili:SliceOfLifeAnime a bili:Topic, skos:Concept ;
+    skos:prefLabel "日常系动画"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“日常系动画”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: animation domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "日常番"@zh ;
+    skos:broader bili:Anime .
+
+bili:HealingAnime a bili:Topic, skos:Concept ;
+    skos:prefLabel "治愈系动画"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“治愈系动画”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: animation domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "治愈番"@zh ;
+    skos:broader bili:Anime .
+
+bili:AnimationProduction a bili:Skill, skos:Concept ;
+    skos:prefLabel "动画制作"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“动画制作”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: animation domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Animation Production"@en ;
+    skos:broader bili:Animation .
+
+bili:Storyboarding a bili:Skill, skos:Concept ;
+    skos:prefLabel "动画分镜"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“动画分镜”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: animation domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Storyboard"@en ;
+    skos:broader bili:AnimationProduction .
+
+bili:KeyAnimation a bili:Skill, skos:Concept ;
+    skos:prefLabel "原画"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“原画”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: animation domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Key Animation"@en ;
+    skos:broader bili:AnimationProduction .
+
+bili:VoiceActing a bili:Skill, skos:Concept ;
+    skos:prefLabel "配音"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“配音”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: animation domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "声优"@zh, "Voice Acting"@en ;
+    skos:broader bili:Animation .
+
+bili:AnimeReview a bili:Topic, skos:Concept ;
+    skos:prefLabel "动画评论"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“动画评论”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: animation domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "番剧点评"@zh ;
+    skos:broader bili:Animation .
+
+bili:AnimeAnalysis a bili:Topic, skos:Concept ;
+    skos:prefLabel "动画解析"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“动画解析”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: animation domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "番剧解析"@zh ;
+    skos:broader bili:Animation .
+
+bili:Cosplay a bili:Topic, skos:Concept ;
+    skos:prefLabel "角色扮演"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“角色扮演”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: animation domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Cosplay"@en ;
+    skos:broader bili:Animation .
+
+bili:OtakuCulture a bili:Topic, skos:Concept ;
+    skos:prefLabel "御宅文化"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“御宅文化”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: animation domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "ACG文化"@zh ;
+    skos:broader bili:Animation .
+
+bili:Manga a bili:Topic, skos:Concept ;
+    skos:prefLabel "漫画"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“漫画”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: animation domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Comic"@en ;
+    skos:broader bili:Animation .
+
+bili:LightNovel a bili:Topic, skos:Concept ;
+    skos:prefLabel "轻小说"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“轻小说”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: animation domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Light Novel"@en ;
+    skos:broader bili:Animation .

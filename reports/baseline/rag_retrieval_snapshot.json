@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "fixture": "deterministic in-memory vector-store contract",
+  "algorithm": "V1 ontology expansion plus reciprocal-rank fusion",
+  "input": {
+    "query": "RAG knowledge base",
+    "k": 2,
+    "bvids": ["BV1BASE00001"]
+  },
+  "issued_queries": [
+    "RAG knowledge base",
+    "知识",
+    "检索增强生成",
+    "大语言模型",
+    "向量数据库"
+  ],
+  "results": [
+    {
+      "rank": 1,
+      "bvid": "BV1BASE00001",
+      "chunk_index": 0,
+      "ontology_rrf_score": 0.070492,
+      "matched_query_count": 5
+    }
+  ],
+  "limitations": [
+    "This freezes deterministic orchestration behavior, not semantic retrieval quality.",
+    "The V1 path has no relevance threshold, groundedness score, or reviewed QA gold set."
+  ]
+}

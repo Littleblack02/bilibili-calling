@@ -6,8 +6,10 @@ import json
 import asyncio
 import time
 import hashlib
+import copy
 import os
 import re
+from urllib.parse import urlencode
 from typing import Optional, Dict, List, Any
 from app.config import settings
 from app.utils.logger import get_logger
@@ -30,6 +32,14 @@ def clean_html_text(text: str) -> str:
 class BilibiliService:
     """Bilibili API 服务"""
 
+    _up_videos_cache: Dict[tuple[int, int, int, str], tuple[float, Dict[str, Any]]] = {}
+    _WBI_MIXIN_KEY_ENC_TAB = (
+        46, 47, 18, 2, 53, 8, 23, 32, 15, 50, 10, 31, 58, 3, 45, 35,
+        27, 43, 5, 49, 33, 9, 42, 19, 29, 28, 14, 39, 12, 38, 41, 13,
+        37, 48, 7, 16, 24, 55, 40, 61, 26, 17, 0, 1, 60, 51, 30, 4,
+        22, 25, 54, 21, 56, 59, 6, 63, 57, 62, 11, 36, 20, 34, 44, 52,
+    )
+
     def __init__(self, sessdata: str = None, bili_jct: str = None, dedeuserid: str = None):
         self.base_url = "https://api.bilibili.com"
         self.client = None
@@ -44,6 +54,8 @@ class BilibiliService:
         else:
             self.cookies = getattr(settings, "bilibili_cookies", {}) or {}
         self._wbi_keys = None  # WBI签名密钥缓存
+        self._profile_channel_status: Dict[str, Dict[str, Any]] = {}
+        self._profile_sync_request_key = str(time.time_ns())
 
     async def __aenter__(self):
         await self._ensure_client_async()
@@ -365,6 +377,30 @@ class BilibiliService:
         Returns:
             完整的关注列表
         """
+        if settings.profile_sync_v2_enabled:
+            if not mid:
+                user_info = await self.get_user_info()
+                mid = user_info.get("mid", 0) if user_info else 0
+            if not mid:
+                self._record_profile_channel_status(
+                    "followings",
+                    status="auth_required",
+                    capability_status="auth_required",
+                    error_summary="unable to resolve authenticated account id",
+                )
+                return []
+            return await self._read_profile_channel(
+                "followings",
+                "https://api.bilibili.com/x/relation/followings",
+                params={"vmid": mid, "pn": 1, "ps": 50, "order_type": "attention"},
+                item_keys=("list",),
+                pagination={
+                    "kind": "page", "page_param": "pn", "size_param": "ps",
+                    "page_size": 50, "max_pages": 40, "max_items": 2000,
+                    "timeout_seconds": 20, "rate_limit_seconds": 0.1,
+                },
+            )
+
         all_followings = []
         pn = 1
         ps = 50  # 每页最大数量
@@ -405,15 +441,18 @@ class BilibiliService:
             logger.info(f"nav API响应状态: {resp.status_code}")
             data = resp.json()
 
-            if data.get("code") == 0 and data.get("data"):
+            # Anonymous nav responses may use code=-101 while still returning
+            # the public WBI image keys in data.wbi_img.
+            if data.get("data"):
                 wbi_img = data["data"].get("wbi_img")
                 if wbi_img and isinstance(wbi_img, dict):
                     wbi_img_url = wbi_img.get("img_url")
-                    if wbi_img_url:
-                        # 从URL中提取密钥
-                        wbi_key = wbi_img_url.split("/")[-1].replace(".png", "")
-                        self._wbi_keys = (wbi_key[:16], wbi_key[16:])
-                        logger.info(f"成功获取WBI keys: {wbi_key[:16]}...")
+                    wbi_sub_url = wbi_img.get("sub_url")
+                    if wbi_img_url and wbi_sub_url:
+                        img_key = wbi_img_url.rsplit("/", 1)[-1].split(".", 1)[0]
+                        sub_key = wbi_sub_url.rsplit("/", 1)[-1].split(".", 1)[0]
+                        self._wbi_keys = (img_key, sub_key)
+                        logger.info("成功获取WBI keys")
                         return self._wbi_keys
                     else:
                         logger.warning("wbi_img_url为空")
@@ -429,11 +468,6 @@ class BilibiliService:
 
     async def _generate_wbi_signature(self, params: dict) -> dict:
         """生成WBI签名（异步版本）"""
-        # 按key排序并混合
-        sorted_params = dict(sorted(params.items()))
-        query = "&".join([f"{k}={v}" for k, v in sorted_params.items()])
-
-        # 获取密钥（异步获取）
         if not self._wbi_keys or self._wbi_keys == ("", ""):
             try:
                 self._wbi_keys = await self._get_wbi_keys()
@@ -441,15 +475,20 @@ class BilibiliService:
                 logger.warning(f"无法获取WBI keys: {e}，跳过签名")
                 return params
 
-        mix_key, _ = self._wbi_keys
-
-        # 生成签名
-        wbi_signature = hashlib.md5(f"{query}{mix_key}".encode()).hexdigest()
-
-        params["wts"] = int(time.time())
-        params["w_rid"] = wbi_signature
-
-        return params
+        img_key, sub_key = self._wbi_keys
+        raw_key = f"{img_key}{sub_key}"
+        if len(raw_key) < 64:
+            logger.warning("WBI keys are incomplete; sending unsigned request")
+            return dict(params)
+        mixin_key = "".join(raw_key[index] for index in self._WBI_MIXIN_KEY_ENC_TAB)[:32]
+        signed = {**params, "wts": int(time.time())}
+        signed = {
+            key: "".join(char for char in str(value) if char not in "!'()*")
+            for key, value in sorted(signed.items())
+        }
+        query = urlencode(signed)
+        signed["w_rid"] = hashlib.md5(f"{query}{mixin_key}".encode()).hexdigest()
+        return signed
 
     # ============================================================
     # 搜索类 API
@@ -812,6 +851,23 @@ class BilibiliService:
 
     async def get_all_favorite_videos(self, media_id: int) -> List[Dict[str, Any]]:
         """获取收藏夹中所有视频"""
+        if settings.profile_sync_v2_enabled:
+            await self._get_wbi_keys()
+            return await self._read_profile_channel(
+                "favorites",
+                f"{self.base_url}/x/v3/fav/resource/list",
+                params={
+                    "media_id": media_id, "pn": 1, "ps": 20,
+                    "platform": "web",
+                },
+                item_keys=("medias",),
+                pagination={
+                    "kind": "page", "page_param": "pn", "size_param": "ps",
+                    "page_size": 20, "max_pages": 50, "max_items": 1000,
+                    "timeout_seconds": 20, "rate_limit_seconds": 0.1, "wbi": True,
+                },
+            )
+
         all_videos = []
         pn = 1
         ps = 20
@@ -930,7 +986,15 @@ class BilibiliService:
         order: str = "pubdate"
     ) -> Dict[str, Any]:
         """获取UP主视频列表（需要WBI签名）"""
+        cache_key = (int(mid), int(pn), int(ps), str(order))
+        cached = self._up_videos_cache.get(cache_key)
+        now = time.time()
+        if cached and now - cached[0] <= settings.up_video_cache_ttl_seconds:
+            result = copy.deepcopy(cached[1])
+            result["cache_hit"] = True
+            return result
         try:
+            await self._ensure_client_async()
             url = f"{self.base_url}/x/space/wbi/arc/search"
             params = {
                 "mid": mid,
@@ -938,19 +1002,23 @@ class BilibiliService:
                 "pn": pn,
                 "order": order
             }
-            # params = self._generate_wbi_signature(params)  # 需要WBI签名
+            params = await self._generate_wbi_signature(params)
 
             resp = await self.client.get(url, params=params)
             data = resp.json()
 
             if data.get("code") == 0:
-                list_data = data["data"]["list"]
-                return {
+                list_data = (data.get("data") or {}).get("list") or {}
+                result = {
                     "success": True,
                     "videos": list_data.get("vlist", []),
                     "page": list_data.get("page", {}),
-                    "source": "bilibili_up_videos"
+                    "source": "bilibili_up_videos",
+                    "direct_mid": int(mid),
+                    "cache_hit": False,
                 }
+                self._up_videos_cache[cache_key] = (now, copy.deepcopy(result))
+                return result
             else:
                 return {
                     "success": False,
@@ -1319,6 +1387,33 @@ class BilibiliService:
                 "source": "bilibili_view"
             }
 
+    async def get_video_tags(self, bvid: str) -> Dict[str, Any]:
+        """Get archive tags separately; the view response does not guarantee them."""
+        try:
+            await self._ensure_client_async()
+            response = await self.client.get(
+                f"{self.base_url}/x/tag/archive/tags", params={"bvid": bvid}
+            )
+            payload = response.json()
+            if payload.get("code") == 0:
+                return {
+                    "success": True,
+                    "tags": payload.get("data") or [],
+                    "source": "bilibili_archive_tags",
+                }
+            return {
+                "success": False,
+                "error": payload.get("message", "获取视频标签失败"),
+                "source": "bilibili_archive_tags",
+            }
+        except Exception as exc:
+            logger.warning(f"Get video tags failed [{bvid}]: {type(exc).__name__}")
+            return {
+                "success": False,
+                "error": type(exc).__name__,
+                "source": "bilibili_archive_tags",
+            }
+
     async def get_audio_url(self, bvid: str, cid: int) -> Optional[str]:
         """
         从播放信息接口获取音频流 URL（用于 ASR）
@@ -1459,6 +1554,13 @@ class BilibiliService:
         Returns:
             字幕纯文本或 None
         """
+        payload = await self.download_subtitle_with_segments(subtitle_url)
+        return payload.get("text") if payload else None
+
+    async def download_subtitle_with_segments(
+        self, subtitle_url: str
+    ) -> Optional[Dict[str, Any]]:
+        """Download subtitles while preserving timestamped evidence units."""
         if not subtitle_url:
             return None
         try:
@@ -1471,52 +1573,103 @@ class BilibiliService:
                 resp.raise_for_status()
                 raw = resp.text
 
-            if subtitle_url.lower().endswith(".srt") or '"format":"srt"' in raw[:200]:
-                return self._parse_srt(raw)
-            else:
-                return self._parse_ass(raw)
+            segments = self._parse_subtitle_segments(raw, subtitle_url)
+            text = "\n".join(
+                segment["text"] for segment in segments if segment.get("text")
+            )
+            return {"text": text, "segments": segments} if text else None
         except Exception as e:
             logger.error(f"Download subtitle failed: {e}")
             return None
 
-    def _parse_ass(self, raw: str) -> str:
-        """解析 ASS/SSA 字幕为纯文本"""
+    @staticmethod
+    def _subtitle_time_seconds(value: str) -> float:
+        parts = value.strip().replace(",", ".").split(":")
+        if len(parts) != 3:
+            raise ValueError(f"Invalid subtitle timestamp: {value}")
+        hours, minutes, seconds = parts
+        return int(hours) * 3600 + int(minutes) * 60 + float(seconds)
+
+    def _parse_subtitle_segments(self, raw: str, format_hint: str = "") -> List[Dict[str, Any]]:
+        """Parse Bilibili JSON, SRT or ASS into a common timed structure."""
+        import json
         import re
-        lines = []
-        in_dialogue = False
+
+        try:
+            data = json.loads(raw)
+        except (json.JSONDecodeError, TypeError):
+            data = None
+        if isinstance(data, dict):
+            body = data.get("body") or data.get("data", {}).get("body") or []
+            native = []
+            for row in body:
+                if not isinstance(row, dict):
+                    continue
+                text = str(row.get("content") or row.get("text") or "").strip()
+                try:
+                    start = float(row.get("from", row.get("start_time")))
+                    end = float(row.get("to", row.get("end_time")))
+                except (TypeError, ValueError):
+                    continue
+                if text:
+                    native.append({"start_time": start, "end_time": end, "text": text})
+            if native:
+                return native
+
+        if format_hint.lower().endswith(".srt") or "-->" in raw:
+            segments = []
+            pattern = re.compile(
+                r"(?P<start>\d{2}:\d{2}:\d{2}[,.]\d{3})\s*-->\s*"
+                r"(?P<end>\d{2}:\d{2}:\d{2}[,.]\d{3})[^\n]*\n"
+                r"(?P<text>.*?)(?=\n\s*\n|\Z)",
+                re.DOTALL,
+            )
+            for match in pattern.finditer(raw.replace("\r\n", "\n")):
+                text = " ".join(
+                    line.strip() for line in match.group("text").splitlines()
+                    if line.strip() and not line.strip().isdigit()
+                )
+                if text:
+                    segments.append({
+                        "start_time": self._subtitle_time_seconds(match.group("start")),
+                        "end_time": self._subtitle_time_seconds(match.group("end")),
+                        "text": text,
+                    })
+            return segments
+
+        segments = []
+        in_events = False
         for line in raw.splitlines():
             line = line.strip()
             if line.startswith("[Events]"):
-                in_dialogue = True
+                in_events = True
                 continue
-            if in_dialogue and line.startswith("Dialogue:"):
-                # ASS 格式: Dialogue: Layer,Start,End,Style,Name,MarginL,MarginR,MarginV,Effect,Text
-                parts = line.split(",", 9)
-                if len(parts) >= 10:
-                    text = parts[9]
-                    # 去除 ASS 样式标签 {\a9} {\r} {\an8} 等
-                    text = re.sub(r"\{[^}]*\}", "", text)
-                    # 去除 {\} 残留
-                    text = text.replace("\\N", "\n").replace("\\n", "\n").strip()
-                    if text:
-                        lines.append(text)
-        return "\n".join(lines)
+            if not in_events or not line.startswith("Dialogue:"):
+                continue
+            parts = line.split(",", 9)
+            if len(parts) < 10:
+                continue
+            text = re.sub(r"\{[^}]*\}", "", parts[9])
+            text = text.replace("\\N", " ").replace("\\n", " ").strip()
+            if text:
+                segments.append({
+                    "start_time": self._subtitle_time_seconds(parts[1]),
+                    "end_time": self._subtitle_time_seconds(parts[2]),
+                    "text": text,
+                })
+        return segments
+
+    def _parse_ass(self, raw: str) -> str:
+        """解析 ASS/SSA 字幕为纯文本"""
+        return "\n".join(
+            segment["text"] for segment in self._parse_subtitle_segments(raw, ".ass")
+        )
 
     def _parse_srt(self, raw: str) -> str:
         """解析 SRT 字幕为纯文本"""
-        import re
-        lines = []
-        for line in raw.splitlines():
-            line = line.strip()
-            # 跳过序号、时间码、空行
-            if re.match(r"^\d+$", line):
-                continue
-            if re.match(r"\d{2}:\d{2}:\d{2}", line):
-                continue
-            if not line:
-                continue
-            lines.append(line)
-        return "\n".join(lines)
+        return "\n".join(
+            segment["text"] for segment in self._parse_subtitle_segments(raw, ".srt")
+        )
 
     async def get_video_summary(
         self, bvid: str, cid: int, up_mid: int = None
@@ -1770,9 +1923,6 @@ class BilibiliService:
             }
         """
         try:
-            await self._ensure_client_async()
-
-            # 使用新的追番 API
             url = "https://api.bilibili.com/x/space/bangumi/follow/list"
             params = {
                 "vmid": mid,
@@ -1780,21 +1930,34 @@ class BilibiliService:
                 "pn": 1,
                 "ps": 20
             }
+            if settings.profile_sync_v2_enabled:
+                items = await self._read_profile_channel(
+                    "bangumi",
+                    url,
+                    params=params,
+                    item_keys=("list",),
+                    pagination={
+                        "kind": "page", "page_param": "pn", "size_param": "ps",
+                        "page_size": 20, "max_pages": 30, "max_items": 600,
+                        "timeout_seconds": 20, "rate_limit_seconds": 0.1,
+                    },
+                )
+            else:
+                await self._ensure_client_async()
+                # 尝试添加WBI签名
+                try:
+                    wbi_params = await self._generate_wbi_signature(params)
+                    resp = await self.client.get(url, params=wbi_params)
+                except Exception as wbi_error:
+                    logger.debug(f"WBI签名失败，尝试无签名: {wbi_error}")
+                    resp = await self.client.get(url, params=params)
+                data = resp.json()
 
-            # 尝试添加WBI签名
-            try:
-                wbi_params = await self._generate_wbi_signature(params)
-                resp = await self.client.get(url, params=wbi_params)
-            except Exception as wbi_error:
-                logger.debug(f"WBI签名失败，尝试无签名: {wbi_error}")
-                resp = await self.client.get(url, params=params)
-            data = resp.json()
+                if data.get("code") != 0:
+                    logger.warning(f"获取追番列表失败: {data.get('message', 'Unknown error')}")
+                    return []
 
-            if data.get("code") != 0:
-                logger.warning(f"获取追番列表失败: {data.get('message', 'Unknown error')}")
-                return []
-
-            items = data.get("data", {}).get("list", []) or []
+                items = data.get("data", {}).get("list", []) or []
 
             # 转换为统一格式
             result = []
@@ -1915,22 +2078,35 @@ class BilibiliService:
             }
         """
         try:
-            await self._ensure_client_async()
-
             url = "https://api.bilibili.com/x/v2/history"
             params = {
                 "pn": pn,
                 "ps": min(ps, 50)  # 最大50条
             }
+            if settings.profile_sync_v2_enabled:
+                items = await self._read_profile_channel(
+                    "history",
+                    url,
+                    params=params,
+                    item_keys=(),
+                    pagination={
+                        "kind": "page", "page_param": "pn", "size_param": "ps",
+                        "page_size": min(ps, 50), "max_pages": 20,
+                        "max_items": max(1, ps), "timeout_seconds": 20,
+                        "rate_limit_seconds": 0.1, "recent_window_days": 30,
+                        "initial": pn,
+                    },
+                )
+            else:
+                await self._ensure_client_async()
+                resp = await self.client.get(url, params=params)
+                data = resp.json()
 
-            resp = await self.client.get(url, params=params)
-            data = resp.json()
+                if data.get("code") != 0:
+                    logger.warning(f"获取观看历史失败: {data.get('message', 'Unknown error')}")
+                    return []
 
-            if data.get("code") != 0:
-                logger.warning(f"获取观看历史失败: {data.get('message', 'Unknown error')}")
-                return []
-
-            items = data.get("data", []) or []
+                items = data.get("data", []) or []
 
             # 转换为统一格式
             result = []
@@ -1980,18 +2156,28 @@ class BilibiliService:
             }
         """
         try:
-            await self._ensure_client_async()
-
             url = "https://api.bilibili.com/x/v2/history/toview"
+            if settings.profile_sync_v2_enabled:
+                items = await self._read_profile_channel(
+                    "watchlater",
+                    url,
+                    item_keys=("list",),
+                    pagination={
+                        "kind": "single", "page_size": 1000,
+                        "max_pages": 1, "max_items": 1000,
+                        "timeout_seconds": 20,
+                    },
+                )
+            else:
+                await self._ensure_client_async()
+                resp = await self.client.get(url)
+                data = resp.json()
 
-            resp = await self.client.get(url)
-            data = resp.json()
+                if data.get("code") != 0:
+                    logger.warning(f"获取稍后观看列表失败: {data.get('message', 'Unknown error')}")
+                    return []
 
-            if data.get("code") != 0:
-                logger.warning(f"获取稍后观看列表失败: {data.get('message', 'Unknown error')}")
-                return []
-
-            items = data.get("data", {}).get("list", []) or []
+                items = data.get("data", {}).get("list", []) or []
 
             # 转换为统一格式
             result = []
@@ -2171,19 +2357,29 @@ class BilibiliService:
             }
         """
         try:
-            await self._ensure_client_async()
-
             # 先获取用户收藏夹列表
             url = "https://api.bilibili.com/x/v3/fav/folder/created/list-all"
+            if settings.profile_sync_v2_enabled:
+                items = await self._read_profile_channel(
+                    "cinema",
+                    url,
+                    item_keys=("list",),
+                    pagination={
+                        "kind": "single", "page_size": 1000,
+                        "max_pages": 1, "max_items": 1000,
+                        "timeout_seconds": 20,
+                    },
+                )
+            else:
+                await self._ensure_client_async()
+                resp = await self.client.get(url)
+                data = resp.json()
 
-            resp = await self.client.get(url)
-            data = resp.json()
+                if data.get("code") != 0:
+                    logger.warning(f"获取影视收藏夹失败: {data.get('message', 'Unknown error')}")
+                    return []
 
-            if data.get("code") != 0:
-                logger.warning(f"获取影视收藏夹失败: {data.get('message', 'Unknown error')}")
-                return []
-
-            items = data.get("data", {}).get("list", []) or []
+                items = data.get("data", {}).get("list", []) or []
 
             # 筛选可能包含影视内容的收藏夹
             # 电影相关关键词
@@ -2251,23 +2447,35 @@ class BilibiliService:
             }
         """
         try:
-            await self._ensure_client_async()
-
             url = "https://api.bilibili.com/x/v3/fav/resource/list"
             params = {
                 "media_id": media_id,
                 "pn": pn,
                 "ps": ps
             }
+            if settings.profile_sync_v2_enabled:
+                items = await self._read_profile_channel(
+                    "cinema",
+                    url,
+                    params=params,
+                    item_keys=("medias",),
+                    pagination={
+                        "kind": "page", "page_param": "pn", "size_param": "ps",
+                        "page_size": min(max(1, ps), 50), "max_pages": 20,
+                        "max_items": 1000, "timeout_seconds": 20,
+                        "rate_limit_seconds": 0.1, "initial": pn,
+                    },
+                )
+            else:
+                await self._ensure_client_async()
+                resp = await self.client.get(url, params=params)
+                data = resp.json()
 
-            resp = await self.client.get(url, params=params)
-            data = resp.json()
+                if data.get("code") != 0:
+                    logger.warning(f"获取影视收藏夹视频失败: {data.get('message', 'Unknown error')}")
+                    return []
 
-            if data.get("code") != 0:
-                logger.warning(f"获取影视收藏夹视频失败: {data.get('message', 'Unknown error')}")
-                return []
-
-            items = data.get("data", {}).get("medias", []) or []
+                items = data.get("data", {}).get("medias", []) or []
 
             result = []
             for item in items:
@@ -2286,6 +2494,7 @@ class BilibiliService:
                     },
                     "duration": item.get("duration", 0),
                     "pubdate": item.get("pubdate", 0),
+                    "fav_time": item.get("fav_time", 0),
                     "url": f"https://www.bilibili.com/video/{bvid}"
                 })
 
@@ -2295,3 +2504,484 @@ class BilibiliService:
         except Exception as e:
             logger.error(f"获取影视收藏夹视频失败: {e}")
             return []
+
+    # ============================================================
+    # Comprehensive, read-only user-signal channels
+    # ============================================================
+
+    @staticmethod
+    def _extract_channel_items(payload: Any, keys: tuple[str, ...]) -> List[Dict[str, Any]]:
+        """Extract a list from API responses with tolerant schema handling."""
+        if isinstance(payload, list):
+            return [item for item in payload if isinstance(item, dict)]
+        if not isinstance(payload, dict):
+            return []
+        data = payload.get("data", payload)
+        if isinstance(data, list):
+            return [item for item in data if isinstance(item, dict)]
+        if not isinstance(data, dict):
+            return []
+        for key in keys:
+            value: Any = data
+            for part in key.split("."):
+                value = value.get(part) if isinstance(value, dict) else None
+            if isinstance(value, list):
+                return [item for item in value if isinstance(item, dict)]
+        return []
+
+    async def _read_profile_channel(
+        self,
+        name: str,
+        url: str,
+        *,
+        params: Dict[str, Any] | None = None,
+        data: Dict[str, Any] | None = None,
+        method: str = "GET",
+        item_keys: tuple[str, ...] = ("list", "items"),
+        pagination: Dict[str, Any] | None = None,
+    ) -> List[Dict[str, Any]]:
+        """Read one authenticated channel; failure never breaks other channels."""
+        if settings.profile_sync_v2_enabled and pagination:
+            return await self._read_profile_channel_paginated(
+                name,
+                url,
+                params=params,
+                data=data,
+                method=method,
+                item_keys=item_keys,
+                pagination=pagination,
+            )
+        try:
+            await self._ensure_client_async()
+            response = (
+                await self.client.post(url, params=params, data=data)
+                if method.upper() == "POST"
+                else await self.client.get(url, params=params)
+            )
+            response.raise_for_status()
+            payload = response.json()
+            if isinstance(payload, dict) and payload.get("code", 0) != 0:
+                logger.warning(
+                    f"用户信号通道失败 [{name}]: "
+                    f"code={payload.get('code')} message={payload.get('message')}"
+                )
+                return []
+            items = self._extract_channel_items(payload, item_keys)
+            logger.info(f"用户信号通道 [{name}] 获取 {len(items)} 条")
+            return items
+        except Exception as exc:
+            logger.warning(f"用户信号通道不可用 [{name}]: {exc}")
+            return []
+
+    async def _read_profile_channel_paginated(
+        self,
+        name: str,
+        url: str,
+        *,
+        params: Dict[str, Any] | None,
+        data: Dict[str, Any] | None,
+        method: str,
+        item_keys: tuple[str, ...],
+        pagination: Dict[str, Any],
+    ) -> List[Dict[str, Any]]:
+        """V2 bounded pagination with a capability result for every channel."""
+        from app.services.profile.pagination import (
+            AuthRequired,
+            CursorPaginator,
+            OffsetPaginator,
+            PageNumberPaginator,
+            ProfileChannelAdapter,
+            RateLimited,
+            SchemaChanged,
+        )
+
+        await self._ensure_client_async()
+        kind = pagination.get("kind", "page")
+        page_param = pagination.get("page_param", "pn")
+        size_param = pagination.get("size_param", "ps")
+        target = pagination.get("target", "params")
+        paginator_type = {
+            "page": PageNumberPaginator,
+            "cursor": CursorPaginator,
+            "offset": OffsetPaginator,
+            "single": PageNumberPaginator,
+        }.get(kind, PageNumberPaginator)
+        paginator = paginator_type(
+            page_size=int(pagination.get("page_size", 50)),
+            max_pages=int(pagination.get("max_pages", 20)),
+            max_items=int(pagination.get("max_items", 1000)),
+            timeout_seconds=float(pagination.get("timeout_seconds", 20)),
+            rate_limit_seconds=float(pagination.get("rate_limit_seconds", 0.1)),
+            recent_window_days=pagination.get("recent_window_days"),
+        )
+        adapter = ProfileChannelAdapter(
+            item_paths=("data",) + tuple(f"data.{key}" for key in item_keys),
+            has_more_paths=(
+                "_pagination.has_more", "data.has_more", "data.has_next",
+                "data.page.has_more",
+            ),
+            cursor_paths=(
+                "_pagination.next", "data.next_offset", "data.offset",
+                "data.next_cursor",
+            ),
+        )
+
+        last_http_status: int | None = None
+
+        async def fetch(token: Any, page_size: int) -> Dict[str, Any]:
+            nonlocal last_http_status
+            request_params = dict(params or {})
+            request_data = dict(data or {})
+            destination = request_data if target == "data" else request_params
+            if kind != "single":
+                destination[page_param] = token
+                destination[size_param] = page_size
+            if pagination.get("wbi"):
+                request_params = await self._generate_wbi_signature(request_params)
+            response = (
+                await self.client.post(url, params=request_params, data=request_data)
+                if method.upper() == "POST"
+                else await self.client.get(url, params=request_params)
+            )
+            last_http_status = response.status_code
+            if response.status_code in {401, 403}:
+                raise AuthRequired(f"HTTP {response.status_code}")
+            if response.status_code == 429:
+                retry_after = response.headers.get("Retry-After")
+                raise RateLimited(
+                    "HTTP 429",
+                    float(retry_after) if retry_after and retry_after.isdigit() else None,
+                )
+            response.raise_for_status()
+            try:
+                payload = response.json()
+            except Exception as exc:
+                raise SchemaChanged("response body is not JSON") from exc
+            if not isinstance(payload, dict):
+                raise SchemaChanged("response JSON is not an object")
+            extracted = self._extract_channel_items(payload, item_keys)
+            explicit_more = kind == "single" or any(
+                value is not None for value in (
+                    (payload.get("data") or {}).get("has_more")
+                    if isinstance(payload.get("data"), dict) else None,
+                    (payload.get("data") or {}).get("has_next")
+                    if isinstance(payload.get("data"), dict) else None,
+                )
+            )
+            payload["_pagination"] = {
+                # APIs without an explicit flag require one final empty page to
+                # prove a full snapshot rather than assuming page one is all.
+                "has_more": (
+                    False if kind == "single" else
+                    bool((payload.get("data") or {}).get("has_more")
+                         or (payload.get("data") or {}).get("has_next"))
+                    if explicit_more else len(extracted) >= page_size
+                ),
+                "next": (
+                    (payload.get("data") or {}).get("offset")
+                    if isinstance(payload.get("data"), dict) else None
+                ),
+            }
+            return payload
+
+        initial = pagination.get("initial")
+        result = await paginator.collect(fetch, adapter, initial=initial)
+        self._record_profile_channel_status(
+            name,
+            status=result.status,
+            capability_status=result.capability_status,
+            count=len(result.items),
+            page_count=result.page_count,
+            cursor=result.cursor,
+            full_snapshot=result.full_snapshot,
+            error_summary=result.error_summary,
+            http_status=last_http_status,
+        )
+        if result.status != "success":
+            logger.warning(
+                f"用户信号通道 [{name}] {result.status}: {result.error_summary}"
+            )
+        else:
+            logger.info(
+                f"用户信号通道 [{name}] 分页获取 {len(result.items)} 条/"
+                f"{result.page_count} 页"
+            )
+        return result.items
+
+    def _record_profile_channel_status(
+        self,
+        name: str,
+        *,
+        status: str,
+        capability_status: str,
+        count: int = 0,
+        page_count: int = 0,
+        cursor: Dict[str, Any] | None = None,
+        full_snapshot: bool = False,
+        error_summary: str | None = None,
+        http_status: int | None = None,
+    ) -> None:
+        """Record one bounded, secret-free channel outcome for sync persistence."""
+        self._profile_channel_status[name] = {
+            "status": status,
+            "capability_status": capability_status,
+            "count": max(0, int(count)),
+            "page_count": max(0, int(page_count)),
+            "cursor": cursor or {},
+            "full_snapshot": bool(full_snapshot),
+            "error_summary": str(error_summary)[:500] if error_summary else None,
+            "http_status": http_status,
+            "schema_version": "2.0",
+            "request_key": self._profile_sync_request_key,
+        }
+        from app.services.observability import metrics
+        metrics.inc(
+            "profile_channel_outcomes_total",
+            channel=name, status=status, capability=capability_status,
+        )
+        if http_status == 429:
+            metrics.inc("profile_channel_rate_limited_total", channel=name)
+        if http_status in {401, 403} or status in {"auth_failed", "unauthorized"}:
+            metrics.inc("profile_channel_auth_failures_total", channel=name)
+        if status == "schema_error":
+            metrics.inc("profile_channel_schema_errors_total", channel=name)
+
+    def profile_channel_statuses(self) -> Dict[str, Dict[str, Any]]:
+        return json.loads(json.dumps(self._profile_channel_status, ensure_ascii=False))
+
+    async def get_subscribed_tags(self, mid: int) -> List[Dict[str, Any]]:
+        return await self._read_profile_channel(
+            "subscribed_tags",
+            "https://api.bilibili.com/x/space/tag/sub/list",
+            params={"vmid": mid, "pn": 1, "ps": 50},
+            item_keys=("list", "tags", "tag_list"),
+            pagination={"kind": "page", "page_param": "pn", "size_param": "ps", "page_size": 50},
+        )
+
+    async def get_favorite_collections(self, mid: int) -> List[Dict[str, Any]]:
+        return await self._read_profile_channel(
+            "favorite_collections",
+            "https://api.bilibili.com/x/v3/fav/folder/collected/list",
+            params={"up_mid": mid, "pn": 1, "ps": 50},
+            item_keys=("list", "items"),
+            pagination={"kind": "page", "page_param": "pn", "size_param": "ps", "page_size": 50},
+        )
+
+    async def get_favorite_topics(self) -> List[Dict[str, Any]]:
+        return await self._read_profile_channel(
+            "favorite_topics",
+            "https://app.bilibili.com/x/topic/web/fav/list",
+            params={"page_num": 1, "page_size": 16},
+            item_keys=("topic_list", "list", "items"),
+            pagination={"kind": "page", "page_param": "page_num", "size_param": "page_size", "page_size": 16},
+        )
+
+    async def get_favorite_articles(self) -> List[Dict[str, Any]]:
+        return await self._read_profile_channel(
+            "favorite_articles",
+            "https://api.bilibili.com/x/article/favorites/list/all",
+            params={"pn": 1, "ps": 30},
+            item_keys=("favorites", "list", "items"),
+            pagination={"kind": "page", "page_param": "pn", "size_param": "ps", "page_size": 30},
+        )
+
+    async def get_favorite_courses(self, mid: int) -> List[Dict[str, Any]]:
+        return await self._read_profile_channel(
+            "favorite_courses",
+            "https://api.bilibili.com/pugv/app/web/favorite/page",
+            params={"mid": mid, "pn": 1, "ps": 30},
+            item_keys=("items", "list", "seasons"),
+            pagination={"kind": "page", "page_param": "pn", "size_param": "ps", "page_size": 30},
+        )
+
+    async def get_favorite_notes(self) -> List[Dict[str, Any]]:
+        return await self._read_profile_channel(
+            "favorite_notes",
+            "https://api.bilibili.com/x/note/list",
+            params={"pn": 1, "ps": 30},
+            item_keys=("list", "notes", "items"),
+            pagination={"kind": "page", "page_param": "pn", "size_param": "ps", "page_size": 30},
+        )
+
+    async def get_user_courses(self, mid: int) -> List[Dict[str, Any]]:
+        return await self._read_profile_channel(
+            "courses",
+            "https://api.bilibili.com/pugv/app/web/season/page",
+            params={"mid": mid, "pn": 1, "ps": 30},
+            item_keys=("items", "list", "seasons"),
+            pagination={"kind": "page", "page_param": "pn", "size_param": "ps", "page_size": 30},
+        )
+
+    async def get_special_followings(self) -> List[Dict[str, Any]]:
+        return await self._read_profile_channel(
+            "special_followings",
+            "https://api.bilibili.com/x/relation/tag/special",
+            params={"pn": 1, "ps": 50},
+            item_keys=("list", "items"),
+            pagination={"kind": "page", "page_param": "pn", "size_param": "ps", "page_size": 50},
+        )
+
+    async def get_whisper_followings(self) -> List[Dict[str, Any]]:
+        return await self._read_profile_channel(
+            "whisper_followings",
+            "https://api.bilibili.com/x/relation/whispers",
+            params={"pn": 1, "ps": 50},
+            item_keys=("list", "items"),
+            pagination={"kind": "page", "page_param": "pn", "size_param": "ps", "page_size": 50},
+        )
+
+    async def get_fan_medals(self, mid: int) -> List[Dict[str, Any]]:
+        return await self._read_profile_channel(
+            "fan_medals",
+            "https://api.live.bilibili.com/xlive/web-ucenter/user/MedalWall",
+            params={"target_id": mid},
+            item_keys=("list", "medal_list", "items"),
+            pagination={
+                "kind": "page", "page_param": "page", "size_param": "page_size",
+                "page_size": 100, "max_pages": 1, "max_items": 100,
+            },
+        )
+
+    async def get_followed_manga(self) -> List[Dict[str, Any]]:
+        return await self._read_profile_channel(
+            "manga",
+            "https://manga.bilibili.com/twirp/bookshelf.v1.Bookshelf/ListFavorite",
+            method="POST",
+            params={"device": "pc", "platform": "web", "nov": 25},
+            data={"page_num": 1, "page_size": 30, "order": 3, "wait_free": 0},
+            item_keys=("list", "items", "books"),
+            pagination={
+                "kind": "page", "target": "data", "page_param": "page_num",
+                "size_param": "page_size", "page_size": 30,
+            },
+        )
+
+    async def get_live_watch_history(self) -> List[Dict[str, Any]]:
+        return await self._read_profile_channel(
+            "live_history",
+            "https://api.live.bilibili.com/xlive/web-ucenter/v1/history/get_history_by_uid",
+            item_keys=("list", "items", "rooms"),
+            pagination={
+                "kind": "page", "page_param": "page", "size_param": "page_size",
+                "page_size": 30, "max_pages": 10, "max_items": 300,
+                "recent_window_days": 30,
+            },
+        )
+
+    async def get_dynamic_feed(self) -> List[Dict[str, Any]]:
+        return await self._read_profile_channel(
+            "dynamic_feed",
+            "https://api.bilibili.com/x/polymer/web-dynamic/v1/feed/all",
+            params={
+                "timezone_offset": -480,
+                "type": "all",
+                "page": 1,
+                "features": "itemOpusStyle",
+            },
+            item_keys=("items", "list"),
+            pagination={
+                "kind": "cursor", "page_param": "offset", "size_param": "page_size",
+                "page_size": 20, "max_pages": 10, "max_items": 200,
+                "recent_window_days": 14, "initial": "",
+            },
+        )
+
+    async def get_extended_profile_channels(self, mid: int) -> Dict[str, List[Dict[str, Any]]]:
+        """Collect all supported read-only Bilibili profile channels concurrently."""
+        channel_factories = {
+            "subscribed_tags": lambda: self.get_subscribed_tags(mid),
+            "favorite_collections": lambda: self.get_favorite_collections(mid),
+            "favorite_topics": self.get_favorite_topics,
+            "favorite_articles": self.get_favorite_articles,
+            "favorite_courses": lambda: self.get_favorite_courses(mid),
+            "favorite_notes": self.get_favorite_notes,
+            "courses": lambda: self.get_user_courses(mid),
+            "special_followings": self.get_special_followings,
+            "whisper_followings": self.get_whisper_followings,
+            "fan_medals": lambda: self.get_fan_medals(mid),
+            "manga": self.get_followed_manga,
+            "live_history": self.get_live_watch_history,
+            "dynamic_feed": self.get_dynamic_feed,
+        }
+        semaphore = asyncio.Semaphore(4)
+        auth_failed = asyncio.Event()
+
+        async def collect(name: str, factory):
+            async with semaphore:
+                if auth_failed.is_set():
+                    self._profile_channel_status[name] = {
+                        "status": "auth_required",
+                        "capability_status": "auth_required",
+                        "count": 0,
+                        "page_count": 0,
+                        "cursor": {},
+                        "full_snapshot": False,
+                        "error_summary": "skipped after another channel reported expired authentication",
+                        "schema_version": "2.0",
+                        "request_key": self._profile_sync_request_key,
+                    }
+                    return name, []
+                try:
+                    items = await asyncio.wait_for(factory(), timeout=35)
+                    status = self._profile_channel_status.get(name, {})
+                    if status.get("capability_status") == "auth_required":
+                        auth_failed.set()
+                    return name, items
+                except Exception as exc:
+                    logger.warning(f"扩展画像通道超时/失败 [{name}]: {exc}")
+                    timed_out = isinstance(exc, (asyncio.TimeoutError, TimeoutError))
+                    self._record_profile_channel_status(
+                        name,
+                        status="timed_out" if timed_out else "failed",
+                        capability_status="degraded",
+                        error_summary=(
+                            "channel request timed out" if timed_out
+                            else f"channel collection failed: {type(exc).__name__}"
+                        ),
+                    )
+                    return name, []
+
+        pairs = await asyncio.gather(*[
+            collect(name, factory) for name, factory in channel_factories.items()
+        ])
+        return {name: items for name, items in pairs}
+
+    @staticmethod
+    def profile_channel_capabilities() -> Dict[str, Dict[str, Any]]:
+        """Auditable coverage matrix for authenticated, read-only profile data."""
+        supported = {
+            "favorites": "收藏视频及收藏时间（同步阶段）",
+            "bangumi": "追番",
+            "cinema": "追剧/影视收藏",
+            "history": "视频观看历史",
+            "watchlater": "稍后再看",
+            "followings": "普通关注",
+            "special_followings": "特别关注",
+            "whisper_followings": "悄悄关注",
+            "subscribed_tags": "订阅标签",
+            "favorite_collections": "收藏的合集",
+            "favorite_topics": "收藏话题",
+            "favorite_articles": "收藏专栏",
+            "favorite_courses": "收藏课程",
+            "favorite_notes": "收藏笔记",
+            "courses": "已购/在学课程",
+            "fan_medals": "粉丝勋章",
+            "manga": "追漫",
+            "live_history": "直播观看历史",
+            "dynamic_feed": "关注动态候选（只作曝光/召回，不作正偏好）",
+        }
+        unavailable = {
+            "video_like_history": "没有稳定的账号全量点赞历史读取接口",
+            "video_coin_history": "没有稳定的账号全量投币历史读取接口",
+            "complete_watch_completion": "历史接口只提供有限窗口，不能还原账号全生命周期完播序列",
+        }
+        return {
+            "supported": {
+                name: {"available": True, "status": "working", "meaning": meaning}
+                for name, meaning in supported.items()
+            },
+            "unavailable": {
+                name: {"available": False, "status": "unavailable", "reason": reason}
+                for name, reason in unavailable.items()
+            },
+        }

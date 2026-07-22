@@ -1,0 +1,259 @@
+@prefix bili: <https://bilibili.local/ontology/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+bili:Cooking a bili:Skill, skos:Concept ;
+    skos:prefLabel "烹饪"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“烹饪”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: life domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Cooking"@en ;
+    skos:broader bili:Food .
+
+bili:Baking a bili:Skill, skos:Concept ;
+    skos:prefLabel "烘焙"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“烘焙”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: life domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Baking"@en ;
+    skos:broader bili:Food .
+
+bili:Coffee a bili:Topic, skos:Concept ;
+    skos:prefLabel "咖啡"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“咖啡”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: life domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Coffee"@en ;
+    skos:broader bili:Food .
+
+bili:Tea a bili:Topic, skos:Concept ;
+    skos:prefLabel "茶文化"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“茶文化”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: life domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Tea"@en ;
+    skos:broader bili:Food .
+
+bili:Travel a bili:Topic, skos:Concept ;
+    skos:prefLabel "旅行"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“旅行”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: life domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Travel"@en ;
+    skos:broader bili:Life .
+
+bili:CityWalk a bili:Topic, skos:Concept ;
+    skos:prefLabel "城市漫步"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“城市漫步”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: life domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "City Walk"@en ;
+    skos:broader bili:Travel .
+
+bili:Photography a bili:Skill, skos:Concept ;
+    skos:prefLabel "摄影"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“摄影”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: life domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Photography"@en ;
+    skos:broader bili:Life .
+
+bili:Videography a bili:Skill, skos:Concept ;
+    skos:prefLabel "视频拍摄"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“视频拍摄”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: life domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Videography"@en ;
+    skos:broader bili:Life .
+
+bili:HomeImprovement a bili:Skill, skos:Concept ;
+    skos:prefLabel "家居改造"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“家居改造”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: life domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Home Improvement"@en ;
+    skos:broader bili:Life .
+
+bili:InteriorDesign a bili:Skill, skos:Concept ;
+    skos:prefLabel "室内设计"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“室内设计”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: life domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Interior Design"@en ;
+    skos:broader bili:Life .
+
+bili:Gardening a bili:Skill, skos:Concept ;
+    skos:prefLabel "园艺"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“园艺”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: life domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Gardening"@en ;
+    skos:broader bili:Life .
+
+bili:Handicraft a bili:Skill, skos:Concept ;
+    skos:prefLabel "手工"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“手工”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: life domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "DIY手作"@zh ;
+    skos:broader bili:Life .
+
+bili:Fitness a bili:Topic, skos:Concept ;
+    skos:prefLabel "健身"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“健身”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: life domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Fitness"@en ;
+    skos:broader bili:Sports .
+
+bili:Running a bili:Topic, skos:Concept ;
+    skos:prefLabel "跑步"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“跑步”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: life domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Running"@en ;
+    skos:broader bili:Sports .
+
+bili:Cycling a bili:Topic, skos:Concept ;
+    skos:prefLabel "骑行"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“骑行”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: life domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Cycling"@en ;
+    skos:broader bili:Sports .
+
+bili:Basketball a bili:Topic, skos:Concept ;
+    skos:prefLabel "篮球"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“篮球”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: life domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Basketball"@en ;
+    skos:broader bili:Sports .
+
+bili:Football a bili:Topic, skos:Concept ;
+    skos:prefLabel "足球"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“足球”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: life domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Football"@en, "Soccer"@en ;
+    skos:broader bili:Sports .
+
+bili:Swimming a bili:Topic, skos:Concept ;
+    skos:prefLabel "游泳"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“游泳”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: life domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Swimming"@en ;
+    skos:broader bili:Sports .
+
+bili:Yoga a bili:Topic, skos:Concept ;
+    skos:prefLabel "瑜伽"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“瑜伽”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: life domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Yoga"@en ;
+    skos:broader bili:Sports .
+
+bili:Outdoor a bili:Topic, skos:Concept ;
+    skos:prefLabel "户外运动"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“户外运动”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: life domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Outdoor"@en ;
+    skos:broader bili:Sports .
+
+bili:PetCare a bili:Skill, skos:Concept ;
+    skos:prefLabel "宠物养护"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“宠物养护”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: life domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Pet Care"@en ;
+    skos:broader bili:Animals .
+
+bili:Cat a bili:Topic, skos:Concept ;
+    skos:prefLabel "猫"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“猫”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: life domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Cat"@en ;
+    skos:broader bili:Animals .
+
+bili:Dog a bili:Topic, skos:Concept ;
+    skos:prefLabel "狗"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“狗”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: life domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Dog"@en ;
+    skos:broader bili:Animals .
+
+bili:FashionStyling a bili:Skill, skos:Concept ;
+    skos:prefLabel "穿搭"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“穿搭”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: life domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Styling"@en ;
+    skos:broader bili:Fashion .
+
+bili:Skincare a bili:Topic, skos:Concept ;
+    skos:prefLabel "护肤"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“护肤”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: life domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Skincare"@en ;
+    skos:broader bili:Fashion .
+
+bili:Makeup a bili:Topic, skos:Concept ;
+    skos:prefLabel "美妆"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“美妆”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: life domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Makeup"@en ;
+    skos:broader bili:Fashion .
+
+bili:PersonalFinance a bili:Topic, skos:Concept ;
+    skos:prefLabel "个人理财"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“个人理财”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: life domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Personal Finance"@en ;
+    skos:broader bili:Life .
+
+bili:CareerDevelopment a bili:Topic, skos:Concept ;
+    skos:prefLabel "职业发展"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“职业发展”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: life domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Career Development"@en ;
+    skos:broader bili:Life .

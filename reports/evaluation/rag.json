@@ -1,0 +1,274 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-07-21T14:17:32.064544+08:00",
+  "dataset_kind": "deterministic_synthetic_editorial",
+  "claim_scope": "Local lexical/extractive Grounded-RAG engineering regression; no remote LLM or live collection.",
+  "dataset": {
+    "questions": 150,
+    "answerable": 126,
+    "unanswerable": 24,
+    "gold_chunks": 126,
+    "benchmark_chunks": 10000,
+    "qa_sha256": "9256debc04b1ad9ee1b563418de2199720bb5d798dd3b74c4135d614167af2da",
+    "chunks_sha256": "4b78d1839ff86238131cacca2c8da1b813928db8c976ebcb53c1d9276cc2cb43"
+  },
+  "metrics": {
+    "retrieval_recall_at_5": 0.980159,
+    "retrieval_mrr_at_10": 0.992063,
+    "citation_correctness": 0.982143,
+    "groundedness": 1.0,
+    "answerable_grounded_rate": 1.0,
+    "unanswerable_refusal_rate": 1.0,
+    "factual_hallucination_rate": 0.0,
+    "retrieval_latency_p50_ms": 31.6459,
+    "retrieval_latency_p95_ms": 86.2669
+  },
+  "by_question_type": {
+    "cross_video": {
+      "count": 42,
+      "recall_at_5": 0.940476,
+      "mrr_at_10": 0.988095
+    },
+    "direct": {
+      "count": 21,
+      "recall_at_5": 1.0,
+      "mrr_at_10": 1.0
+    },
+    "negation": {
+      "count": 21,
+      "recall_at_5": 1.0,
+      "mrr_at_10": 1.0
+    },
+    "synonym": {
+      "count": 42,
+      "recall_at_5": 1.0,
+      "mrr_at_10": 0.988095
+    }
+  },
+  "acceptance_gates": {
+    "qa_count_120_to_200": true,
+    "recall_at_5_gte_085": true,
+    "mrr_at_10_gte_075": true,
+    "citation_correctness_gte_095": true,
+    "groundedness_gte_090": true,
+    "refusal_rate_gte_090": true,
+    "hallucination_rate_lte_005": true,
+    "local_retrieval_p95_lte_800ms": true
+  },
+  "passed": true,
+  "examples": [
+    {
+      "id": "qa-rag-001",
+      "type": "direct",
+      "answerable": true,
+      "retrieved": [
+        "BVQA00000001#0",
+        "BVQA00000007#0",
+        "BVQA00000013#0",
+        "BVQA00000004#0",
+        "BVQA00000003#2"
+      ],
+      "expected": [
+        "BVQA00000001#0"
+      ],
+      "grounded": true,
+      "answerability": "answerable"
+    },
+    {
+      "id": "qa-rag-002",
+      "type": "synonym",
+      "answerable": true,
+      "retrieved": [
+        "BVQA00000002#1",
+        "BVQA00000008#1",
+        "BVQA00000014#1",
+        "BVQA00000001#0",
+        "BVQA00000003#2"
+      ],
+      "expected": [
+        "BVQA00000002#1"
+      ],
+      "grounded": true,
+      "answerability": "answerable"
+    },
+    {
+      "id": "qa-rag-003",
+      "type": "cross_video",
+      "answerable": true,
+      "retrieved": [
+        "BVQA00000003#2",
+        "BVQA00000009#2",
+        "BVQA00000002#1",
+        "BVQA00000008#1",
+        "BVQA00000015#2"
+      ],
+      "expected": [
+        "BVQA00000002#1",
+        "BVQA00000003#2"
+      ],
+      "grounded": true,
+      "answerability": "answerable"
+    },
+    {
+      "id": "qa-rag-004",
+      "type": "negation",
+      "answerable": true,
+      "retrieved": [
+        "BVQA00000004#0",
+        "BVQA00000001#0",
+        "BVQA00000007#0",
+        "BVQA00000010#0",
+        "BVQA00000031#0"
+      ],
+      "expected": [
+        "BVQA00000004#0"
+      ],
+      "grounded": true,
+      "answerability": "answerable"
+    },
+    {
+      "id": "qa-rag-005",
+      "type": "synonym",
+      "answerable": true,
+      "retrieved": [
+        "BVQA00000005#1",
+        "BVQA00000002#1",
+        "BVQA00000008#1",
+        "BVQA00000004#0",
+        "BVQA00000006#2"
+      ],
+      "expected": [
+        "BVQA00000005#1"
+      ],
+      "grounded": true,
+      "answerability": "answerable"
+    },
+    {
+      "id": "qa-rag-006",
+      "type": "cross_video",
+      "answerable": true,
+      "retrieved": [
+        "BVQA00000006#2",
+        "BVQA00000003#2",
+        "BVQA00000009#2",
+        "BVQA00000005#1",
+        "BVQA00000002#1"
+      ],
+      "expected": [
+        "BVQA00000005#1",
+        "BVQA00000006#2"
+      ],
+      "grounded": true,
+      "answerability": "answerable"
+    },
+    {
+      "id": "qa-rag-007",
+      "type": "direct",
+      "answerable": true,
+      "retrieved": [
+        "BVQA00000007#0",
+        "BVQA00000001#0",
+        "BVQA00000013#0",
+        "BVQA00000004#0",
+        "BVQA00000010#0"
+      ],
+      "expected": [
+        "BVQA00000007#0"
+      ],
+      "grounded": true,
+      "answerability": "answerable"
+    },
+    {
+      "id": "qa-rag-008",
+      "type": "synonym",
+      "answerable": true,
+      "retrieved": [
+        "BVQA00000002#1",
+        "BVQA00000008#1",
+        "BVQA00000014#1",
+        "BVQA00000001#0",
+        "BVQA00000007#0"
+      ],
+      "expected": [
+        "BVQA00000008#1"
+      ],
+      "grounded": true,
+      "answerability": "answerable"
+    },
+    {
+      "id": "qa-rag-009",
+      "type": "cross_video",
+      "answerable": true,
+      "retrieved": [
+        "BVQA00000003#2",
+        "BVQA00000009#2",
+        "BVQA00000002#1",
+        "BVQA00000008#1",
+        "BVQA00000015#2"
+      ],
+      "expected": [
+        "BVQA00000008#1",
+        "BVQA00000009#2"
+      ],
+      "grounded": true,
+      "answerability": "answerable"
+    },
+    {
+      "id": "qa-rag-010",
+      "type": "negation",
+      "answerable": true,
+      "retrieved": [
+        "BVQA00000010#0",
+        "BVQA00000001#0",
+        "BVQA00000031#0",
+        "BVQA00000061#0",
+        "BVQA00000004#0"
+      ],
+      "expected": [
+        "BVQA00000010#0"
+      ],
+      "grounded": true,
+      "answerability": "answerable"
+    },
+    {
+      "id": "qa-rag-011",
+      "type": "synonym",
+      "answerable": true,
+      "retrieved": [
+        "BVQA00000011#1",
+        "BVQA00000010#0",
+        "BVQA00000012#2",
+        "BVQA00000032#1",
+        "BVQA00000119#1"
+      ],
+      "expected": [
+        "BVQA00000011#1"
+      ],
+      "grounded": true,
+      "answerability": "answerable"
+    },
+    {
+      "id": "qa-rag-012",
+      "type": "cross_video",
+      "answerable": true,
+      "retrieved": [
+        "BVQA00000012#2",
+        "BVQA00000011#1",
+        "BVQA00000010#0",
+        "BVQA00000003#2",
+        "BVQA00000033#2"
+      ],
+      "expected": [
+        "BVQA00000011#1",
+        "BVQA00000012#2"
+      ],
+      "grounded": true,
+      "answerability": "answerable"
+    }
+  ],
+  "limitations": [
+    "Synthetic/editorial content does not estimate live-domain quality.",
+    "Answer metrics use a deterministic extractive path; remote generative-LLM quality is not claimed.",
+    "Latency covers the local sparse score-bearing index and GroundedRetriever, not Chroma or remote LLM time."
+  ]
+}

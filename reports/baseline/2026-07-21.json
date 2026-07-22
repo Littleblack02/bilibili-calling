@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "captured_at": "2026-07-21T11:50:00+08:00",
+  "git": {
+    "branch": "main",
+    "commit": "ec53b882d987c777645b5ab602e8214b1eee7f4b",
+    "worktree_clean": false,
+    "note": "The pre-existing user worktree was preserved; this snapshot records rather than discards it."
+  },
+  "runtime": {
+    "python": "3.11.5",
+    "node": "24.12.0",
+    "npm": "11.6.2",
+    "cryptography": "41.0.3",
+    "rdflib": "7.1.4",
+    "pyshacl": "0.30.1",
+    "pydantic": "2.13.0",
+    "sqlalchemy_installed": "1.4.39",
+    "sqlalchemy_requirement": ">=2.0.0"
+  },
+  "configuration": {
+    "secrets_recorded": false,
+    "baseline_algorithm_version": "temporal-ontology-xmix-v2",
+    "v2_feature_flags": {
+      "temporal_affinity_v2": false,
+      "rag_grounded_v2": false,
+      "profile_sync_v2": false,
+      "ontology_linker_v2": false,
+      "candidate_hydration": false
+    }
+  },
+  "verification": {
+    "python_compileall": "passed",
+    "backend_tests": {"status": "passed", "passed": 26, "warnings": 18},
+    "ontology_shacl": {
+      "status": "passed",
+      "conforms": true,
+      "concept_count": 42,
+      "triple_count": 273,
+      "ontology_version": "bili-ontology-1.0.0"
+    },
+    "frontend_lint": {"status": "passed", "errors": 0, "warnings": 16},
+    "frontend_build": "passed"
+  },
+  "quality_metrics": {
+    "entity_linking": null,
+    "rag": null,
+    "recommendation": null,
+    "reason": "No reviewed gold datasets existed at baseline; null prevents unmeasured quality from being represented as zero or as a successful target."
+  },
+  "retrieval_snapshot": "rag_retrieval_snapshot.json"
+}

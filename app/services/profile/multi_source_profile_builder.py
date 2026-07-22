@@ -16,6 +16,7 @@
 - 影视收藏：全部
 """
 import asyncio
+import json
 from typing import Dict, List, Any, Optional, Set
 from collections import Counter
 from datetime import datetime, timedelta
@@ -29,10 +30,23 @@ from app.models import (
     FavoriteVideo, FavoriteFolder, VideoCache, VideoCoverAnalysis,
     UserInterestProfile, UserProfileEmbeddingIndex,
     UserBangumi, UserWatchHistory, UserWatchLater, UserCinema, BangumiUpdateLog,
-    LongTermMemory
+    LongTermMemory, UserContentSignal
 )
 from app.services.gemma.cover_analyzer import get_cover_analyzer
 from app.services.bilibili import BilibiliService
+from app.services.ontology import get_ontology_service
+from app.services.recommendation.temporal_interest import (
+    build_temporal_ontology_features,
+    item_occurred_at,
+    temporal_weight,
+)
+from app.services.profile.signals import parse_datetime, signal_to_profile_item, upsert_user_content_signal
+from app.services.profile.sync import (
+    begin_sync_run,
+    complete_sync_run,
+    fail_sync_run,
+)
+from app.config import settings
 
 
 class MultiSourceProfileBuilder:
@@ -43,19 +57,31 @@ class MultiSourceProfileBuilder:
     MAX_HISTORY = 10        # 历史记录取10条
     MAX_WATCHLATER = 10     # 稍后观看取10个
     MAX_CINEMA = 10         # 影视收藏取10个
+    MAX_CINEMA_SYNC_ITEMS = 300  # 超过此安全上限时只做部分快照，禁止失效旧信号
 
     # 兴趣标签权重（用于综合评分）
+    # Base/source/recency weights are centralized in temporal_interest.py.
+    # This compatibility map is retained for older callers only.
     SOURCE_WEIGHTS = {
-        "favorites": 1.0,     # 收藏夹权重最高
-        "history": 0.8,       # 历史记录
-        "watchlater": 0.6,    # 稍后观看
-        "bangumi": 0.7,       # 追番
-        "cinema": 0.7,        # 影视收藏
+        "favorites": 0.90,
+        "history": 1.00,
+        "watchlater": 0.82,
+        "bangumi": 0.78,
+        "cinema": 0.68,
     }
 
     def __init__(self):
         self.cover_analyzer = get_cover_analyzer()
         self.enable_cover_analysis = True  # 启用封面分析
+
+    @staticmethod
+    def _has_meaningful_data(data_sources: Dict[str, List[Dict]]) -> bool:
+        """Exposure-only dynamic items do not constitute a user profile alone."""
+        return any(
+            isinstance(items, list) and items
+            for source, items in (data_sources or {}).items()
+            if source not in {"dynamic_feed", "extended"}
+        )
 
     async def build_comprehensive_profile(
         self,
@@ -74,7 +100,10 @@ class MultiSourceProfileBuilder:
         Returns:
             完整的用户画像字典
         """
-        logger.info(f"开始构建多数据源用户画像: {session_id}")
+        logger.info("开始构建多数据源用户画像")
+        from app.services.privacy import paused_channels
+        async with async_session_factory() as privacy_db:
+            privacy_paused = await paused_channels(privacy_db, session_id)
 
         # 1. 采集所有数据源
         data_sources = {}
@@ -88,25 +117,47 @@ class MultiSourceProfileBuilder:
             # 不强制重建时，优先从数据库加载已有数据
             logger.info(f"尝试从数据库加载已有数据: {session_id}")
             data_sources = await self._load_from_database(session_id)
-            has_data = any(len(data_sources.get(k, [])) > 0 for k in ["favorites", "bangumi", "history", "watchlater"])
+            has_data = self._has_meaningful_data(data_sources)
             if not has_data:
                 logger.info(f"数据库中没有已有数据，开始采集: {session_id}")
             else:
-                # 数据库有数据时，仍然尝试获取关注列表（因为关注列表不保存在视频数据库中）
+                # 数据库有数据时也刷新账号级通道。这样升级前已有收藏的
+                # 用户无需清库或强制重建，就能补齐新增画像信号。
                 try:
                     async with bilibili:
                         user_info = await bilibili.get_user_info()
                         mid = user_info.get("mid", 0) if user_info else 0
                         if mid:
-                            followings = await self._collect_followings(bilibili, mid)
-                            data_sources["followings"] = followings
-                            logger.info(f"从API获取关注列表: {len(followings)} 个UP主")
+                            followings, cinema, extended = await asyncio.gather(
+                                self._collect_followings(bilibili, mid),
+                                self._collect_cinema(bilibili),
+                                bilibili.get_extended_profile_channels(mid),
+                            )
+                            statuses = bilibili.profile_channel_statuses()
+                            if statuses.get("followings", {}).get("status") == "success":
+                                data_sources["followings"] = followings
+                            if statuses.get("cinema", {}).get("status") == "success":
+                                data_sources["cinema"] = cinema
+                            for source, items in extended.items():
+                                normalized = [
+                                    self._normalize_extended_item(source, item)
+                                    for item in items
+                                    if isinstance(item, dict)
+                                ]
+                                if statuses.get(source, {}).get("status") == "success":
+                                    data_sources[source] = [
+                                        item for item in normalized if item.get("title")
+                                    ]
+                            logger.info(
+                                f"增量刷新画像通道: 关注={len(followings)}, "
+                                f"影视={len(cinema)}, 扩展={len(extended)}"
+                            )
                 except Exception as e:
-                    logger.warning(f"获取关注列表失败: {e}")
+                    logger.warning(f"增量刷新账号画像通道失败，保留本地数据: {e}")
         else:
             data_sources = {}
 
-        if force_rebuild or not any(len(data_sources.get(k, [])) > 0 for k in ["favorites", "bangumi", "history", "watchlater"]):
+        if force_rebuild or not self._has_meaningful_data(data_sources):
             try:
                 async with bilibili:
                     # 并行采集所有数据源
@@ -116,12 +167,22 @@ class MultiSourceProfileBuilder:
                 # 如果采集失败，尝试从数据库读取已有数据
                 data_sources = await self._load_from_database(session_id)
 
-        if not data_sources or not any(len(data_sources.get(k, [])) > 0 for k in ["favorites", "bangumi", "history", "watchlater"]):
+        # Paused channels retain their raw evidence for reversible privacy
+        # control, but they are excluded from profile computation immediately.
+        data_sources = {
+            source: items for source, items in data_sources.items()
+            if source not in privacy_paused
+        }
+
+        if not self._has_meaningful_data(data_sources):
             logger.warning(f"没有采集到任何数据: {session_id}")
             return self._get_empty_profile(session_id)
 
         # 2. 保存采集的数据到数据库
-        await self._save_collected_data(session_id, data_sources)
+        channel_sync_statuses = bilibili.profile_channel_statuses()
+        await self._save_collected_data(
+            session_id, data_sources, channel_sync_statuses=channel_sync_statuses
+        )
 
         # 3. 合并去重视频列表
         all_videos = self._merge_and_deduplicate(data_sources)
@@ -135,34 +196,80 @@ class MultiSourceProfileBuilder:
         # 4. 提取各维度兴趣标签
         favorite_tags = self._extract_tags_from_list(
             data_sources.get("favorites", []),
-            weight=self.SOURCE_WEIGHTS["favorites"]
+            source="favorites",
         )
         recent_tags = self._extract_tags_from_list(
             data_sources.get("history", []),
-            weight=self.SOURCE_WEIGHTS["history"]
+            source="history",
         )
         watchlater_tags = self._extract_tags_from_list(
             data_sources.get("watchlater", []),
-            weight=self.SOURCE_WEIGHTS["watchlater"]
+            source="watchlater",
         )
 
         # 5. 提取番剧偏好
         bangumi_prefs = self._extract_bangumi_preferences(data_sources.get("bangumi", []))
+        bangumi_temporal_tags = self._extract_tags_from_list(
+            data_sources.get("bangumi", []), source="bangumi"
+        )
 
         # 6. 提取影视偏好
         cinema_prefs = self._extract_cinema_preferences(data_sources.get("cinema", []))
+        cinema_temporal_tags = self._extract_tags_from_list(
+            data_sources.get("cinema", []), source="cinema"
+        )
 
-        # 7. 统一兴趣标签（加权合并）
-        unified_tags = self._merge_tags_with_weights({
+        # 7. Time-aware ontology profile: old favorites/bangumi decay, while
+        # recent consumption and explicit intent remain strong. Concepts are
+        # represented as multiple semantic clusters instead of one flat vector.
+        profile_features = build_temporal_ontology_features(
+            data_sources,
+            v2_enabled=settings.v2_feature_flags(session_id)["temporal_affinity_v2"],
+        )
+        profile_features["privacy"] = {
+            "paused_channels": sorted(privacy_paused),
+            "participating_channels": sorted(data_sources),
+        }
+        ontology = get_ontology_service()
+        ontology_tags = {}
+        for concept_id, score in profile_features.get("concept_affinities", {}).items():
+            concept = ontology.concept(concept_id)
+            if concept:
+                ontology_tags[concept["label"]] = score
+        recent_ontology_tags = {}
+        for concept_id, score in profile_features.get("recent_concept_affinities", {}).items():
+            concept = ontology.concept(concept_id)
+            if concept:
+                recent_ontology_tags[concept["label"]] = score
+
+        # 8. 统一兴趣标签（时间加权 + Ontology 规范化）
+        tag_sources = {
             "favorites": favorite_tags,
             "history": recent_tags,
             "watchlater": watchlater_tags,
-            "bangumi": bangumi_prefs.get("tags", {}),
-            "cinema": cinema_prefs.get("tags", {}),
-        })
+            "bangumi": {**bangumi_prefs.get("tags", {}), **bangumi_temporal_tags},
+            "cinema": {**cinema_prefs.get("tags", {}), **cinema_temporal_tags},
+            "ontology": ontology_tags,
+        }
+        for source, items in data_sources.items():
+            if source in tag_sources or source in {"followings", "special_followings", "whisper_followings"}:
+                continue
+            if isinstance(items, list) and items:
+                tag_sources[source] = self._extract_tags_from_list(items, source=source)
+        unified_tags = self._merge_tags_with_weights(tag_sources)
 
         # 8. 提取关注的 UP 主（使用真实关注列表）
-        followings_list = data_sources.get("followings", [])
+        followings_list = list(data_sources.get("followings", []))
+        for source, score in (("special_followings", 1.0), ("whisper_followings", 0.65)):
+            for item in data_sources.get(source, []):
+                followings_list.append({
+                    "mid": item.get("owner_mid") or item.get("id"),
+                    "name": item.get("owner_name") or item.get("title"),
+                    "face": (item.get("payload") or {}).get("face", ""),
+                    "sign": (item.get("payload") or {}).get("sign", ""),
+                    "profile_score": score,
+                    "following_source": source,
+                })
         followed_ups = self._extract_followed_ups(all_videos, followings_list)
 
         # 9. 分析分区分布
@@ -189,7 +296,12 @@ class MultiSourceProfileBuilder:
             "cinema_genres": cinema_prefs.get("genres", []),
             # 统一兴趣（最重要）
             "unified_tags": unified_tags,
+            "recent_interests": self._merge_tags_with_weights({
+                "history": recent_tags,
+                "ontology": recent_ontology_tags,
+            }),
             "primary_interests": self._get_top_interests(unified_tags, top_n=10),
+            "profile_features": profile_features,
             # 关注的 UP 主
             "followed_ups": followed_ups,  # 移除数量限制，返回所有UP主
             # 分区分布
@@ -204,6 +316,7 @@ class MultiSourceProfileBuilder:
             "total_analyzed": len(all_videos),
             "data_sources": list(data_sources.keys()),
             "source_counts": {k: len(v) for k, v in data_sources.items()},
+            "channel_sync_statuses": channel_sync_statuses,
             # 置信度
             "confidence_score": self._calculate_confidence(data_sources),
             "last_update_source": "multi_source_sync",
@@ -223,7 +336,7 @@ class MultiSourceProfileBuilder:
         # 14. 保存到长期记忆
         await self._save_to_long_term_memory(profile)
 
-        logger.info(f"多数据源画像构建完成: {session_id}, 数据源: {profile['data_sources']}")
+        logger.info(f"多数据源画像构建完成，数据源: {profile['data_sources']}")
         return profile
 
     async def _collect_all_sources(
@@ -266,11 +379,24 @@ class MultiSourceProfileBuilder:
             logger.warning("无法获取 mid，跳过关注列表采集")
             tasks.append(asyncio.sleep(0, result=[]))
 
+        # 6. 影视收藏内容
+        tasks.append(self._collect_cinema(bilibili))
+
+        # 7. 其他可读用户信号：话题/专栏/课程/笔记/追漫/
+        # 直播历史/特别关注等。每路内部失败隔离。
+        if mid:
+            tasks.append(bilibili.get_extended_profile_channels(mid))
+        else:
+            tasks.append(asyncio.sleep(0, result={}))
+
         # 并行执行
         results = await asyncio.gather(*tasks, return_exceptions=True)
 
         data_sources = {}
-        source_names = ["favorites", "bangumi", "history", "watchlater", "followings"]
+        source_names = [
+            "favorites", "bangumi", "history", "watchlater", "followings",
+            "cinema", "extended",
+        ]
 
         for i, result in enumerate(results):
             source_name = source_names[i]
@@ -278,8 +404,18 @@ class MultiSourceProfileBuilder:
                 logger.warning(f"采集 {source_name} 失败: {result}")
                 data_sources[source_name] = []
             else:
-                data_sources[source_name] = result
-                logger.info(f"采集 {source_name}: {len(result)} 条")
+                if source_name == "extended":
+                    for extended_name, items in result.items():
+                        normalized = [
+                            self._normalize_extended_item(extended_name, item)
+                            for item in items
+                            if isinstance(item, dict)
+                        ]
+                        data_sources[extended_name] = [item for item in normalized if item.get("title")]
+                        logger.info(f"采集 {extended_name}: {len(data_sources[extended_name])} 条")
+                else:
+                    data_sources[source_name] = result
+                    logger.info(f"采集 {source_name}: {len(result)} 条")
 
         return data_sources
 
@@ -292,6 +428,14 @@ class MultiSourceProfileBuilder:
         try:
             # 从数据库获取收藏夹信息
             async with async_session_factory() as db:
+                signal_result = await db.execute(
+                    select(UserContentSignal).where(
+                        UserContentSignal.session_id == session_id,
+                        UserContentSignal.source == "favorites",
+                        UserContentSignal.is_active == True,
+                    )
+                )
+                favorite_signals = {signal.item_id: signal for signal in signal_result.scalars()}
                 result = await db.execute(
                     select(FavoriteVideo.bvid, VideoCache.title, VideoCache.description,
                            VideoCache.owner_name, VideoCache.owner_mid, VideoCache.pic_url,
@@ -324,6 +468,14 @@ class MultiSourceProfileBuilder:
                         "owner_mid": row.owner_mid,
                         "pic_url": row.pic_url,
                         "folder_title": folder_title,
+                        "occurred_at": (
+                            favorite_signals[bvid].occurred_at
+                            if bvid in favorite_signals else None
+                        ),
+                        "strength": (
+                            favorite_signals[bvid].strength
+                            if bvid in favorite_signals else 1.0
+                        ),
                         "source": "favorites"
                     })
 
@@ -344,9 +496,6 @@ class MultiSourceProfileBuilder:
         """采集追番数据（只取前10个，去掉无意义的标签）"""
         try:
             bangumi_list = await bilibili.get_user_bangumi(mid=mid)
-            # 只取前10个追番
-            bangumi_list = bangumi_list[:10]
-
             # 需要过滤掉的无意义标签
             skip_patterns = [
                 '第.*季', '第.*部', '第.*篇',  # 第几季/部/篇
@@ -383,6 +532,10 @@ class MultiSourceProfileBuilder:
 
         except Exception as e:
             logger.error(f"采集追番数据失败: {e}")
+            bilibili._record_profile_channel_status(
+                "bangumi", status="failed", capability_status="degraded",
+                error_summary=f"profile normalization failed: {type(e).__name__}",
+            )
             return []
 
     async def _collect_history(
@@ -407,6 +560,10 @@ class MultiSourceProfileBuilder:
 
         except Exception as e:
             logger.error(f"采集历史记录失败: {e}")
+            bilibili._record_profile_channel_status(
+                "history", status="failed", capability_status="degraded",
+                error_summary=f"profile normalization failed: {type(e).__name__}",
+            )
             return []
 
     async def _collect_watchlater(
@@ -425,10 +582,14 @@ class MultiSourceProfileBuilder:
                 "duration": item.get("duration", 0),
                 "add_time": item.get("add_time", 0),
                 "source": "watchlater"
-            } for item in watchlater[:self.MAX_WATCHLATER]]
+            } for item in watchlater]
 
         except Exception as e:
             logger.error(f"采集稍后观看失败: {e}")
+            bilibili._record_profile_channel_status(
+                "watchlater", status="failed", capability_status="degraded",
+                error_summary=f"profile normalization failed: {type(e).__name__}",
+            )
             return []
 
     async def _collect_followings(
@@ -451,7 +612,163 @@ class MultiSourceProfileBuilder:
 
         except Exception as e:
             logger.error(f"采集关注列表失败: {e}")
+            bilibili._record_profile_channel_status(
+                "followings", status="failed", capability_status="degraded",
+                error_summary=f"profile normalization failed: {type(e).__name__}",
+            )
             return []
+
+    async def _collect_cinema(self, bilibili: BilibiliService) -> List[Dict]:
+        """采集用户影视类收藏夹的代表内容。"""
+        try:
+            folders = await bilibili.get_cinema_favorites()
+            folder_status = bilibili.profile_channel_statuses().get("cinema", {})
+            if not folders:
+                return []
+            videos: list[dict[str, Any]] = []
+            cinema_folders = [folder for folder in folders if folder.get("type") != "other"]
+            aggregate_success = folder_status.get("status") == "success"
+            aggregate_full = bool(folder_status.get("full_snapshot"))
+            total_pages = int(folder_status.get("page_count") or 0)
+            error_summary = folder_status.get("error_summary")
+            for folder in cinema_folders:
+                rows = await bilibili.get_cinema_favorite_videos(
+                    int(folder.get("media_id", 0)),
+                    ps=50,
+                )
+                page_status = bilibili.profile_channel_statuses().get("cinema", {})
+                total_pages += int(page_status.get("page_count") or 0)
+                if page_status.get("status") != "success":
+                    aggregate_success = False
+                    aggregate_full = False
+                    error_summary = page_status.get("error_summary")
+                else:
+                    aggregate_full = aggregate_full and bool(
+                        page_status.get("full_snapshot")
+                    )
+                for row in rows:
+                    owner = row.get("owner") or {}
+                    videos.append({
+                        **row,
+                        "owner_mid": owner.get("mid"),
+                        "owner_name": owner.get("name"),
+                        "tname": folder.get("type") or "影视",
+                        "folder_title": folder.get("title"),
+                        "occurred_at": row.get("fav_time") or row.get("pubdate"),
+                        "source": "cinema",
+                    })
+                    if len(videos) >= self.MAX_CINEMA_SYNC_ITEMS:
+                        aggregate_full = False
+                        break
+                if len(videos) >= self.MAX_CINEMA_SYNC_ITEMS:
+                    break
+            bilibili._record_profile_channel_status(
+                "cinema",
+                status="success" if aggregate_success else "failed",
+                capability_status="working" if aggregate_success else "degraded",
+                count=len(videos),
+                page_count=total_pages,
+                full_snapshot=aggregate_success and aggregate_full,
+                error_summary=error_summary,
+            )
+            return videos
+        except Exception as exc:
+            logger.warning(f"影视信号采集失败: {exc}")
+            bilibili._record_profile_channel_status(
+                "cinema", status="failed", capability_status="degraded",
+                error_summary=f"profile collection failed: {type(exc).__name__}",
+            )
+            return []
+
+    @staticmethod
+    def _nested(item: Dict[str, Any], *paths: str) -> Any:
+        for path in paths:
+            value: Any = item
+            for part in path.split("."):
+                value = value.get(part) if isinstance(value, dict) else None
+            if value not in (None, "", [], {}):
+                return value
+        return None
+
+    def _normalize_extended_item(self, source: str, item: Dict[str, Any]) -> Dict[str, Any]:
+        """Normalize heterogeneous Bilibili response shapes for profile modeling."""
+        title = self._nested(
+            item,
+            "title", "name", "uname", "tag_name", "topic_name", "season_title",
+            "org_title", "room_title", "medal_info.medal_name",
+            "modules.module_dynamic.major.archive.title",
+            "modules.module_dynamic.major.pgc.title",
+            "modules.module_dynamic.desc.text",
+        ) or ""
+        description = self._nested(
+            item,
+            "description", "desc", "summary", "intro", "sign",
+            "modules.module_dynamic.desc.text",
+        ) or ""
+        creator_mid = self._nested(
+            item,
+            "owner_mid", "mid", "uid", "up_mid", "upper.mid", "author.mid",
+            "medal_info.target_id", "modules.module_author.mid",
+        )
+        creator_name = self._nested(
+            item,
+            "owner_name", "uname", "author_name", "upper.name", "author.name",
+            "medal_info.target_name", "modules.module_author.name",
+        ) or ""
+        item_id = self._nested(
+            item,
+            "bvid", "id", "id_str", "tag_id", "topic_id", "season_id",
+            "media_id", "roomid", "room_id", "comic_id", "mid",
+            "modules.module_dynamic.major.archive.bvid",
+        )
+        occurred_at = self._nested(
+            item,
+            "occurred_at", "view_at", "fav_time", "add_time", "mtime", "ctime",
+            "pub_ts", "pubtime", "last_time", "modules.module_author.pub_ts",
+        )
+        category = self._nested(item, "tname", "category", "type_name", "area_name") or ""
+        tags = []
+        raw_tags = item.get("tags") or item.get("tag_list") or []
+        if isinstance(raw_tags, list):
+            for tag in raw_tags:
+                if isinstance(tag, str):
+                    tags.append(tag)
+                elif isinstance(tag, dict):
+                    value = tag.get("name") or tag.get("tag_name")
+                    if value:
+                        tags.append(str(value))
+
+        strength = 1.0
+        if source == "fan_medals":
+            level = self._nested(item, "medal_info.level", "level") or 1
+            try:
+                strength = min(1.5, 0.6 + float(level) / 30.0)
+            except (TypeError, ValueError):
+                strength = 0.8
+        elif source == "dynamic_feed":
+            strength = 0.2
+        elif source in {"special_followings", "favorite_courses", "courses"}:
+            strength = 1.2
+
+        return {
+            "id": str(item_id or f"{source}:{title}"),
+            "bvid": self._nested(item, "bvid", "modules.module_dynamic.major.archive.bvid") or "",
+            "title": str(title),
+            "description": str(description),
+            "owner_mid": int(creator_mid) if str(creator_mid or "").isdigit() else None,
+            "owner_name": str(creator_name),
+            "tname": str(category),
+            "tags": tags,
+            "occurred_at": occurred_at,
+            "strength": strength,
+            "item_type": (
+                "creator" if source in {"special_followings", "whisper_followings", "fan_medals"}
+                else "video" if self._nested(item, "bvid", "modules.module_dynamic.major.archive.bvid")
+                else source.rstrip("s")
+            ),
+            "source": source,
+            "payload": item,
+        }
 
     async def _load_from_database(self, session_id: str) -> Dict[str, List[Dict]]:
         """从数据库加载已有数据"""
@@ -461,7 +778,11 @@ class MultiSourceProfileBuilder:
             async with async_session_factory() as db:
                 # 加载收藏夹
                 result = await db.execute(
-                    select(VideoCache, FavoriteFolder.title.label("folder_title"))
+                    select(
+                        VideoCache,
+                        FavoriteFolder.title.label("folder_title"),
+                        FavoriteVideo.created_at.label("observed_at"),
+                    )
                     .join(FavoriteVideo, FavoriteVideo.bvid == VideoCache.bvid)
                     .join(FavoriteFolder, FavoriteFolder.id == FavoriteVideo.folder_id)
                     .where(FavoriteFolder.session_id == session_id)
@@ -478,6 +799,11 @@ class MultiSourceProfileBuilder:
                         "owner_mid": row.owner_mid,
                         "pic_url": row.pic_url,
                         "folder_title": row.folder_title,
+                        # This is only a local observation fallback. When the
+                        # API supplied fav_time, the normalized signal below
+                        # replaces it with the actual event time.
+                        "occurred_at": None,
+                        "observed_at": row.observed_at,
                         "source": "favorites"
                     })
 
@@ -491,6 +817,11 @@ class MultiSourceProfileBuilder:
                         "title": record.title,
                         "cover": record.cover,
                         "type": record.bangumi_type,
+                        "status": record.status,
+                        # updated_at is a database synchronization time, not a
+                        # follow event. Unknown add_time must remain unknown so
+                        # an old bangumi entry cannot masquerade as recent.
+                        "occurred_at": record.add_time,
                         "source": "bangumi"
                     })
 
@@ -509,6 +840,13 @@ class MultiSourceProfileBuilder:
                         "owner_name": record.owner_name,
                         "owner_mid": record.owner_mid,
                         "tname": record.tname,
+                        "view_at": record.view_at,
+                        "duration": record.duration,
+                        "progress": record.progress,
+                        "strength": (
+                            min(1.2, max(0.2, (record.progress or 0) / max(1, record.duration or 1)))
+                            if record.duration else 0.7
+                        ),
                         "source": "history"
                     })
 
@@ -524,8 +862,32 @@ class MultiSourceProfileBuilder:
                         "title": record.title,
                         "cover": record.cover,
                         "owner_name": record.owner_name,
+                        "owner_mid": record.owner_mid,
+                        "add_time": record.add_time,
                         "source": "watchlater"
                     })
+
+                # Load every normalized extended signal. It also restores real
+                # favorite timestamps that the legacy FavoriteVideo table does
+                # not contain.
+                signal_result = await db.execute(
+                    select(UserContentSignal).where(
+                        UserContentSignal.session_id == session_id,
+                        UserContentSignal.is_active == True,
+                    )
+                )
+                for signal in signal_result.scalars():
+                    item = signal_to_profile_item(signal)
+                    source_items = data_sources.setdefault(signal.source, [])
+                    existing = next((row for row in source_items if str(
+                        row.get("bvid") or row.get("id") or row.get("item_id") or ""
+                    ) == signal.item_id), None)
+                    if existing is not None:
+                        existing["occurred_at"] = signal.occurred_at
+                        existing["strength"] = signal.strength
+                        existing["tags"] = signal.tags or existing.get("tags", [])
+                    else:
+                        source_items.append(item)
 
         except Exception as e:
             logger.error(f"从数据库加载数据失败: {e}")
@@ -553,43 +915,47 @@ class MultiSourceProfileBuilder:
     def _extract_tags_from_list(
         self,
         items: List[Dict],
-        weight: float = 1.0
+        source: str,
     ) -> Dict[str, float]:
-        """从视频列表中提取兴趣标签"""
-        all_tags = []
+        """从列表中提取兴趣标签，按信号时间和强度加权。"""
+        weighted_tags: Counter[str] = Counter()
+        item_weights: list[float] = []
 
         for item in items:
+            item_weight, _ = temporal_weight(source, item)
+            item_weights.append(item_weight)
             # 标题关键词
             title = item.get("title", "")
             title_tags = self._extract_keywords_from_text(title)
-            all_tags.extend(title_tags)
+            for tag in title_tags:
+                weighted_tags[tag] += item_weight
 
             # 描述关键词
             desc = item.get("description", "")
             if desc:
                 desc_tags = self._extract_keywords_from_text(desc)
-                all_tags.extend(desc_tags[:5])
+                for tag in desc_tags[:5]:
+                    weighted_tags[tag] += item_weight * 0.6
 
             # 分区名称
             tname = item.get("tname", "")
             if tname:
-                all_tags.append(tname)
+                weighted_tags[tname] += item_weight * 0.8
 
             # UP主领域（作为标签）
             owner_name = item.get("owner_name", "")
             if owner_name:
-                all_tags.append(f"UP:{owner_name}")
+                weighted_tags[f"UP:{owner_name}"] += item_weight * 0.35
 
-        # 统计频率并加权
-        tag_counter = Counter(all_tags)
-        total = sum(tag_counter.values())
+        total = sum(weighted_tags.values())
 
         if total == 0:
             return {}
 
+        average_freshness = sum(item_weights) / max(1, len(item_weights))
         return {
-            tag: (count / total) * weight
-            for tag, count in tag_counter.most_common(20)
+            tag: round((count / total) * average_freshness, 6)
+            for tag, count in weighted_tags.most_common(30)
         }
 
     def _extract_keywords_from_text(self, text: str) -> List[str]:
@@ -725,12 +1091,15 @@ class MultiSourceProfileBuilder:
         merged = {}
 
         for source, tags in tag_sources.items():
-            weight = self.SOURCE_WEIGHTS.get(source, 0.5)
+            # Source policy has already been applied per item. Ontology scores
+            # are canonical confidence values and receive a small precision
+            # bonus without overwhelming direct evidence.
+            weight = 1.05 if source == "ontology" else 1.0
             for tag, score in tags.items():
                 if tag in merged:
-                    merged[tag] = max(merged[tag], score * weight)
+                    merged[tag] = min(1.0, merged[tag] + score * weight * 0.5)
                 else:
-                    merged[tag] = score * weight
+                    merged[tag] = min(1.0, score * weight)
 
         # 按分数排序并取前20
         sorted_tags = dict(
@@ -751,8 +1120,8 @@ class MultiSourceProfileBuilder:
                     "face": up.get("face", ""),
                     "sign": up.get("sign", ""),
                     "count": 0,  # 关注列表没有出现次数
-                    "score": 1.0,  # 所有关注的UP主都给予最高权重
-                    "source": "following"
+                    "score": float(up.get("profile_score", 0.55)),
+                    "source": up.get("following_source", "following")
                 }
                 for up in followings
             ]
@@ -870,7 +1239,7 @@ class MultiSourceProfileBuilder:
         """计算画像置信度"""
         # 统计有效数据源数量
         active_sources = sum(1 for v in data_sources.values() if len(v) > 0)
-        source_score = min(active_sources / 5, 1.0) * 0.3
+        source_score = min(active_sources / 8, 1.0) * 0.3
 
         # 统计总数据量
         total_items = sum(len(v) for v in data_sources.values())
@@ -886,11 +1255,24 @@ class MultiSourceProfileBuilder:
     async def _save_collected_data(
         self,
         session_id: str,
-        data_sources: Dict[str, List[Dict]]
+        data_sources: Dict[str, List[Dict]],
+        channel_sync_statuses: Dict[str, Dict[str, Any]] | None = None,
     ):
         """保存采集的数据到数据库"""
         try:
             async with async_session_factory() as db:
+                sync_runs = {}
+                if settings.v2_feature_flags(session_id)["profile_sync_v2"]:
+                    for source, status in (channel_sync_statuses or {}).items():
+                        sync_runs[source] = await begin_sync_run(
+                            db,
+                            session_id=session_id,
+                            channel=source,
+                            request_key=(
+                                f"profile-build:{status.get('request_key') or datetime.utcnow().isoformat()}"
+                            ),
+                            cursor=status.get("cursor") or {},
+                        )
                 # 保存追番（去重）
                 seen_bangumi = set()
                 for item in data_sources.get("bangumi", []):
@@ -924,6 +1306,7 @@ class MultiSourceProfileBuilder:
                         existing.status = item.get("status", "watching")
                         existing.watched_episodes = item.get("progress", {}).get("watched_episodes", 0)
                         existing.total_episodes = item.get("progress", {}).get("total_episodes", 0)
+                        existing.add_time = parse_datetime(item.get("add_time")) or existing.add_time
                     else:
                         new_bangumi = UserBangumi(
                             session_id=session_id,
@@ -934,7 +1317,8 @@ class MultiSourceProfileBuilder:
                             bangumi_type=item.get("type", 1),
                             status=item.get("status", "watching"),
                             watched_episodes=item.get("progress", {}).get("watched_episodes", 0),
-                            total_episodes=item.get("progress", {}).get("total_episodes", 0)
+                            total_episodes=item.get("progress", {}).get("total_episodes", 0),
+                            add_time=parse_datetime(item.get("add_time")),
                         )
                         db.add(new_bangumi)
 
@@ -1009,6 +1393,77 @@ class MultiSourceProfileBuilder:
                         )
                         db.add(new_watchlater)
 
+                # Persist all current and future channels in one normalized
+                # signal table so profile algorithms do not need a new schema
+                # for every Bilibili surface.
+                for source, items in data_sources.items():
+                    if not isinstance(items, list):
+                        continue
+                    for index, item in enumerate(items):
+                        if not isinstance(item, dict):
+                            continue
+                        item_id = (
+                            item.get("bvid") or item.get("season_id") or item.get("media_id")
+                            or item.get("id") or item.get("item_id") or item.get("mid")
+                            or item.get("tag_id") or f"{source}-{index}"
+                        )
+                        item_type = item.get("item_type") or (
+                            "video" if item.get("bvid") else
+                            "creator" if item.get("mid") or item.get("owner_mid") else
+                            "content"
+                        )
+                        repeated = source in {"history", "live_history"}
+                        await upsert_user_content_signal(
+                            db,
+                            session_id=session_id,
+                            source=source,
+                            item_type=item_type,
+                            item_id=str(item_id),
+                            title=item.get("title") or item.get("name") or item.get("room_title"),
+                            description=item.get("description") or item.get("desc") or item.get("sign"),
+                            creator_mid=item.get("owner_mid") or item.get("mid"),
+                            creator_name=item.get("owner_name") or item.get("uname") or item.get("author"),
+                            category=item.get("tname") or item.get("category"),
+                            tags=item.get("tags") if isinstance(item.get("tags"), list) else [],
+                            strength=item.get("strength", 1.0),
+                            occurred_at=item_occurred_at(item),
+                            payload={
+                                key: value for key, value in item.items()
+                                if key not in {"description", "content", "subtitle"}
+                            },
+                            repeated=repeated,
+                            sync_run_id=(
+                                sync_runs[source].run_id if source in sync_runs else None
+                            ),
+                        )
+
+                for source, run in sync_runs.items():
+                    status = (channel_sync_statuses or {}).get(source, {})
+                    if status.get("status") == "success":
+                        await complete_sync_run(
+                            db,
+                            run,
+                            item_count=int(status.get("count") or len(data_sources.get(source, []))),
+                            page_count=int(status.get("page_count") or 0),
+                            cursor=status.get("cursor") or {},
+                            full_snapshot=bool(status.get("full_snapshot")),
+                            http_status=status.get("http_status", 200),
+                        )
+                    else:
+                        await fail_sync_run(
+                            db,
+                            run,
+                            status=str(status.get("status") or "failed"),
+                            capability_status=str(
+                                status.get("capability_status") or "degraded"
+                            ),
+                            error_summary=str(
+                                status.get("error_summary") or "channel collection failed"
+                            ),
+                            http_status=status.get("http_status"),
+                            cursor=status.get("cursor") or {},
+                        )
+
                 await db.commit()
                 logger.info(f"采集数据已保存到数据库: {session_id}")
 
@@ -1038,6 +1493,8 @@ class MultiSourceProfileBuilder:
                             followed_ups=profile.get("followed_ups", []),
                             category_distribution=profile.get("category_distribution", {}),
                             total_favorites=profile.get("total_analyzed", 0),
+                            recent_interest_shift=profile.get("recent_interests", {}),
+                            profile_features=profile.get("profile_features", {}),
                             confidence_score=profile.get("confidence_score", 0.5),
                             last_update_source=profile.get("last_update_source", "multi_source_sync"),
                             updated_at=datetime.utcnow()
@@ -1051,6 +1508,8 @@ class MultiSourceProfileBuilder:
                         followed_ups=profile.get("followed_ups", []),
                         category_distribution=profile.get("category_distribution", {}),
                         total_favorites=profile.get("total_analyzed", 0),
+                        recent_interest_shift=profile.get("recent_interests", {}),
+                        profile_features=profile.get("profile_features", {}),
                         confidence_score=profile.get("confidence_score", 0.5),
                         last_update_source=profile.get("last_update_source", "multi_source_sync")
                     )
@@ -1102,7 +1561,9 @@ class MultiSourceProfileBuilder:
                     "session_id": profile.get("session_id", ""),
                     "type": "multi_source_profile",
                     "confidence": profile.get("confidence_score", 0.0),
-                    "data_sources": profile.get("data_sources", []),
+                    "data_sources": json.dumps(
+                        profile.get("data_sources", []), ensure_ascii=False
+                    ),
                     "updated_at": datetime.utcnow().isoformat()
                 }
             )
@@ -1122,6 +1583,15 @@ class MultiSourceProfileBuilder:
         if unified_tags:
             top_interests = sorted(unified_tags.items(), key=lambda x: x[1], reverse=True)[:10]
             parts.append(f"综合兴趣: {', '.join([f'{t}({s:.2f})' for t, s in top_interests])}")
+
+        features = profile.get("profile_features") or {}
+        multi_interests = features.get("multi_interests") or []
+        if multi_interests:
+            parts.append("语义兴趣簇: " + ", ".join(
+                f"{cluster.get('label')}({float(cluster.get('weight', 0)):.2f})"
+                for cluster in multi_interests[:6]
+                if cluster.get("label")
+            ))
 
         # 关注的UP主
         followed_ups = profile.get("followed_ups", [])
@@ -1268,6 +1738,16 @@ class MultiSourceProfileBuilder:
         return {
             "session_id": session_id,
             "unified_tags": {},
+            "recent_interests": {},
+            "profile_features": {
+                "model": "temporal-multi-interest-ontology-v1",
+                "ontology_version": get_ontology_service().VERSION,
+                "concept_affinities": {},
+                "recent_concept_affinities": {},
+                "multi_interests": [],
+                "source_freshness": {},
+                "interest_evidence": [],
+            },
             "primary_interests": [],
             "followed_ups": [],
             "category_distribution": {},

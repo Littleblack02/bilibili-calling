@@ -10,7 +10,19 @@ interface Message {
   id: string;
   role: "user" | "assistant";
   content: string;
-  sources?: Array<{ bvid: string; title: string; url: string }>;
+  sources?: Array<{
+    bvid: string;
+    title: string;
+    url: string;
+    chunk_index?: number;
+    start_time?: number | null;
+    end_time?: number | null;
+  }>;
+  grounding?: {
+    grounded?: boolean;
+    retrieval_confidence?: number;
+    answerability?: string;
+  };
 }
 
 interface Props {
@@ -90,10 +102,12 @@ export default function ChatPanel({ statsKey, sessionId, folderIds, onSourcesTog
     if (sourcesJson) {
       try {
         const parsed = JSON.parse(sourcesJson);
-        if (Array.isArray(parsed)) {
+        const parsedSources = Array.isArray(parsed) ? parsed : parsed?.sources;
+        const grounding = Array.isArray(parsed) ? undefined : parsed?.grounding;
+        if (Array.isArray(parsedSources)) {
           setMessages((prev) =>
             prev.map((m) =>
-              m.id === assistantId ? { ...m, sources: parsed } : m
+              m.id === assistantId ? { ...m, sources: parsedSources, grounding } : m
             )
           );
         }
@@ -302,11 +316,26 @@ export default function ChatPanel({ statsKey, sessionId, folderIds, onSourcesTog
                     <ReactMarkdown className="markdown" remarkPlugins={[remarkGfm]}>
                       {m.content}
                     </ReactMarkdown>
+                    {m.grounding && (
+                      <div className="mt-2 text-xs text-gray-500">
+                        {m.grounding.grounded ? "✓ 已由收藏证据支持" : "证据不足，已拒绝补全"}
+                        {typeof m.grounding.retrieval_confidence === "number" && (
+                          <> · 检索置信度 {Math.round(m.grounding.retrieval_confidence * 100)}%</>
+                        )}
+                      </div>
+                    )}
                     {m.sources && m.sources.length > 0 && (
                       <div className="source-list">
                         {m.sources.map((s, i) => (
-                          <a key={i} href={s.url} target="_blank" rel="noopener noreferrer" className="source-link">
+                          <a key={i}
+                            href={typeof s.start_time === "number"
+                              ? `${s.url}${s.url.includes("?") ? "&" : "?"}t=${Math.floor(s.start_time)}`
+                              : s.url}
+                            target="_blank" rel="noopener noreferrer" className="source-link">
                             {s.title}
+                            {typeof s.chunk_index === "number" ? ` #${s.chunk_index}` : ""}
+                            {typeof s.start_time === "number" ? ` · ${Math.floor(s.start_time)}s` : ""}
+                            {typeof s.end_time === "number" ? `–${Math.floor(s.end_time)}s` : ""}
                           </a>
                         ))}
                       </div>

@@ -1,0 +1,16 @@
+{
+  "schema_version": "2.0",
+  "ontology_version": "bili-ontology-2.0.0",
+  "modules": [
+    "core.ttl",
+    "bilibili-taxonomy.ttl",
+    "domains/ai.ttl",
+    "domains/game.ttl",
+    "domains/animation.ttl",
+    "domains/music.ttl",
+    "domains/film.ttl",
+    "domains/knowledge.ttl",
+    "domains/life.ttl"
+  ],
+  "personal_namespace_policy": "Personal concepts are stored per user and are never loaded into the public manifest."
+}

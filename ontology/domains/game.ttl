@@ -1,0 +1,259 @@
+@prefix bili: <https://bilibili.local/ontology/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+bili:ActionGame a bili:Topic, skos:Concept ;
+    skos:prefLabel "动作游戏"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“动作游戏”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: game domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Action Game"@en ;
+    skos:broader bili:Game .
+
+bili:RolePlayingGame a bili:Topic, skos:Concept ;
+    skos:prefLabel "角色扮演游戏"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“角色扮演游戏”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: game domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "RPG"@en ;
+    skos:broader bili:Game .
+
+bili:StrategyGame a bili:Topic, skos:Concept ;
+    skos:prefLabel "策略游戏"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“策略游戏”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: game domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "SLG"@en ;
+    skos:broader bili:Game .
+
+bili:SimulationGame a bili:Topic, skos:Concept ;
+    skos:prefLabel "模拟游戏"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“模拟游戏”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: game domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Simulation Game"@en ;
+    skos:broader bili:Game .
+
+bili:ShooterGame a bili:Topic, skos:Concept ;
+    skos:prefLabel "射击游戏"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“射击游戏”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: game domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "FPS"@en, "TPS"@en ;
+    skos:broader bili:ActionGame .
+
+bili:MOBA a bili:Topic, skos:Concept ;
+    skos:prefLabel "多人在线战术竞技"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“多人在线战术竞技”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: game domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "MOBA"@en ;
+    skos:broader bili:Game .
+
+bili:SandboxGame a bili:Topic, skos:Concept ;
+    skos:prefLabel "沙盒游戏"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“沙盒游戏”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: game domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Sandbox"@en ;
+    skos:broader bili:Game .
+
+bili:IndieGame a bili:Topic, skos:Concept ;
+    skos:prefLabel "独立游戏"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“独立游戏”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: game domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Indie Game"@en ;
+    skos:broader bili:Game .
+
+bili:MobileGame a bili:Topic, skos:Concept ;
+    skos:prefLabel "手机游戏"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“手机游戏”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: game domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "手游"@zh ;
+    skos:broader bili:Game .
+
+bili:ConsoleGame a bili:Topic, skos:Concept ;
+    skos:prefLabel "主机游戏"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“主机游戏”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: game domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Console Game"@en ;
+    skos:broader bili:Game .
+
+bili:PCGame a bili:Topic, skos:Concept ;
+    skos:prefLabel "电脑游戏"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“电脑游戏”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: game domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "PC游戏"@zh ;
+    skos:broader bili:Game .
+
+bili:GameGuide a bili:Skill, skos:Concept ;
+    skos:prefLabel "游戏攻略"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“游戏攻略”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: game domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "攻略"@zh ;
+    skos:broader bili:Game .
+
+bili:Speedrun a bili:Topic, skos:Concept ;
+    skos:prefLabel "速通"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“速通”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: game domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Speedrun"@en ;
+    skos:broader bili:Game .
+
+bili:Esports a bili:Topic, skos:Concept ;
+    skos:prefLabel "电子竞技"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“电子竞技”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: game domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "电竞"@zh, "Esports"@en ;
+    skos:broader bili:Game .
+
+bili:GameReview a bili:Topic, skos:Concept ;
+    skos:prefLabel "游戏评测"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“游戏评测”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: game domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Game Review"@en ;
+    skos:broader bili:Game .
+
+bili:GameLore a bili:Topic, skos:Concept ;
+    skos:prefLabel "游戏剧情解析"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“游戏剧情解析”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: game domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "世界观解析"@zh ;
+    skos:broader bili:Game .
+
+bili:Minecraft a bili:Topic, skos:Concept ;
+    skos:prefLabel "我的世界"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“我的世界”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: game domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Minecraft"@en, "MC游戏"@zh ;
+    skos:broader bili:SandboxGame .
+
+bili:GenshinImpact a bili:Topic, skos:Concept ;
+    skos:prefLabel "原神"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“原神”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: game domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Genshin Impact"@en ;
+    skos:broader bili:RolePlayingGame .
+
+bili:HonkaiStarRail a bili:Topic, skos:Concept ;
+    skos:prefLabel "崩坏星穹铁道"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“崩坏星穹铁道”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: game domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "星穹铁道"@zh ;
+    skos:broader bili:RolePlayingGame .
+
+bili:LeagueOfLegends a bili:Topic, skos:Concept ;
+    skos:prefLabel "英雄联盟"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“英雄联盟”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: game domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "LOL游戏"@zh ;
+    skos:broader bili:MOBA .
+
+bili:Dota2 a bili:Topic, skos:Concept ;
+    skos:prefLabel "Dota 2"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“Dota 2”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: game domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "DOTA2"@en ;
+    skos:broader bili:MOBA .
+
+bili:CounterStrike a bili:Topic, skos:Concept ;
+    skos:prefLabel "反恐精英"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“反恐精英”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: game domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "CS2"@en, "CSGO"@en ;
+    skos:broader bili:ShooterGame .
+
+bili:Valorant a bili:Topic, skos:Concept ;
+    skos:prefLabel "无畏契约"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“无畏契约”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: game domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "VALORANT"@en ;
+    skos:broader bili:ShooterGame .
+
+bili:Nintendo a bili:Topic, skos:Concept ;
+    skos:prefLabel "任天堂游戏"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“任天堂游戏”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: game domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Nintendo"@en ;
+    skos:broader bili:ConsoleGame .
+
+bili:PlayStation a bili:Topic, skos:Concept ;
+    skos:prefLabel "PlayStation游戏"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“PlayStation游戏”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: game domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "PS5"@en ;
+    skos:broader bili:ConsoleGame .
+
+bili:Steam a bili:Topic, skos:Concept ;
+    skos:prefLabel "Steam游戏"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“Steam游戏”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: game domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "Steam平台"@zh ;
+    skos:broader bili:PCGame .
+
+bili:BoardGame a bili:Topic, skos:Concept ;
+    skos:prefLabel "桌面游戏"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“桌面游戏”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: game domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "桌游"@zh ;
+    skos:broader bili:Game .
+
+bili:VirtualRealityGame a bili:Topic, skos:Concept ;
+    skos:prefLabel "虚拟现实游戏"@zh ;
+    skos:definition "在B站内容理解与兴趣画像中表示“虚拟现实游戏”的受控概念。"@zh ;
+    dcterms:source "Ontology V2 editorial curation: game domain" ;
+    bili:status "active" ;
+    bili:maintenanceVersion "2.0.0" ;
+    skos:altLabel "VR游戏"@zh ;
+    skos:broader bili:Game .

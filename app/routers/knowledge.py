@@ -12,6 +12,9 @@ from app.services.bilibili import BilibiliService
 from app.services.content_fetcher import ContentFetcher
 from app.services.asr import ASRService
 from app.services.rag import RAGService
+from app.services.ontology import get_ontology_service
+from app.services.ontology.repository import replace_video_annotations
+from app.services.profile.signals import upsert_user_content_signal
 from app.routers.auth import get_session
 
 router = APIRouter(prefix="/knowledge", tags=["知识库"])
@@ -217,6 +220,7 @@ async def _sync_folder(
             "duration": media.get("duration"),
             "owner_name": owner.get("name"),
             "owner_mid": owner.get("mid"),
+            "favorited_at": media.get("fav_time") or media.get("ctime") or media.get("fav_at"),
         }
     
     if skipped_invalid > 0:
@@ -403,6 +407,32 @@ async def _sync_folder(
         
         # 无论向量是否添加成功，都写入 FavoriteVideo 记录
         try:
+            # Materialize deterministic ontology annotations even when vector
+            # indexing is skipped. This keeps graph/profile/recommendation
+            # consumers consistent with the SQL content cache.
+            cache_result = await db.execute(select(VideoCache).where(VideoCache.bvid == bvid))
+            current_cache = cache_result.scalar_one_or_none()
+            ontology = get_ontology_service()
+            annotations = ontology.annotate_video(
+                meta["title"],
+                ((current_cache.content or "") if current_cache else ""),
+            )
+            await replace_video_annotations(db, bvid, annotations, ontology)
+
+            await upsert_user_content_signal(
+                db,
+                session_id=session_id,
+                source="favorites",
+                item_type="video",
+                item_id=bvid,
+                title=meta.get("title"),
+                description=meta.get("intro"),
+                creator_mid=meta.get("owner_mid"),
+                creator_name=meta.get("owner_name"),
+                strength=0.9,
+                occurred_at=meta.get("favorited_at"),
+                payload={"folder_media_id": folder_id},
+            )
             exists_row = await db.execute(
                 select(FavoriteVideo.id).where(
                     FavoriteVideo.folder_id == folder.id,
@@ -973,6 +1003,9 @@ async def _rebuild_knowledge_base_task(
                                 outline=content.outline
                             )
                             chunks = rag.add_video_content(video_content)
+                            ontology = get_ontology_service()
+                            annotations = ontology.annotate_video(cache.title, content.content or "")
+                            await replace_video_annotations(db, bvid, annotations, ontology)
                             logger.info(f"[{bvid}] 重建完成: {new_source}, 块数={chunks}")
                             refreshed += 1
                         else:

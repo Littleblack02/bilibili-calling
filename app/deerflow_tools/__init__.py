@@ -44,6 +44,10 @@ from app.deerflow_tools.time_tools import (
     clear_prefetch_cache_tool,
     get_prefetch_cache_status_tool,
 )
+from app.deerflow_tools.ontology_tools import (
+    resolve_concept_tool,
+    explain_concept_relation_tool,
+)
 
 __all__ = [
     "rag_search_tool",
@@ -75,6 +79,8 @@ __all__ = [
     "mark_prefetch_as_pushed_tool",
     "clear_prefetch_cache_tool",
     "get_prefetch_cache_status_tool",
+    "resolve_concept_tool",
+    "explain_concept_relation_tool",
 ]
 
 # Re-export aliases matching the tool names in config.yaml
@@ -107,3 +113,5 @@ get_prefetch_recommendations = get_prefetch_recommendations_tool
 mark_prefetch_as_pushed = mark_prefetch_as_pushed_tool
 clear_prefetch_cache = clear_prefetch_cache_tool
 get_prefetch_cache_status = get_prefetch_cache_status_tool
+resolve_concept = resolve_concept_tool
+explain_concept_relation = explain_concept_relation_tool

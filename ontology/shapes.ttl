@@ -1,0 +1,95 @@
+@prefix bili: <https://bilibili.local/ontology/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+bili:ConceptShape a sh:NodeShape ;
+    sh:targetClass skos:Concept ;
+    sh:property [
+        sh:path skos:prefLabel ; sh:minCount 1 ; sh:uniqueLang true ;
+        sh:message "Concepts require a preferred label with unique languages."@en
+    ] ;
+    sh:property [
+        sh:path skos:definition ; sh:minCount 1 ;
+        sh:message "Concepts require an editorial definition."@en
+    ] ;
+    sh:property [
+        sh:path dcterms:source ; sh:minCount 1 ;
+        sh:message "Concepts require a provenance source."@en
+    ] ;
+    sh:property [
+        sh:path bili:status ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:in ("active" "deprecated" "draft") ;
+        sh:message "Concept status must be active, deprecated or draft."@en
+    ] ;
+    sh:property [
+        sh:path bili:maintenanceVersion ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "Concepts require a maintenance version."@en
+    ] ;
+    sh:property [ sh:path skos:broader ; sh:class skos:Concept ] ;
+    sh:property [ sh:path skos:related ; sh:class skos:Concept ] ;
+    sh:property [ sh:path bili:requires ; sh:class skos:Concept ] ;
+    sh:sparql [
+        sh:message "Concept relations must not point to the concept itself."@en ;
+        sh:select """
+            SELECT $this WHERE {
+                $this ?relation $this .
+                FILTER (?relation IN (skos:broader, skos:related, bili:requires))
+            }
+        """
+    ] ;
+    sh:sparql [
+        sh:message "The skos:broader hierarchy must be acyclic."@en ;
+        sh:select """
+            SELECT $this WHERE { $this skos:broader+ $this . }
+        """
+    ] ;
+    sh:sparql [
+        sh:message "Deprecated concepts require owl:deprecated true and dcterms:isReplacedBy."@en ;
+        sh:select """
+            SELECT $this WHERE {
+                $this bili:status "deprecated" .
+                FILTER NOT EXISTS { $this owl:deprecated true ; dcterms:isReplacedBy ?replacement . }
+            }
+        """
+    ] ;
+    sh:sparql [
+        sh:message "Preferred/alternative labels must not collide across concepts."@en ;
+        sh:select """
+            SELECT DISTINCT $this WHERE {
+                $this (skos:prefLabel|skos:altLabel) ?label .
+                ?other (skos:prefLabel|skos:altLabel) ?label .
+                FILTER ($this != ?other)
+            }
+        """
+    ] .
+
+bili:DeprecatedReplacementShape a sh:NodeShape ;
+    sh:targetObjectsOf dcterms:isReplacedBy ;
+    sh:class skos:Concept ;
+    sh:message "A deprecated concept replacement must be an ontology concept."@en .
+
+bili:CategoryTidShape a sh:NodeShape ;
+    sh:targetClass bili:Category ;
+    sh:property [
+        sh:path bili:bilibiliTid ; sh:maxCount 1 ; sh:datatype <http://www.w3.org/2001/XMLSchema#integer> ;
+        sh:minInclusive 0
+    ] .
+
+bili:VideoShape a sh:NodeShape ;
+    sh:targetClass bili:Video ;
+    sh:property [ sh:path bili:aboutTopic ; sh:class skos:Concept ] ;
+    sh:property [ sh:path bili:teaches ; sh:class bili:Skill ] ;
+    sh:property [ sh:path bili:hasFormat ; sh:class bili:ContentFormat ] ;
+    sh:property [ sh:path bili:hasDifficulty ; sh:class bili:Difficulty ] .
+
+bili:PublicOntologyShape a sh:NodeShape ;
+    sh:targetNode bili:ontology-v2 ;
+    sh:sparql [
+        sh:message "Personal concepts must not be loaded into the public ontology graph."@en ;
+        sh:select """
+            SELECT $this WHERE { ?concept a bili:PersonalConcept . }
+        """
+    ] .

@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "database_scope": "disposable_temporary_sqlite",
+  "metrics": {
+    "videos": 3,
+    "video_concepts": 13,
+    "ontology_concepts": 13
+  },
+  "checks": {
+    "fixture_videos_processed": true,
+    "annotations_created": true,
+    "idempotent_replacement": true,
+    "canonical_concepts_materialized": true,
+    "version_recorded": true
+  },
+  "passed": true
+}

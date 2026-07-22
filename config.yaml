@@ -46,11 +46,21 @@ tool_groups:
   - name: profile
   - name: recommendation
   - name: time
+  - name: ontology
 
 # ============================================================================
 # Tools Configuration
 # ============================================================================
 tools:
+  # Ontology tools (canonical concepts, relations and query expansion)
+  - name: resolve_concept
+    group: ontology
+    use: app.deerflow_tools:resolve_concept_tool
+
+  - name: explain_concept_relation
+    group: ontology
+    use: app.deerflow_tools:explain_concept_relation_tool
+
   # RAG tools (bilibili-rag's vector store)
   - name: rag_search
     group: rag

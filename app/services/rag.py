@@ -5,6 +5,7 @@ RAG 服务模块 - 向量存储与问答
 """
 from typing import List, Optional
 from loguru import logger
+import json
 
 # Defer langchain_openai imports to avoid pydantic v1 conflicts during module load
 def _get_openai_embeddings():
@@ -52,6 +53,13 @@ from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
 from app.config import settings
 from app.models import VideoContent
+from app.services.ontology import get_ontology_service
+from app.services.rag_grounded import (
+    GroundedRetriever,
+    build_grounded_context,
+    grounded_refusal,
+    verify_answer_citations,
+)
 
 
 class RAGService:
@@ -129,6 +137,21 @@ class RAGService:
 """),
             ("human", "{question}")
         ])
+
+        self.grounded_qa_prompt = ChatPromptTemplate.from_messages([
+            ("system", """你是严格受证据约束的收藏知识库助手。
+
+规则：
+1. 只能使用给定证据，不使用外部常识补充事实。
+2. 每个事实性句子末尾必须引用对应的 `[BVID#chunk_index]`。
+3. 不得引用没有出现在证据中的编号。
+4. 证据无法支持答案时，只回答“收藏知识库证据不足”。
+
+证据：
+{context}
+"""),
+            ("human", "{question}"),
+        ])
         
         # 无内容时的通用回复模板
         self.fallback_prompt = ChatPromptTemplate.from_messages([
@@ -195,31 +218,110 @@ class RAGService:
             logger.warning(f"[{video.bvid}] 内容太少，跳过")
             return 0
         
-        # 分块
-        chunks = self.text_splitter.split_text(full_content)
+        # Timestamped subtitle units are packed into bounded time windows.
+        # Large gaps start a new chunk, preserving addressable evidence.
+        timed_chunks: list[dict] = []
+        if settings.rag_grounded_v2_enabled and video.segments:
+            current_texts: list[str] = []
+            current_start: float | None = None
+            current_end: float | None = None
+
+            def flush_timed_chunk() -> None:
+                nonlocal current_texts, current_start, current_end
+                text = " ".join(current_texts).strip()
+                if len(text) > 5:
+                    timed_chunks.append({
+                        "text": text,
+                        "start_time": current_start,
+                        "end_time": current_end,
+                    })
+                current_texts, current_start, current_end = [], None, None
+
+            for segment in video.segments:
+                if not isinstance(segment, dict):
+                    continue
+                text = str(segment.get("text") or segment.get("content") or "").strip()
+                try:
+                    start_time = float(segment.get("start_time", segment.get("from")))
+                    end_time = float(segment.get("end_time", segment.get("to")))
+                except (TypeError, ValueError):
+                    continue
+                exceeds_window = bool(
+                    current_start is not None
+                    and end_time - current_start > settings.rag_subtitle_chunk_seconds
+                )
+                exceeds_size = sum(len(value) for value in current_texts) + len(text) > 1000
+                if current_texts and (exceeds_window or exceeds_size):
+                    flush_timed_chunk()
+                if not current_texts:
+                    current_start = start_time
+                current_end = end_time
+                if text:
+                    current_texts.append(text)
+            flush_timed_chunk()
+
+        chunks = (
+            timed_chunks
+            if timed_chunks
+            else [{"text": text, "start_time": None, "end_time": None}
+                  for text in self.text_splitter.split_text(full_content)]
+        )
         
         if not chunks:
             logger.warning(f"[{video.bvid}] 没有生成文档块")
             return 0
         
         # 过滤空内容块
-        valid_chunks = [c for c in chunks if c and c.strip() and len(c.strip()) > 5]
+        valid_chunks = [
+            chunk for chunk in chunks
+            if chunk.get("text") and chunk["text"].strip()
+            and len(chunk["text"].strip()) > 5
+        ]
         if not valid_chunks:
             logger.warning(f"[{video.bvid}] 没有有效的文档块")
             return 0
         
         # 创建文档
         documents = []
+        ontology = get_ontology_service()
         for i, chunk in enumerate(valid_chunks):
+            chunk_text = chunk["text"].strip()
+            if settings.rag_grounded_v2_enabled:
+                # Do not inject the video title into every chunk: unrelated
+                # passages must not inherit a video-level topic.
+                ontology_annotations = ontology.annotate_video("", chunk_text)
+                concept_scope = "chunk"
+            else:
+                ontology_annotations = ontology.annotate_video(title, full_content)
+                concept_scope = "video"
+            concept_ids_json = json.dumps(
+                [annotation.concept_id for annotation in ontology_annotations],
+                ensure_ascii=False,
+            )
+            concept_labels_json = json.dumps(
+                [annotation.label for annotation in ontology_annotations],
+                ensure_ascii=False,
+            )
+            metadata = {
+                "bvid": video.bvid,
+                "title": title,
+                "source": video.source.value,
+                "chunk_index": i,
+                "url": f"https://www.bilibili.com/video/{video.bvid}",
+                # Chroma metadata is scalar-only, so concept arrays are
+                # encoded as JSON and remain inspectable/versioned.
+                "concept_ids": concept_ids_json,
+                "concept_labels": concept_labels_json,
+                "concept_scope": concept_scope,
+                "ontology_version": ontology.VERSION,
+            }
+            if chunk.get("start_time") is not None:
+                metadata["start_time"] = float(chunk["start_time"])
+            if chunk.get("end_time") is not None:
+                metadata["end_time"] = float(chunk["end_time"])
             doc = Document(
-                page_content=chunk.strip(),  # 确保是干净的字符串
-                metadata={
-                    "bvid": video.bvid,
-                    "title": title,
-                    "source": video.source.value,
-                    "chunk_index": i,
-                    "url": f"https://www.bilibili.com/video/{video.bvid}"
-                }
+                page_content=chunk_text,
+                metadata=metadata,
             )
             documents.append(doc)
         
@@ -277,11 +379,55 @@ class RAGService:
             logger.warning("检索查询为空")
             return []
 
+        if settings.rag_grounded_v2_enabled:
+            try:
+                return GroundedRetriever(self.vectorstore).search(query, k=k, bvids=bvids)
+            except Exception as exc:
+                # The V2 retrieval path must not make question answering a
+                # single point of failure. Falling back remains observable.
+                logger.warning(f"Grounded RAG V2 failed; falling back to V1: {exc}")
+
         try:
-            if bvids:
-                docs = self.vectorstore.similarity_search(query, k=k, filter={"bvid": {"$in": bvids}})
-            else:
-                docs = self.vectorstore.similarity_search(query, k=k)
+            # Ontology expansion and reciprocal-rank fusion improve recall for
+            # aliases/related concepts while the original query always remains
+            # the strongest retrieval path.
+            ontology = get_ontology_service()
+            query_variants = ontology.expand_query(query, max_terms=6)
+            fused: dict[tuple[str, object, str], tuple[Document, float, list[str]]] = {}
+            per_query_k = max(k, min(20, k * 2))
+            for variant in query_variants:
+                expanded_query = variant["query"]
+                if bvids:
+                    variant_docs = self.vectorstore.similarity_search(
+                        expanded_query,
+                        k=per_query_k,
+                        filter={"bvid": {"$in": bvids}},
+                    )
+                else:
+                    variant_docs = self.vectorstore.similarity_search(expanded_query, k=per_query_k)
+                for rank, doc in enumerate(variant_docs, start=1):
+                    metadata = doc.metadata or {}
+                    key = (
+                        str(metadata.get("bvid", "")),
+                        metadata.get("chunk_index", ""),
+                        doc.page_content[:80],
+                    )
+                    contribution = float(variant.get("weight", 1.0)) / (60.0 + rank)
+                    prior = fused.get(key)
+                    if prior:
+                        fused[key] = (prior[0], prior[1] + contribution, [*prior[2], expanded_query])
+                    else:
+                        fused[key] = (doc, contribution, [expanded_query])
+
+            ranked = sorted(fused.values(), key=lambda row: row[1], reverse=True)[:k]
+            docs = []
+            for doc, fusion_score, matched_queries in ranked:
+                doc.metadata = {
+                    **(doc.metadata or {}),
+                    "ontology_rrf_score": round(fusion_score, 6),
+                    "matched_queries": json.dumps(list(dict.fromkeys(matched_queries)), ensure_ascii=False),
+                }
+                docs.append(doc)
 
             logger.info(f"检索完成：query='{query}'，召回={len(docs)}")
             for idx, doc in enumerate(docs):
@@ -385,6 +531,8 @@ class RAGService:
         # 先检查向量库是否有内容
         stats = self.get_collection_stats()
         if stats["total_chunks"] == 0:
+            if settings.rag_grounded_v2_enabled:
+                return grounded_refusal("empty_knowledge_base")
             # 知识库为空时，使用 fallback 让 AI 自然回复
             return await self._fallback_answer(question, "知识库目前还没有内容")
         
@@ -396,9 +544,14 @@ class RAGService:
             return await self._fallback_answer(question, f"检索时遇到问题")
         
         if not docs:
+            if settings.rag_grounded_v2_enabled:
+                return grounded_refusal("no_result_above_threshold")
             # 没检索到内容时，也让 AI 自然回复
             return await self._fallback_answer(question, "没有找到相关内容")
         
+        if settings.rag_grounded_v2_enabled:
+            return await self._answer_grounded(question, docs)
+
         # 构建上下文
         context_parts = []
         seen_bvids = set()
@@ -457,6 +610,69 @@ class RAGService:
                 "answer": f"AI 回答时发生错误: {str(e)}",
                 "sources": sources
             }
+
+    async def _answer_grounded(self, question: str, docs: List[Document]) -> dict:
+        """Generate only from cited chunks and reject unverifiable output."""
+        context, citations = build_grounded_context(docs)
+        retrieval_confidence = max(
+            (citation["retrieval_score"] for citation in citations), default=0.0
+        )
+        if retrieval_confidence < settings.rag_answerability_threshold:
+            from app.services.observability import metrics
+            metrics.inc("rag_answer_outcomes_total", outcome="low_confidence")
+            return grounded_refusal("confidence_below_answerability_threshold")
+        query_coverages = [
+            float(document.metadata.get("rerank_query_coverage", 0.0))
+            for document in docs
+            if "rerank_query_coverage" in (document.metadata or {})
+        ]
+        if (
+            query_coverages
+            and max(query_coverages) < settings.rag_answerability_query_coverage
+        ):
+            from app.services.observability import metrics
+            metrics.inc("rag_answer_outcomes_total", outcome="low_query_coverage")
+            return grounded_refusal("query_evidence_coverage_below_threshold")
+        try:
+            chain = (
+                {"context": lambda _: context, "question": RunnablePassthrough()}
+                | self.grounded_qa_prompt
+                | self.llm
+                | StrOutputParser()
+            )
+            answer = await chain.ainvoke(question)
+        except Exception as exc:
+            logger.error(f"Grounded answer generation failed: {exc}")
+            return grounded_refusal("generation_error")
+
+        verification = verify_answer_citations(answer, citations)
+        if not verification["valid"]:
+            from app.services.observability import metrics
+            metrics.inc("rag_answer_outcomes_total", outcome="citation_invalid")
+            return grounded_refusal(f"citation_{verification['reason']}")
+        referenced = set(verification["referenced_citation_ids"])
+        used_citations = [
+            citation for citation in citations
+            if citation["citation_id"] in referenced
+        ]
+        ontology_matches = list(dict.fromkeys(
+            concept_id
+            for citation in used_citations
+            for concept_id in citation["concept_ids"]
+        ))
+        from app.services.observability import metrics
+        metrics.inc("rag_answer_outcomes_total", outcome="grounded")
+        metrics.observe("rag_answer_citation_count", len(used_citations))
+        return {
+            "answer": answer,
+            "sources": used_citations,
+            "grounded": True,
+            "retrieval_confidence": round(retrieval_confidence, 6),
+            "answerability": "answerable",
+            "citations": used_citations,
+            "ontology_matches": ontology_matches,
+            "citation_verification": verification,
+        }
     
     async def summarize_content(self, content: str) -> str:
         """
